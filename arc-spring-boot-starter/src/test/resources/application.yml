@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
+#
+# SPDX-License-Identifier: Apache-2.0
+arc:
+  scripts:
+    folder: src/test/resources/agents
+    hotReload:
+      enable: true
+      delay: PT1S
+
+logging:
+  level:
+    root: WARN
+    io.github.lmos.ai: DEBUG
