@@ -14,6 +14,7 @@ import com.azure.ai.openai.models.ChatRequestMessage
 import com.azure.ai.openai.models.ChatRequestSystemMessage
 import com.azure.ai.openai.models.ChatRequestUserMessage
 import com.azure.ai.openai.models.FunctionDefinition
+import com.azure.core.exception.ClientAuthenticationException
 import com.azure.core.util.BinaryData
 import io.github.lmos.arc.agents.AIException
 import io.github.lmos.arc.agents.conversation.AssistantMessage
@@ -27,6 +28,7 @@ import io.github.lmos.arc.agents.llm.ChatCompletionSettings
 import io.github.lmos.arc.agents.llm.LLMFinishedEvent
 import io.github.lmos.arc.agents.llm.LLMStartedEvent
 import io.github.lmos.arc.agents.llm.OutputFormat.JSON
+import io.github.lmos.arc.core.Failure
 import io.github.lmos.arc.core.Result
 import io.github.lmos.arc.core.Success
 import io.github.lmos.arc.core.failWith
@@ -92,7 +94,11 @@ class AzureAIClient(
                 if (openAIFunctions != null) tools = openAIFunctions
             }
 
-        val chatCompletions = client.getChatCompletions(config.modelName, chatCompletionsOptions).awaitFirst()
+        val chatCompletions = try {
+            client.getChatCompletions(config.modelName, chatCompletionsOptions).awaitFirst()
+        } catch (ex: Exception) {
+            return Failure(mapOpenAIException(ex))
+        }
         log.debug("ChatCompletions: ${chatCompletions.choices[0].finishReason} (${chatCompletions.choices.size})")
 
         val newMessages = functionCallHandler.handle(chatCompletions).getOrThrow()
@@ -100,6 +106,11 @@ class AzureAIClient(
             return getChatCompletions(messages + newMessages, openAIFunctions, functionCallHandler, settings)
         }
         return Success(chatCompletions)
+    }
+
+    private fun mapOpenAIException(ex: Exception): AIException = when (ex) {
+        is ClientAuthenticationException -> AIException(ex.message ?: "Unexpected error!", ex)
+        else -> AIException("Unexpected error!", ex)
     }
 
     private fun toOpenAIMessages(messages: List<ConversationMessage>) = messages.map { msg ->

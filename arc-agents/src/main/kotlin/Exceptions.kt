@@ -26,6 +26,11 @@ class FeatureNotSupportedException(msg: String) : AIException(msg)
 class ServerException(msg: String) : AIException(msg)
 
 /**
+ * Indicates that the Model endpoint could not be called due to an authentication error.
+ */
+class AuthenticationException(msg: String) : AIException(msg)
+
+/**
  * Indicates that the provided settings are invalid.
  */
 class InvalidSettingsException(msg: String) : AIException(msg)

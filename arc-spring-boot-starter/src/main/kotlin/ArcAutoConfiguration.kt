@@ -42,6 +42,7 @@ import kotlin.reflect.KClass
 class ArcAutoConfiguration {
 
     @Bean
+    @ConditionalOnMissingBean(BeanProvider::class)
     fun beanProvider(beanFactory: ConfigurableBeanFactory): BeanProvider = CoroutineBeanProvider(object : BeanProvider {
         override suspend fun <T : Any> provide(bean: KClass<T>) = beanFactory.getBean(bean.java)
     })

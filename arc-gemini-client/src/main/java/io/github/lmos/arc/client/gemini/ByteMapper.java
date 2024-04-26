@@ -12,6 +12,13 @@ import com.google.cloud.vertexai.generativeai.PartMaker;
  */
 public class ByteMapper {
 
+    /**
+     * Maps a byte array to a Part.
+     *
+     * @param mimeType The mime type of the byte array.
+     * @param data The byte array.
+     * @return a Gemini Part instance.
+     */
     public static Part map(String mimeType, byte[] data) {
         return PartMaker.fromMimeTypeAndData(mimeType, data);
     }
