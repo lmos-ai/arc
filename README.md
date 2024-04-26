@@ -7,9 +7,9 @@ SPDX-License-Identifier: CC0-1.0
 # The Arc Project
 
 The goal of the Arc project is to utilize the power of Kotlin DSL and Kotlin Scripting to define
-a language optimized at orchestrating LLM powered solutions.
+a language optimized for building LLM powered solutions.
 
-Please take a look at the [documentation](https://telekom.github.io/arc/).
+Please take a look at the documentation -> coming soon...
 
 ## Code of Conduct
 
