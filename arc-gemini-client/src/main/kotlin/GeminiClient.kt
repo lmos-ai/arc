@@ -15,7 +15,7 @@ import com.google.cloud.vertexai.api.Type
 import com.google.cloud.vertexai.generativeai.ContentMaker.forRole
 import com.google.cloud.vertexai.generativeai.GenerativeModel
 import com.google.cloud.vertexai.generativeai.ResponseHandler
-import io.github.lmos.arc.agents.AIException
+import io.github.lmos.arc.agents.ArcException
 import io.github.lmos.arc.agents.conversation.AssistantMessage
 import io.github.lmos.arc.agents.conversation.ConversationMessage
 import io.github.lmos.arc.agents.conversation.SystemMessage
@@ -49,7 +49,7 @@ class GeminiClient(
         messages: List<ConversationMessage>,
         functions: List<LLMFunction>?,
         settings: ChatCompletionSettings?,
-    ) = result<AssistantMessage, AIException> {
+    ) = result<AssistantMessage, ArcException> {
         val vertexMessages = toVertexMessage(messages.systemToUser()) // gemini does not support system message
         val vertexFunctions = functions?.let { toVertexFunctions(it) }
         val functionCallHandler = FunctionCallHandler(functions ?: emptyList())
@@ -60,7 +60,7 @@ class GeminiClient(
                 vertexFunctions,
                 functionCallHandler,
                 settings,
-            ) failWith { AIException("Failed to call Gemini!", it) }
+            ) failWith { ArcException("Failed to call Gemini!", it) }
         eventHandler?.publish(
             LLMFinishedEvent(
                 languageModel.modelName,
@@ -77,7 +77,7 @@ class GeminiClient(
         functions: List<Tool>?,
         functionCallHandler: FunctionCallHandler,
         settings: ChatCompletionSettings?,
-    ): Result<GenerateContentResponse, AIException> {
+    ): Result<GenerateContentResponse, ArcException> {
         val generationConfig = GenerationConfig.newBuilder()
             .apply { settings?.maxTokens?.let { maxOutputTokens = it } }
             .apply { settings?.temperature?.let { temperature = it.toFloat() } }

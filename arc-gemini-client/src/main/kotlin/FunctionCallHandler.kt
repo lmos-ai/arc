@@ -10,7 +10,7 @@ import com.google.cloud.vertexai.api.GenerateContentResponse
 import com.google.cloud.vertexai.generativeai.ContentMaker.fromMultiModalData
 import com.google.cloud.vertexai.generativeai.PartMaker.fromFunctionResponse
 import com.google.cloud.vertexai.generativeai.ResponseHandler
-import io.github.lmos.arc.agents.AIException
+import io.github.lmos.arc.agents.ArcException
 import io.github.lmos.arc.agents.HallucinationDetectedException
 import io.github.lmos.arc.agents.functions.LLMFunction
 import io.github.lmos.arc.agents.functions.convertToJsonMap
@@ -33,7 +33,7 @@ class FunctionCallHandler(private val functions: List<LLMFunction>) {
 
     fun calledSensitiveFunction() = _calledFunctions.any { it.value.isSensitive }
 
-    suspend fun handle(response: GenerateContentResponse) = result<List<Content>, AIException> {
+    suspend fun handle(response: GenerateContentResponse) = result<List<Content>, ArcException> {
         val functionCalls = ResponseHandler.getFunctionCalls(response)
 
         log.debug("Received ${functionCalls.size} tool calls..")
@@ -59,13 +59,13 @@ class FunctionCallHandler(private val functions: List<LLMFunction>) {
         fromMultiModalData(fromFunctionResponse(name, mapOf(name to response))) // TODO check this
 
     private suspend fun callFunction(functionName: String, functionArguments: Map<String, String>) =
-        result<String, AIException> {
+        result<String, ArcException> {
             val function = functions.find { it.name == functionName }
-                ?: failWith { AIException("Cannot find function called $functionName!") }
+                ?: failWith { ArcException("Cannot find function called $functionName!") }
 
             log.debug("Calling LLMFunction $function with $functionArguments...")
             _calledFunctions[functionName] = function
-            function.execute(functionArguments) failWith { AIException(cause = it.cause) }
+            function.execute(functionArguments) failWith { ArcException(cause = it.cause) }
         }
 
     private fun String.toJson() = result<Map<String, Any?>, HallucinationDetectedException> {

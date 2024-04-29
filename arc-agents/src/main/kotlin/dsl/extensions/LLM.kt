@@ -4,7 +4,7 @@
 
 package io.github.lmos.arc.agents.dsl.extensions
 
-import io.github.lmos.arc.agents.AIException
+import io.github.lmos.arc.agents.ArcException
 import io.github.lmos.arc.agents.conversation.AssistantMessage
 import io.github.lmos.arc.agents.conversation.SystemMessage
 import io.github.lmos.arc.agents.conversation.UserMessage
@@ -22,7 +22,7 @@ suspend fun DSLContext.llm(
     systemMessage: String? = null,
     model: String? = null,
     settings: ChatCompletionSettings? = null,
-) = result<AssistantMessage, AIException> {
+) = result<AssistantMessage, ArcException> {
     val chatCompleterProvider = get<ChatCompleterProvider>()
     val chatCompleter = chatCompleterProvider.provideByModel(model = model)
     val messages = buildList {

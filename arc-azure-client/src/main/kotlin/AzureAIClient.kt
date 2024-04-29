@@ -16,7 +16,7 @@ import com.azure.ai.openai.models.ChatRequestUserMessage
 import com.azure.ai.openai.models.FunctionDefinition
 import com.azure.core.exception.ClientAuthenticationException
 import com.azure.core.util.BinaryData
-import io.github.lmos.arc.agents.AIException
+import io.github.lmos.arc.agents.ArcException
 import io.github.lmos.arc.agents.conversation.AssistantMessage
 import io.github.lmos.arc.agents.conversation.ConversationMessage
 import io.github.lmos.arc.agents.conversation.SystemMessage
@@ -53,7 +53,7 @@ class AzureAIClient(
         functions: List<LLMFunction>?,
         settings: ChatCompletionSettings?,
     ) =
-        result<AssistantMessage, AIException> {
+        result<AssistantMessage, ArcException> {
             val openAIMessages = toOpenAIMessages(messages)
             val openAIFunctions = if (functions != null) toOpenAIFunctions(functions) else null
 
@@ -82,7 +82,7 @@ class AzureAIClient(
         openAIFunctions: List<ChatCompletionsFunctionToolDefinition>? = null,
         functionCallHandler: FunctionCallHandler,
         settings: ChatCompletionSettings?,
-    ): Result<ChatCompletions, AIException> {
+    ): Result<ChatCompletions, ArcException> {
         val chatCompletionsOptions = ChatCompletionsOptions(messages)
             .apply {
                 settings?.temperature?.let { temperature = it }
@@ -108,9 +108,9 @@ class AzureAIClient(
         return Success(chatCompletions)
     }
 
-    private fun mapOpenAIException(ex: Exception): AIException = when (ex) {
-        is ClientAuthenticationException -> AIException(ex.message ?: "Unexpected error!", ex)
-        else -> AIException("Unexpected error!", ex)
+    private fun mapOpenAIException(ex: Exception): ArcException = when (ex) {
+        is ClientAuthenticationException -> ArcException(ex.message ?: "Unexpected error!", ex)
+        else -> ArcException("Unexpected error!", ex)
     }
 
     private fun toOpenAIMessages(messages: List<ConversationMessage>) = messages.map { msg ->

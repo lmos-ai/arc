@@ -4,7 +4,7 @@
 
 package io.github.lmos.arc.client.ollama
 
-import io.github.lmos.arc.agents.AIException
+import io.github.lmos.arc.agents.ArcException
 import io.github.lmos.arc.agents.FeatureNotSupportedException
 import io.github.lmos.arc.agents.conversation.AssistantMessage
 import io.github.lmos.arc.agents.conversation.ConversationMessage
@@ -76,7 +76,7 @@ class OllamaClient(
         messages: List<ConversationMessage>,
         functions: List<LLMFunction>?,
         settings: ChatCompletionSettings?,
-    ) = result<AssistantMessage, AIException> {
+    ) = result<AssistantMessage, ArcException> {
         val ollamaMessages = toOllamaMessages(messages)
 
         ensure(functions.isNullOrEmpty()) {
@@ -98,7 +98,7 @@ class OllamaClient(
     }
 
     private suspend fun chat(messages: List<ChatMessage>, settings: ChatCompletionSettings?) =
-        result<ChatResponse, AIException> {
+        result<ChatResponse, ArcException> {
             val response: HttpResponse = client.post("${languageModel.url}/api/chat") {
                 contentType(ContentType.Application.Json)
                 setBody(
@@ -110,7 +110,7 @@ class OllamaClient(
                     ),
                 )
             }.body()
-            ensure(response.status.isSuccess()) { AIException("Failed to complete chat: ${response.status}!") }
+            ensure(response.status.isSuccess()) { ArcException("Failed to complete chat: ${response.status}!") }
             println(response.bodyAsText())
             json.decodeFromString(response.bodyAsText()) // server is sending wrong content type
             // so that ktor does not decode it correctly.

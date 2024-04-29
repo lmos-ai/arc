@@ -10,7 +10,7 @@ import com.azure.ai.openai.models.ChatRequestAssistantMessage
 import com.azure.ai.openai.models.ChatRequestMessage
 import com.azure.ai.openai.models.ChatRequestToolMessage
 import com.azure.ai.openai.models.CompletionsFinishReason
-import io.github.lmos.arc.agents.AIException
+import io.github.lmos.arc.agents.ArcException
 import io.github.lmos.arc.agents.HallucinationDetectedException
 import io.github.lmos.arc.agents.functions.LLMFunction
 import io.github.lmos.arc.agents.functions.convertToJsonMap
@@ -32,7 +32,7 @@ class FunctionCallHandler(private val functions: List<LLMFunction>) {
 
     fun calledSensitiveFunction() = _calledFunctions.any { it.value.isSensitive }
 
-    suspend fun handle(chatCompletions: ChatCompletions) = result<List<ChatRequestMessage>, AIException> {
+    suspend fun handle(chatCompletions: ChatCompletions) = result<List<ChatRequestMessage>, ArcException> {
         val choice = chatCompletions.choices[0]
 
         // The LLM is requesting the calling of the function we defined in the original request
@@ -57,14 +57,14 @@ class FunctionCallHandler(private val functions: List<LLMFunction>) {
         }
     }
 
-    private suspend fun callFunction(functionName: String, functionArguments: String) = result<String, AIException> {
+    private suspend fun callFunction(functionName: String, functionArguments: String) = result<String, ArcException> {
         val jsonMap = functionArguments.toJson() failWith { it }
         val function = functions.find { it.name == functionName }
-            ?: failWith { AIException("Cannot find function called $functionName!") }
+            ?: failWith { ArcException("Cannot find function called $functionName!") }
 
         log.debug("Calling LLMFunction $function with $jsonMap...")
         _calledFunctions[functionName] = function
-        function.execute(jsonMap) failWith { AIException(cause = it.cause) }
+        function.execute(jsonMap) failWith { ArcException(cause = it.cause) }
     }
 
     private fun String.toJson() = result<Map<String, Any?>, HallucinationDetectedException> {

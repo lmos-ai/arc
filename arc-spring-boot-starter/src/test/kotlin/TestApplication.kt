@@ -4,7 +4,7 @@
 
 package io.github.lmos.arc.spring
 
-import io.github.lmos.arc.agents.AIException
+import io.github.lmos.arc.agents.ArcException
 import io.github.lmos.arc.agents.conversation.AssistantMessage
 import io.github.lmos.arc.agents.conversation.ConversationMessage
 import io.github.lmos.arc.agents.functions.LLMFunction
@@ -25,7 +25,7 @@ open class TestApplication {
                 messages: List<ConversationMessage>,
                 functions: List<LLMFunction>?,
                 settings: ChatCompletionSettings?,
-            ) = result<AssistantMessage, AIException> {
+            ) = result<AssistantMessage, ArcException> {
                 functions?.forEach { function ->
                     function.execute(mapOf("param" to "test"))
                 }

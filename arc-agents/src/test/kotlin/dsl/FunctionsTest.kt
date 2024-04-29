@@ -4,7 +4,7 @@
 
 package io.github.lmos.arc.agents.dsl
 
-import io.github.lmos.arc.agents.AIException
+import io.github.lmos.arc.agents.ArcException
 import io.github.lmos.arc.agents.TestBase
 import io.github.lmos.arc.core.Failure
 import io.github.lmos.arc.core.getOrThrow
@@ -79,12 +79,12 @@ class FunctionsTest : TestBase() {
                 name = "name",
                 description = "description",
             ) {
-                throw AIException("test")
+                throw ArcException("test")
             }
             val result = context.functions.first().execute(mapOf("p1" to "p1", "p2" to "p2"))
             assertThat(result is Failure).isTrue()
             if (result is Failure) {
-                assertThat(result.reason.cause is AIException).isTrue()
+                assertThat(result.reason.cause is ArcException).isTrue()
             }
         }
     }

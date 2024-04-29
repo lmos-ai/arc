@@ -4,7 +4,7 @@
 
 package io.github.lmos.arc.agents.dsl
 
-import io.github.lmos.arc.agents.AIException
+import io.github.lmos.arc.agents.ArcException
 import io.github.lmos.arc.agents.AgentEvent
 import io.github.lmos.arc.agents.AgentFailedException
 import io.github.lmos.arc.agents.AgentFinishedEvent
@@ -46,14 +46,14 @@ class AgentTest : TestBase() {
             description = "description"
             systemPrompt = { "systemPrompt" }
         } as ChatAgent
-        coEvery { chatCompleter.complete(any(), any()) } answers { Failure(AIException()) }
+        coEvery { chatCompleter.complete(any(), any()) } answers { Failure(ArcException()) }
 
         val result: Result<Conversation, AgentFailedException>
         testBeanProvider.setContext(contextBeans) {
             result = agent.execute("question".toConversation(User("user")))
         }
         assertThat(result is Failure).isTrue()
-        assertThat((result as Failure).reason.cause).isInstanceOf(AIException::class.java)
+        assertThat((result as Failure).reason.cause).isInstanceOf(ArcException::class.java)
     }
 
     @Test

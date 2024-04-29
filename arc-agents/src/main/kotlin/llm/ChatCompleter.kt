@@ -4,7 +4,7 @@
 
 package io.github.lmos.arc.agents.llm
 
-import io.github.lmos.arc.agents.AIException
+import io.github.lmos.arc.agents.ArcException
 import io.github.lmos.arc.agents.conversation.AssistantMessage
 import io.github.lmos.arc.agents.conversation.ConversationMessage
 import io.github.lmos.arc.agents.functions.LLMFunction
@@ -19,5 +19,5 @@ interface ChatCompleter {
         messages: List<ConversationMessage>,
         functions: List<LLMFunction>? = null,
         settings: ChatCompletionSettings? = null,
-    ): Result<AssistantMessage, AIException>
+    ): Result<AssistantMessage, ArcException>
 }
