@@ -34,8 +34,8 @@ class ScriptingLLMFunctionLoader(
     private val scope = CoroutineScope(SupervisorJob())
     private val running = AtomicBoolean(false)
 
-    override fun provideByGroup(functionGroup: String): List<LLMFunction> {
-        return functions.values.filter { it.group == functionGroup }.toList()
+    override fun load(): List<LLMFunction> {
+        return functions.values.toList()
     }
 
     fun deleteFunctions() {

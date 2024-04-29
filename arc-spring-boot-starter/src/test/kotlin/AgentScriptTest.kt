@@ -36,10 +36,10 @@ class AgentScriptTest {
     @Test
     fun `test function defined as script`(): Unit = runBlocking {
         var i = 0
-        while (llmFunctionProvider.provideByGroup("weather").isEmpty() && i < 30) {
+        while (llmFunctionProvider.provide("get_weather").isEmpty() && i < 30) {
             delay(1000)
             i++
         }
-        assertThat(llmFunctionProvider.provideByGroup("weather")).hasSize(1)
+        assertThat(llmFunctionProvider.provide("get_weather")).hasSize(1)
     }
 }

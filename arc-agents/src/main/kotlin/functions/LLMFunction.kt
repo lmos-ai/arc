@@ -13,7 +13,7 @@ interface LLMFunction {
     val name: String
     val parameters: ParametersSchema
     val description: String
-    val group: String
+    val group: String?
     val isSensitive: Boolean
 
     suspend fun execute(input: Map<String, Any?>): Result<String, LLMFunctionException>

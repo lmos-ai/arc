@@ -29,6 +29,6 @@ class AgentBeansTest {
 
     @Test
     fun `test function defined as bean`(): Unit = runBlocking {
-        assertThat(functionProvider.provideByGroup("weather-beans")).isNotEmpty
+        assertThat(functionProvider.provide("get_weather_bean")).isNotEmpty
     }
 }

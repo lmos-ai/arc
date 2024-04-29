@@ -8,19 +8,19 @@ package io.github.lmos.arc.agents.functions
  * Provides LLMFunctions.
  * Usually there is one instance of this class per application.
  */
-fun interface LLMFunctionProvider {
+interface LLMFunctionProvider {
 
-    fun provideByGroup(functionGroup: String): List<LLMFunction>
+    fun provide(functionName: String): List<LLMFunction>
 }
 
 /**
- * Loads Agents.
+ * Loads Functions.
  * Typically, a [LLMFunctionProvider] uses [LLMFunctionLoader]s to load Arc Functions from different sources.
  * There can be many implementations of [LLMFunctionLoader]s in an application.
  */
 fun interface LLMFunctionLoader {
 
-    fun provideByGroup(functionGroup: String): List<LLMFunction>
+    fun load(): List<LLMFunction>
 }
 
 /**
@@ -31,7 +31,9 @@ class CompositeLLMFunctionProvider(
     private val functions: List<LLMFunction>,
 ) : LLMFunctionProvider {
 
-    override fun provideByGroup(functionGroup: String): List<LLMFunction> {
-        return loaders.flatMap { it.provideByGroup(functionGroup) } + functions
+    override fun provide(functionName: String): List<LLMFunction> {
+        return functions().filter { it.name == functionName }
     }
+
+    private fun functions() = loaders.flatMap { it.load() } + functions
 }

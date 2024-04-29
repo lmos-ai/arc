@@ -18,5 +18,5 @@ agent {
        - Use the "store_preference" function, to store the weather location."
      """
     }
-    tools = listOf("weather")
+    tools = listOf("get_weather")
 }

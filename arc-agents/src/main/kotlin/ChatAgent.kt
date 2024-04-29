@@ -87,7 +87,7 @@ class ChatAgent(
 
     private suspend fun functions() = if (tools.isNotEmpty()) {
         val functionProvider = beanProvider.provide(LLMFunctionProvider::class)
-        tools.flatMap { functionProvider.provideByGroup(it) }
+        tools.flatMap { functionProvider.provide(it) }
     } else {
         null
     }

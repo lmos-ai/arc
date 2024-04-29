@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory
 data class LambdaLLMFunction(
     override val name: String,
     override val description: String,
-    override val group: String,
+    override val group: String?,
     override val isSensitive: Boolean,
     override val parameters: ParametersSchema,
     private val beanProvider: BeanProvider,

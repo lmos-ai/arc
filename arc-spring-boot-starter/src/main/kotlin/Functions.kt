@@ -19,7 +19,6 @@ import io.github.lmos.arc.agents.functions.ParameterSchema
  *     open fun myFunction(function: Functions) = function(
  *         name = "get_weather",
  *         description = "Returns real-time weather information for any location",
- *         group = "weather"
  *     ) {
  *     """
  *         The weather is good in Berlin. It is 20 degrees celsius.
@@ -31,7 +30,7 @@ class Functions(private val beanProvider: BeanProvider) {
     operator fun invoke(
         name: String,
         description: String,
-        group: String,
+        group: String? = null,
         params: List<Pair<ParameterSchema, Boolean>> = emptyList(),
         isSensitive: Boolean = false,
         fn: suspend DSLContext.(List<String?>) -> String,

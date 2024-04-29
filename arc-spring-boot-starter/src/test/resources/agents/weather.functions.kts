@@ -10,10 +10,17 @@
 function(
     name = "get_weather",
     description = "Returns real-time weather information for any location",
-    group = "weather",
     params = types(string("location", "a city to obtain the weather for."))
 ) { (location) ->
         """
          The weather is good in $location. It is 20 degrees celsius.
+        """
+}
+
+function(
+    name = "get_forecast",
+    description = "Returns real-time weather forecast",
+) { """
+         The next 4 days will be full of sun!
         """
 }

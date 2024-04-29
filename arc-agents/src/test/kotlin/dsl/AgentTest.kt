@@ -81,7 +81,7 @@ class AgentTest : TestBase() {
             tools = listOf("myFunctions")
         }
         val functionGroup = slot<String>()
-        coEvery { functionProvider.provideByGroup(capture(functionGroup)) } answers { emptyList() }
+        coEvery { functionProvider.provide(capture(functionGroup)) } answers { emptyList() }
 
         executeAgent(agent as ChatAgent, "question")
 

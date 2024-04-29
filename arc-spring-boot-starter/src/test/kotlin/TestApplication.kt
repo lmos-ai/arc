@@ -45,7 +45,6 @@ open class TestApplication {
     open fun myFunction(function: Functions) = function(
         name = "get_weather_bean",
         description = "Returns real-time weather information for any location",
-        group = "weather-beans",
     ) {
         """
         The weather is good in Berlin. It is 20 degrees celsius.

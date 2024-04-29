@@ -71,6 +71,7 @@ class ArcAutoConfiguration {
     fun loggingEventHandler() = LoggingEventHandler()
 
     @Bean
+    @ConditionalOnMissingBean(AgentProvider::class)
     fun agentProvider(loaders: List<AgentLoader>, agents: List<Agent<*, *>>): AgentProvider =
         CompositeAgentProvider(loaders, agents)
 

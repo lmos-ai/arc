@@ -28,7 +28,7 @@ interface FunctionDefinitionContext {
     fun function(
         name: String,
         description: String,
-        group: String = "",
+        group: String? = null,
         params: List<Pair<ParameterSchema, Boolean>> = emptyList(),
         isSensitive: Boolean = false,
         fn: suspend DSLContext.(List<String?>) -> String,
@@ -50,7 +50,7 @@ class BasicFunctionDefinitionContext(private val beanProvider: BeanProvider) : F
     override fun function(
         name: String,
         description: String,
-        group: String,
+        group: String?,
         params: List<Pair<ParameterSchema, Boolean>>,
         isSensitive: Boolean,
         fn: suspend DSLContext.(List<String?>) -> String,
