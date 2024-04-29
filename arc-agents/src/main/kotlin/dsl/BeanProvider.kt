@@ -7,6 +7,7 @@ package io.github.lmos.arc.agents.dsl
 import io.github.lmos.arc.core.getOrNull
 import io.github.lmos.arc.core.result
 import kotlinx.coroutines.asContextElement
+import kotlinx.coroutines.isPresent
 import kotlinx.coroutines.withContext
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind.EXACTLY_ONCE
@@ -32,10 +33,13 @@ class CoroutineBeanProvider(private val fallbackBeanProvider: BeanProvider? = nu
     }
 
     override suspend fun <T : Any> provide(type: KClass<T>): T {
-        // contextLocal.ensurePresent()
+        if (!contextLocal.isPresent()) return fallbackOrThrow(type)
         return contextLocal.get()?.firstOrNull { type.isInstance(it) }?.let { it as T }
-            ?: fallbackBeanProvider?.provide(type) ?: throw MissingBeanException("Bean of type $type cannot be located!")
+            ?: fallbackOrThrow(type)
     }
+
+    private suspend fun <T : Any> fallbackOrThrow(type: KClass<T>) =
+        fallbackBeanProvider?.provide(type) ?: throw MissingBeanException("Bean of type $type cannot be located!")
 
     /**
      * Sets the context for the current Coroutine context.
