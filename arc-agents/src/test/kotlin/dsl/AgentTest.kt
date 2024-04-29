@@ -4,11 +4,11 @@
 
 package io.github.lmos.arc.agents.dsl
 
-import io.github.lmos.arc.agents.ArcException
 import io.github.lmos.arc.agents.AgentEvent
 import io.github.lmos.arc.agents.AgentFailedException
 import io.github.lmos.arc.agents.AgentFinishedEvent
 import io.github.lmos.arc.agents.AgentStartedEvent
+import io.github.lmos.arc.agents.ArcException
 import io.github.lmos.arc.agents.ChatAgent
 import io.github.lmos.arc.agents.TestBase
 import io.github.lmos.arc.agents.User
