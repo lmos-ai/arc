@@ -16,7 +16,7 @@ plugins {
 
 subprojects {
     group = "io.github.lmos-ai.arc"
-    version = "0.20.1"
+    version = "0.21.0"
 
     apply(plugin = "org.cyclonedx.bom")
     apply(plugin = "org.jetbrains.kotlin.jvm")
