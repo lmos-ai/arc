@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkarc=self.webpackChunkarc||[]).push([[472],{5513:e=>{e.exports=JSON.parse('{"title":"Recent posts","items":[{"title":"Llama3 is out!","permalink":"/blog/Llama3","unlisted":false}]}')}}]);
