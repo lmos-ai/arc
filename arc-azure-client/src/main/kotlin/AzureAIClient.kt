@@ -36,6 +36,7 @@ import io.github.lmos.arc.core.getOrThrow
 import io.github.lmos.arc.core.result
 import kotlinx.coroutines.reactive.awaitFirst
 import org.slf4j.LoggerFactory
+import kotlin.time.measureTime
 
 /**
  * Calls the OpenAI endpoints and automatically handles LLM function calls.
@@ -60,17 +61,22 @@ class AzureAIClient(
             val functionCallHandler = FunctionCallHandler(functions ?: emptyList())
 
             eventHandler?.publish(LLMStartedEvent(config.modelName))
-            val chatCompletions =
-                getChatCompletions(openAIMessages, openAIFunctions, functionCallHandler, settings) failWith { it }
+
+            val result: Result<ChatCompletions, ArcException>
+            val duration = measureTime {
+                result = getChatCompletions(openAIMessages, openAIFunctions, functionCallHandler, settings)
+            }
+            val chatCompletions = result failWith { it }
             eventHandler?.publish(
                 LLMFinishedEvent(
                     config.modelName,
                     chatCompletions.usage.totalTokens,
                     chatCompletions.usage.promptTokens,
                     chatCompletions.usage.completionTokens,
+                    functionCallHandler.calledFunctions.size,
+                    duration,
                 ),
             )
-
             chatCompletions.getFirstAssistantMessage(sensitive = functionCallHandler.calledSensitiveFunction())
         }
 

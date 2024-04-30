@@ -12,18 +12,21 @@ plugins {
     id("org.cyclonedx.bom") version "1.8.2" apply false
     id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
     id("org.jetbrains.kotlinx.kover") version "0.7.6"
+    id("org.gradle.crypto.checksum") version "1.4.0" apply false
 }
 
 subprojects {
     group = "io.github.lmos-ai.arc"
-    version = "0.22.0"
+    version = "0.24.0"
 
     apply(plugin = "org.cyclonedx.bom")
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "kotlinx-serialization")
     apply(plugin = "maven-publish")
+    apply(plugin = "signing")
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
     apply(plugin = "org.jetbrains.kotlinx.kover")
+    apply(plugin = "org.gradle.crypto.checksum")
 
     java {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -51,6 +54,27 @@ subprojects {
         publications {
             create("Maven", MavenPublication::class.java) {
                 from(components["java"])
+                pom {
+                    description = "ARC is an AI framework."
+                    url = "https://github.com/lmos-ai/arc"
+                    scm {
+                        url = "https://github.com/lmos-ai/arc.git"
+                    }
+                    licenses {
+                        license {
+                            name = "Apache-2.0"
+                            distribution = "repo"
+                            url = "https://github.com/lmos-ai/arc/blob/main/LICENSES/Apache-2.0.txt"
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = "pat"
+                            name = "Patrick Whelan"
+                            email = "opensource@telekom.de"
+                        }
+                    }
+                }
             }
         }
 
@@ -63,6 +87,10 @@ subprojects {
                     password = findProperty("GITHUB_TOKEN")?.toString() ?: getenv("GITHUB_TOKEN")
                 }
             }
+        }
+
+        configure<SigningExtension> {
+            sign(publications)
         }
     }
 

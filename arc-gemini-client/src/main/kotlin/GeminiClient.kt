@@ -33,6 +33,7 @@ import io.github.lmos.arc.core.failWith
 import io.github.lmos.arc.core.getOrThrow
 import io.github.lmos.arc.core.result
 import org.slf4j.LoggerFactory
+import kotlin.time.measureTime
 
 /**
  * Calls a Gemini endpoint to complete a conversation.
@@ -54,19 +55,26 @@ class GeminiClient(
         val vertexFunctions = functions?.let { toVertexFunctions(it) }
         val functionCallHandler = FunctionCallHandler(functions ?: emptyList())
         eventHandler?.publish(LLMStartedEvent(languageModel.modelName))
-        val response =
-            chat(
-                vertexMessages,
-                vertexFunctions,
-                functionCallHandler,
-                settings,
-            ) failWith { ArcException("Failed to call Gemini!", it) }
+
+        val result: Result<GenerateContentResponse, ArcException>
+        val duration = measureTime {
+            result =
+                chat(
+                    vertexMessages,
+                    vertexFunctions,
+                    functionCallHandler,
+                    settings,
+                )
+        }
+        val response = result failWith { ArcException("Failed to call Gemini!", it) }
         eventHandler?.publish(
             LLMFinishedEvent(
                 languageModel.modelName,
                 totalTokens = response.usageMetadata.totalTokenCount,
                 promptTokens = response.usageMetadata.promptTokenCount,
                 completionTokens = response.usageMetadata.candidatesTokenCount,
+                functionCallHandler.calledFunctions.size,
+                duration,
             ),
         )
         AssistantMessage(ResponseHandler.getText(response), sensitive = functionCallHandler.calledSensitiveFunction())
