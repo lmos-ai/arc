@@ -16,16 +16,19 @@ class BasicEventPublisherTest : TestBase() {
     fun `test handlers receive events`() {
         val subject = BasicEventPublisher()
         val handler1 = TestHandler()
-        val handler2 = OtherTestHandler()
+        val handler2 = TestHandler()
+        val handler3 = OtherTestHandler()
 
         subject.add(handler1)
         subject.add(handler2)
+        subject.add(handler3)
         subject.publish(TestEvent())
         subject.publish(SubTestEvent())
         subject.publish(OtherTestEvent())
 
         assertThat(handler1.count.get()).isEqualTo(2)
-        assertThat(handler2.count.get()).isEqualTo(1)
+        assertThat(handler2.count.get()).isEqualTo(2)
+        assertThat(handler3.count.get()).isEqualTo(1)
     }
 }
 

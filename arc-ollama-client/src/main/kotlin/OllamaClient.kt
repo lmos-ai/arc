@@ -17,6 +17,7 @@ import io.github.lmos.arc.agents.llm.ChatCompletionSettings
 import io.github.lmos.arc.agents.llm.LLMFinishedEvent
 import io.github.lmos.arc.agents.llm.LLMStartedEvent
 import io.github.lmos.arc.agents.llm.OutputFormat.JSON
+import io.github.lmos.arc.core.Result
 import io.github.lmos.arc.core.ensure
 import io.github.lmos.arc.core.failWith
 import io.github.lmos.arc.core.result
@@ -35,6 +36,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import org.slf4j.LoggerFactory
+import kotlin.time.measureTime
 
 /**
  * Calls a Ollama Chat endpoint to complete a conversation.
@@ -84,13 +86,19 @@ class OllamaClient(
         }
 
         eventHandler?.publish(LLMStartedEvent(languageModel.modelName))
-        val chatCompletions = chat(ollamaMessages, settings) failWith { it }
+        val result: Result<ChatResponse, ArcException>
+        val duration = measureTime {
+            result = chat(ollamaMessages, settings)
+        }
+        val chatCompletions = result failWith { it }
         eventHandler?.publish(
             LLMFinishedEvent(
                 languageModel.modelName,
                 chatCompletions.promptTokenCount + chatCompletions.responseTokenCount,
                 chatCompletions.promptTokenCount,
                 chatCompletions.responseTokenCount,
+                0,
+                duration,
             ),
         )
 
@@ -111,7 +119,6 @@ class OllamaClient(
                 )
             }.body()
             ensure(response.status.isSuccess()) { ArcException("Failed to complete chat: ${response.status}!") }
-            println(response.bodyAsText())
             json.decodeFromString(response.bodyAsText()) // server is sending wrong content type
             // so that ktor does not decode it correctly.
         }
@@ -153,7 +160,7 @@ data class ChatMessage(
 @Serializable
 data class ChatResponse(
     @SerialName("prompt_eval_count")
-    val promptTokenCount: Int,
+    val promptTokenCount: Int = -1,
     @SerialName("eval_count")
     val responseTokenCount: Int,
     val message: ChatMessage,

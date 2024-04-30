@@ -6,6 +6,7 @@ package io.github.lmos.arc.agents.llm
 
 import io.github.lmos.arc.agents.events.Event
 import java.time.Instant
+import kotlin.time.Duration
 
 /**
  * Events published by the LLM clients.
@@ -21,5 +22,7 @@ data class LLMFinishedEvent(
     val totalTokens: Int,
     val promptTokens: Int,
     val completionTokens: Int,
+    val functionCallCount: Int,
+    val duration: Duration,
     override val timestamp: Instant = Instant.now(),
 ) : Event

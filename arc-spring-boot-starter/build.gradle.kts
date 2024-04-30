@@ -7,6 +7,8 @@ dependencies {
     api(project(":arc-agents"))
     implementation(project(":arc-scripting"))
 
+    compileOnly("io.micrometer:micrometer-registry-atlas:1.12.3")
+
     implementation("org.springframework.boot:spring-boot-autoconfigure:3.2.4")
     implementation("org.springframework.boot:spring-boot-configuration-processor:3.2.4")
 

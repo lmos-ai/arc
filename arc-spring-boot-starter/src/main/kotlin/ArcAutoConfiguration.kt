@@ -34,11 +34,13 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Import
 import java.io.File
 import java.time.Duration
 import kotlin.reflect.KClass
 
 @AutoConfiguration
+@Import(MetricConfiguration::class)
 class ArcAutoConfiguration {
 
     @Bean
@@ -67,7 +69,6 @@ class ArcAutoConfiguration {
     fun memory() = InMemoryMemory()
 
     @Bean
-    @ConditionalOnMissingBean(EventHandler::class)
     fun loggingEventHandler() = LoggingEventHandler()
 
     @Bean

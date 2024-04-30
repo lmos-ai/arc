@@ -4,6 +4,7 @@
 
 package io.github.lmos.arc.agents.events
 
+import org.slf4j.LoggerFactory
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 import java.util.concurrent.ConcurrentHashMap
@@ -30,13 +31,19 @@ fun EventListeners.addAll(newHandlers: List<EventHandler<out Event>>) {
  * Basic EventPublisher.
  */
 class BasicEventPublisher : EventPublisher, EventListeners {
+
     private val handlers = ConcurrentHashMap<Type, List<EventHandler<out Event>>>()
+    private val log = LoggerFactory.getLogger(javaClass)
 
     override fun publish(event: Event) {
         handlers.forEach { (key, value) ->
             if ((key as Class<*>).isAssignableFrom(event::class.java)) {
                 value.forEach { handler ->
-                    handler::class.java.methods.first { it.name == handler::onEvent.name }.invoke(handler, event)
+                    try {
+                        handler::class.java.methods.first { it.name == handler::onEvent.name }.invoke(handler, event)
+                    } catch (ex: Exception) {
+                        log.error("Error while handling event!", ex)
+                    }
                 }
             }
         }
