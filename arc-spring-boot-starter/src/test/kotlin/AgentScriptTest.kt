@@ -10,6 +10,7 @@ import io.github.lmos.arc.agents.getAgentByName
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatNoException
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -36,10 +37,17 @@ class AgentScriptTest {
     @Test
     fun `test function defined as script`(): Unit = runBlocking {
         var i = 0
-        while (llmFunctionProvider.provide("get_weather").isEmpty() && i < 30) {
-            delay(1000)
-            i++
+
+        while (i < 30) {
+            try {
+                llmFunctionProvider.provide("get_weather")
+                break // If no exception is thrown, break the loop
+            } catch (e: NoSuchElementException) {
+                delay(1000)
+                i++
+            }
         }
-        assertThat(llmFunctionProvider.provide("get_weather")).hasSize(1)
+
+        assertThatNoException().isThrownBy { (llmFunctionProvider.provide("get_weather")) }
     }
 }

@@ -34,3 +34,8 @@ class AuthenticationException(msg: String) : ArcException(msg)
  * Indicates that the provided settings are invalid.
  */
 class InvalidSettingsException(msg: String) : ArcException(msg)
+
+/**
+ * Indicates that the provided function could not be found.
+ */
+class FunctionNotFoundException(msg: String) : ArcException(msg)

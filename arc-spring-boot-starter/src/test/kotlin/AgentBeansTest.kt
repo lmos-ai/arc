@@ -9,6 +9,7 @@ import io.github.lmos.arc.agents.functions.LLMFunctionProvider
 import io.github.lmos.arc.agents.getAgentByName
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatNoException
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -29,6 +30,6 @@ class AgentBeansTest {
 
     @Test
     fun `test function defined as bean`(): Unit = runBlocking {
-        assertThat(functionProvider.provide("get_weather_bean")).isNotEmpty
+        assertThatNoException().isThrownBy { (functionProvider.provide("get_weather_bean")) }
     }
 }
