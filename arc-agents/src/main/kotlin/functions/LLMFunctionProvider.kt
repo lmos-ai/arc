@@ -4,13 +4,18 @@
 
 package io.github.lmos.arc.agents.functions
 
+import io.github.lmos.arc.agents.FunctionNotFoundException
+import io.github.lmos.arc.core.Failure
+import io.github.lmos.arc.core.Result
+import io.github.lmos.arc.core.Success
+
 /**
  * Provides LLMFunctions.
  * Usually there is one instance of this class per application.
  */
 interface LLMFunctionProvider {
 
-    fun provide(functionName: String): List<LLMFunction>
+    fun provide(functionName: String): Result<LLMFunction, FunctionNotFoundException>
 }
 
 /**
@@ -31,9 +36,17 @@ class CompositeLLMFunctionProvider(
     private val functions: List<LLMFunction>,
 ) : LLMFunctionProvider {
 
-    override fun provide(functionName: String): List<LLMFunction> {
-        return functions().filter { it.name == functionName }
-    }
+    /**
+     * Retrieves a list of LLMFunctions matching the given function name.
+     *
+     * @param functionName The name of the function to search for.
+     * @return List of LLMFunctions matching the function name.
+     * @throws NoSuchElementException if no matching LLMFunction is found.
+     */
+
+    override fun provide(functionName: String): Result<LLMFunction, FunctionNotFoundException> =
+        functions().firstOrNull { it.name == functionName }?.let { Success(it) }
+            ?: Failure(FunctionNotFoundException("No matching LLMFunction found for name: $functionName"))
 
     private fun functions() = loaders.flatMap { it.load() } + functions
 }

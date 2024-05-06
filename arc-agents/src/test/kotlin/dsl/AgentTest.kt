@@ -4,20 +4,16 @@
 
 package io.github.lmos.arc.agents.dsl
 
-import io.github.lmos.arc.agents.AgentEvent
-import io.github.lmos.arc.agents.AgentFailedException
-import io.github.lmos.arc.agents.AgentFinishedEvent
-import io.github.lmos.arc.agents.AgentStartedEvent
-import io.github.lmos.arc.agents.ArcException
-import io.github.lmos.arc.agents.ChatAgent
-import io.github.lmos.arc.agents.TestBase
-import io.github.lmos.arc.agents.User
+import io.github.lmos.arc.agents.*
 import io.github.lmos.arc.agents.conversation.Conversation
 import io.github.lmos.arc.agents.conversation.toConversation
 import io.github.lmos.arc.agents.events.BasicEventPublisher
 import io.github.lmos.arc.agents.events.EventHandler
+import io.github.lmos.arc.agents.functions.LLMFunction
+import io.github.lmos.arc.agents.functions.ParametersSchema
 import io.github.lmos.arc.core.Failure
 import io.github.lmos.arc.core.Result
+import io.github.lmos.arc.core.Success
 import io.github.lmos.arc.core.getOrThrow
 import io.mockk.coEvery
 import io.mockk.slot
@@ -81,7 +77,17 @@ class AgentTest : TestBase() {
             tools = listOf("myFunctions")
         }
         val functionGroup = slot<String>()
-        coEvery { functionProvider.provide(capture(functionGroup)) } answers { emptyList() }
+        coEvery { functionProvider.provide(capture(functionGroup)) } answers {
+            Success(object : LLMFunction {
+                override val name = "MyFunction"
+                override val parameters = ParametersSchema(emptyList(), emptyList())
+                override val description = "This is a sample function"
+                override val group = "SampleGroup"
+                override val isSensitive = false
+
+                override suspend fun execute(input: Map<String, Any?>) = Success("execution result")
+            })
+        }
 
         executeAgent(agent as ChatAgent, "question")
 
