@@ -9,6 +9,7 @@ import java.net.URI
 plugins {
     kotlin("jvm") version "1.9.23" apply false
     kotlin("plugin.serialization") version "1.9.23" apply false
+    id("org.jetbrains.dokka") version "1.9.20"
     id("org.cyclonedx.bom") version "1.8.2" apply false
     id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
     id("org.jetbrains.kotlinx.kover") version "0.7.6"
@@ -20,6 +21,7 @@ subprojects {
     version = "0.24.0"
 
     apply(plugin = "org.cyclonedx.bom")
+    apply(plugin = "org.jetbrains.dokka")
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "kotlinx-serialization")
     apply(plugin = "maven-publish")
@@ -31,7 +33,7 @@ subprojects {
     java {
         sourceCompatibility = JavaVersion.VERSION_17
         withSourcesJar()
-        withJavadocJar()
+        // withJavadocJar()
     }
 
     configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
@@ -50,10 +52,17 @@ subprojects {
         useJUnitPlatform()
     }
 
+    val javadocJar: TaskProvider<Jar> by tasks.registering(Jar::class) {
+        dependsOn(tasks.dokkaJavadoc)
+        from(tasks.dokkaJavadoc.flatMap { it.outputDirectory })
+        archiveClassifier.set("javadoc")
+    }
+
     configure<PublishingExtension> {
         publications {
             create("Maven", MavenPublication::class.java) {
                 from(components["java"])
+                artifact(javadocJar)
                 pom {
                     description = "ARC is an AI framework."
                     url = "https://github.com/lmos-ai/arc"
@@ -123,6 +132,7 @@ dependencies {
     kover(project("arc-reader-html"))
     kover(project("arc-agents"))
     kover(project("arc-spring-boot-starter"))
+    kover(project("arc-memory-mongo-spring-boot-starter"))
 }
 
 repositories {

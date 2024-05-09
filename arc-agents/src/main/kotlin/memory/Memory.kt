@@ -20,7 +20,7 @@ interface Memory {
      * @param key The key to store the value under.
      * @param value The value to store. If null, the value is removed from memory.
      */
-    fun storeLongTerm(owner: String, key: String, value: Any?)
+    suspend fun storeLongTerm(owner: String, key: String, value: Any?)
 
     /**
      * Store a value in SHORT_TERM memory.
@@ -29,7 +29,7 @@ interface Memory {
      * @param value The value to store. If null, the value is removed from memory.
      * @param sessionId The session id to store the value under.
      */
-    fun storeShortTerm(owner: String, key: String, value: Any?, sessionId: String)
+    suspend fun storeShortTerm(owner: String, key: String, value: Any?, sessionId: String)
 
     /**
      * Fetch a value from memory.
@@ -38,7 +38,7 @@ interface Memory {
      * @param sessionId The session id to fetch the value for. Only used if the value was stored under SHORT_TERM memory.
      * @return The value stored under the key, or null if no value is stored.
      */
-    fun fetch(owner: String, key: String, sessionId: String? = null): Any?
+    suspend fun fetch(owner: String, key: String, sessionId: String? = null): Any?
 }
 
 /**
@@ -53,7 +53,7 @@ class InMemoryMemory : Memory {
     private val shortTermMemory = ConcurrentHashMap<String, MemoryShortTermEntry>()
     private val longTermMemory = ConcurrentHashMap<String, Any>()
 
-    override fun storeLongTerm(owner: String, key: String, value: Any?) {
+    override suspend fun storeLongTerm(owner: String, key: String, value: Any?) {
         if (value == null) {
             log.debug("Removing $key for $owner from LONG_TERM memory.")
             longTermMemory.remove("$owner $key")
@@ -64,7 +64,7 @@ class InMemoryMemory : Memory {
         cleanShortTermMemory()
     }
 
-    override fun storeShortTerm(owner: String, key: String, value: Any?, sessionId: String) {
+    override suspend fun storeShortTerm(owner: String, key: String, value: Any?, sessionId: String) {
         if (value == null) {
             log.debug("Removing $key for $owner from SHORT_TERM memory.")
             shortTermMemory.remove("$sessionId $owner $key")
@@ -82,7 +82,7 @@ class InMemoryMemory : Memory {
         }
     }
 
-    override fun fetch(owner: String, key: String, sessionId: String?) =
+    override suspend fun fetch(owner: String, key: String, sessionId: String?) =
         if (sessionId != null) {
             shortTermMemory["$sessionId $owner $key"]?.value
                 ?: longTermMemory["$owner $key"]

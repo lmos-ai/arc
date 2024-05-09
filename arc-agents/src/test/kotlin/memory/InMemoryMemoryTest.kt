@@ -4,13 +4,14 @@
 
 package io.github.lmos.arc.agents.memory
 
+import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class InMemoryMemoryTest {
 
     @Test
-    fun `test store ShortTerm value`() {
+    fun `test store ShortTerm value`() = runBlocking {
         val subject = InMemoryMemory()
         subject.storeShortTerm("owner", "key", "value", "session")
         subject.fetch("owner", "key", "session").let {
@@ -19,7 +20,7 @@ class InMemoryMemoryTest {
     }
 
     @Test
-    fun `test that ShortTerm value can only be retrieved with correct session`() {
+    fun `test that ShortTerm value can only be retrieved with correct session`() = runBlocking {
         val subject = InMemoryMemory()
         subject.storeShortTerm("owner", "key", "value", "session")
         subject.fetch("owner", "key", "NEW_session").let {
@@ -28,7 +29,7 @@ class InMemoryMemoryTest {
     }
 
     @Test
-    fun `test remove ShortTerm value`() {
+    fun `test remove ShortTerm value`() = runBlocking {
         val subject = InMemoryMemory()
         subject.storeShortTerm("owner", "key", "value", "session")
         subject.storeShortTerm("owner", "key", null, "session")
@@ -38,7 +39,7 @@ class InMemoryMemoryTest {
     }
 
     @Test
-    fun `test store LongTerm value`() {
+    fun `test store LongTerm value`() = runBlocking {
         val subject = InMemoryMemory()
         subject.storeLongTerm("owner", "key", "value")
         subject.fetch("owner", "key").let {
@@ -47,7 +48,7 @@ class InMemoryMemoryTest {
     }
 
     @Test
-    fun `test that session id is ignored when retrieving LongTerm value`() {
+    fun `test that session id is ignored when retrieving LongTerm value`() = runBlocking {
         val subject = InMemoryMemory()
         subject.storeLongTerm("owner", "key", "value")
         subject.fetch("owner", "key", "NEW_session").let {
@@ -56,7 +57,7 @@ class InMemoryMemoryTest {
     }
 
     @Test
-    fun `test remove LongTerm value`() {
+    fun `test remove LongTerm value`() = runBlocking {
         val subject = InMemoryMemory()
         subject.storeLongTerm("owner", "key", "value")
         subject.storeLongTerm("owner", "key", null)
