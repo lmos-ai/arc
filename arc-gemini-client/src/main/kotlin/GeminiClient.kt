@@ -30,9 +30,11 @@ import io.github.lmos.arc.client.gemini.ByteMapper.map
 import io.github.lmos.arc.core.Result
 import io.github.lmos.arc.core.Success
 import io.github.lmos.arc.core.failWith
+import io.github.lmos.arc.core.finally
 import io.github.lmos.arc.core.getOrThrow
 import io.github.lmos.arc.core.result
 import org.slf4j.LoggerFactory
+import kotlin.time.Duration
 import kotlin.time.measureTime
 
 /**
@@ -53,31 +55,38 @@ class GeminiClient(
     ) = result<AssistantMessage, ArcException> {
         val vertexMessages = toVertexMessage(messages.systemToUser()) // gemini does not support system message
         val vertexFunctions = functions?.let { toVertexFunctions(it) }
-        val functionCallHandler = FunctionCallHandler(functions ?: emptyList())
+        val functionCallHandler = FunctionCallHandler(functions ?: emptyList(), eventHandler)
+
         eventHandler?.publish(LLMStartedEvent(languageModel.modelName))
 
         val result: Result<GenerateContentResponse, ArcException>
         val duration = measureTime {
-            result =
-                chat(
-                    vertexMessages,
-                    vertexFunctions,
-                    functionCallHandler,
-                    settings,
-                )
+            result = chat(vertexMessages, vertexFunctions, functionCallHandler, settings)
         }
-        val response = result failWith { ArcException("Failed to call Gemini!", it) }
+
+        var response: GenerateContentResponse? = null
+        finally { publishEvent(it, response, duration, functionCallHandler) }
+        response = result failWith { ArcException("Failed to call Gemini!", it) }
+        AssistantMessage(ResponseHandler.getText(response), sensitive = functionCallHandler.calledSensitiveFunction())
+    }
+
+    private fun publishEvent(
+        result: Result<AssistantMessage, ArcException>,
+        response: GenerateContentResponse?,
+        duration: Duration,
+        functionCallHandler: FunctionCallHandler
+    ) {
         eventHandler?.publish(
             LLMFinishedEvent(
+                result,
                 languageModel.modelName,
-                totalTokens = response.usageMetadata.totalTokenCount,
-                promptTokens = response.usageMetadata.promptTokenCount,
-                completionTokens = response.usageMetadata.candidatesTokenCount,
+                totalTokens = response?.usageMetadata?.totalTokenCount ?: -1,
+                promptTokens = response?.usageMetadata?.promptTokenCount ?: -1,
+                completionTokens = response?.usageMetadata?.candidatesTokenCount ?: -1,
                 functionCallHandler.calledFunctions.size,
                 duration,
             ),
         )
-        AssistantMessage(ResponseHandler.getText(response), sensitive = functionCallHandler.calledSensitiveFunction())
     }
 
     private suspend fun chat(

@@ -20,6 +20,7 @@ import io.github.lmos.arc.agents.llm.OutputFormat.JSON
 import io.github.lmos.arc.core.Result
 import io.github.lmos.arc.core.ensure
 import io.github.lmos.arc.core.failWith
+import io.github.lmos.arc.core.finally
 import io.github.lmos.arc.core.result
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -36,6 +37,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import org.slf4j.LoggerFactory
+import kotlin.time.Duration
 import kotlin.time.measureTime
 
 /**
@@ -90,19 +92,28 @@ class OllamaClient(
         val duration = measureTime {
             result = chat(ollamaMessages, settings)
         }
-        val chatCompletions = result failWith { it }
+        var chatCompletions: ChatResponse? = null
+        finally { publishEvent(it, chatCompletions, duration) }
+        chatCompletions = result failWith { it }
+        AssistantMessage(chatCompletions.message.content)
+    }
+
+    private fun publishEvent(
+        result: Result<AssistantMessage, ArcException>,
+        chatCompletions: ChatResponse?,
+        duration: Duration
+    ) {
         eventHandler?.publish(
             LLMFinishedEvent(
+                result,
                 languageModel.modelName,
-                chatCompletions.promptTokenCount + chatCompletions.responseTokenCount,
-                chatCompletions.promptTokenCount,
-                chatCompletions.responseTokenCount,
+                chatCompletions?.let { it.promptTokenCount + it.responseTokenCount } ?: -1,
+                chatCompletions?.promptTokenCount ?: -1,
+                chatCompletions?.responseTokenCount ?: -1,
                 0,
                 duration,
             ),
         )
-
-        AssistantMessage(chatCompletions.message.content)
     }
 
     private suspend fun chat(messages: List<ChatMessage>, settings: ChatCompletionSettings?) =
