@@ -12,18 +12,22 @@ import com.azure.ai.openai.models.ChatRequestToolMessage
 import com.azure.ai.openai.models.CompletionsFinishReason
 import io.github.lmos.arc.agents.ArcException
 import io.github.lmos.arc.agents.HallucinationDetectedException
+import io.github.lmos.arc.agents.events.EventPublisher
 import io.github.lmos.arc.agents.functions.LLMFunction
+import io.github.lmos.arc.agents.functions.LLMFunctionCalledEvent
 import io.github.lmos.arc.agents.functions.convertToJsonMap
+import io.github.lmos.arc.core.Result
 import io.github.lmos.arc.core.failWith
 import io.github.lmos.arc.core.getOrNull
 import io.github.lmos.arc.core.result
 import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.time.measureTime
 
 /**
  * Finds function calls in ChatCompletions and calls the callback function if any are found.
  */
-class FunctionCallHandler(private val functions: List<LLMFunction>) {
+class FunctionCallHandler(private val functions: List<LLMFunction>, private val eventHandler: EventPublisher?) {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -45,10 +49,22 @@ class FunctionCallHandler(private val functions: List<LLMFunction>) {
                 choice.message.toolCalls.forEach {
                     val toolCall = it as ChatCompletionsFunctionToolCall
                     val functionName = toolCall.function.name
-                    val functionArguments = toolCall.function.arguments
+                    val functionArguments = toolCall.function.arguments.toJson() failWith { it }
 
-                    val functionCallResult = callFunction(functionName, functionArguments) failWith { it }
-                    add(ChatRequestToolMessage(functionCallResult, toolCall.id))
+                    val functionCallResult: Result<String, ArcException>
+                    val duration = measureTime {
+                        functionCallResult = callFunction(functionName, functionArguments)
+                    }
+                    eventHandler?.publish(
+                        LLMFunctionCalledEvent(
+                            functionName,
+                            functionArguments,
+                            functionCallResult,
+                            duration = duration
+                        )
+                    )
+
+                    add(ChatRequestToolMessage(functionCallResult failWith { it }, toolCall.id))
                 }
             }
             listOf(assistantMessage) + toolMessages
@@ -57,15 +73,15 @@ class FunctionCallHandler(private val functions: List<LLMFunction>) {
         }
     }
 
-    private suspend fun callFunction(functionName: String, functionArguments: String) = result<String, ArcException> {
-        val jsonMap = functionArguments.toJson() failWith { it }
-        val function = functions.find { it.name == functionName }
-            ?: failWith { ArcException("Cannot find function called $functionName!") }
+    private suspend fun callFunction(functionName: String, functionArguments: Map<String, Any?>) =
+        result<String, ArcException> {
+            val function = functions.find { it.name == functionName }
+                ?: failWith { ArcException("Cannot find function called $functionName!") }
 
-        log.debug("Calling LLMFunction $function with $jsonMap...")
-        _calledFunctions[functionName] = function
-        function.execute(jsonMap) failWith { ArcException(cause = it.cause) }
-    }
+            log.debug("Calling LLMFunction $function with $functionArguments...")
+            _calledFunctions[functionName] = function
+            function.execute(functionArguments) failWith { ArcException(cause = it.cause) }
+        }
 
     private fun String.toJson() = result<Map<String, Any?>, HallucinationDetectedException> {
         convertToJsonMap().getOrNull() ?: failWith {

@@ -11,19 +11,20 @@ import com.google.cloud.vertexai.generativeai.ContentMaker.fromMultiModalData
 import com.google.cloud.vertexai.generativeai.PartMaker.fromFunctionResponse
 import com.google.cloud.vertexai.generativeai.ResponseHandler
 import io.github.lmos.arc.agents.ArcException
-import io.github.lmos.arc.agents.HallucinationDetectedException
+import io.github.lmos.arc.agents.events.EventPublisher
 import io.github.lmos.arc.agents.functions.LLMFunction
-import io.github.lmos.arc.agents.functions.convertToJsonMap
+import io.github.lmos.arc.agents.functions.LLMFunctionCalledEvent
+import io.github.lmos.arc.core.Result
 import io.github.lmos.arc.core.failWith
-import io.github.lmos.arc.core.getOrNull
 import io.github.lmos.arc.core.result
 import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.time.measureTime
 
 /**
  * Finds function calls in ChatCompletions and calls the callback function if any are found.
  */
-class FunctionCallHandler(private val functions: List<LLMFunction>) {
+class FunctionCallHandler(private val functions: List<LLMFunction>, private val eventHandler: EventPublisher?) {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -41,13 +42,21 @@ class FunctionCallHandler(private val functions: List<LLMFunction>) {
             buildList {
                 add(ResponseHandler.getContent(response)) // add function_call response from model
                 functionCalls.forEach { functionCall ->
-                    val functionCallResult =
-                        callFunction(
+                    val functionArguments = functionCall.args.fieldsMap.mapValues { it.value.stringValue }
+                    val functionCallResult: Result<String, ArcException>
+                    val duration = measureTime {
+                        functionCallResult = callFunction(functionCall.name, functionArguments)
+                    }
+                    eventHandler?.publish(
+                        LLMFunctionCalledEvent(
                             functionCall.name,
-                            functionCall.args.fieldsMap.mapValues { it.value.stringValue },
-                        ) failWith { it }
+                            functionArguments,
+                            functionCallResult,
+                            duration = duration
+                        )
+                    )
                     // add function responses
-                    add(functionCall.toResponse(functionCallResult))
+                    add(functionCall.toResponse(functionCallResult failWith { it }))
                 }
             }
         } else {
@@ -67,10 +76,4 @@ class FunctionCallHandler(private val functions: List<LLMFunction>) {
             _calledFunctions[functionName] = function
             function.execute(functionArguments) failWith { ArcException(cause = it.cause) }
         }
-
-    private fun String.toJson() = result<Map<String, Any?>, HallucinationDetectedException> {
-        convertToJsonMap().getOrNull() ?: failWith {
-            HallucinationDetectedException("LLM has failed to produce valid JSON for function call! -> ${this@toJson}")
-        }
-    }
 }

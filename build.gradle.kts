@@ -18,7 +18,7 @@ plugins {
 
 subprojects {
     group = "io.github.lmos-ai.arc"
-    version = "0.24.0"
+    version = "0.25.0"
 
     apply(plugin = "org.cyclonedx.bom")
     apply(plugin = "org.jetbrains.dokka")
@@ -80,6 +80,11 @@ subprojects {
                         developer {
                             id = "pat"
                             name = "Patrick Whelan"
+                            email = "opensource@telekom.de"
+                        }
+                        developer {
+                            id = "bharat_bhushan"
+                            name = "Bharat Bhushan"
                             email = "opensource@telekom.de"
                         }
                     }
