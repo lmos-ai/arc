@@ -15,7 +15,11 @@ interface Agent<I, O> {
 
     val description: String
 
-    suspend fun execute(input: I): Result<O, AgentFailedException>
+    /**
+     * Executes the agent with the given input and context.
+     * The objects passed as the context can be accessed within the Agents DSL using DSLContext#context.
+     */
+    suspend fun execute(input: I, context: Set<Any> = emptySet()): Result<O, AgentFailedException>
 }
 
 /**
