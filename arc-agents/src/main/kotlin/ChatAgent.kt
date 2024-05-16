@@ -39,14 +39,14 @@ class ChatAgent(
     private val filterInput: suspend InputFilterContext.() -> Unit,
 ) : Agent<Conversation, Conversation> {
 
-    override suspend fun execute(input: Conversation): Result<Conversation, AgentFailedException> {
+    override suspend fun execute(input: Conversation, context: Set<Any>): Result<Conversation, AgentFailedException> {
         val agentEventHandler = beanProvider.provideOptional<EventPublisher>()
         val model = model()
 
         agentEventHandler?.publish(AgentStartedEvent(this@ChatAgent))
         val result: Result<Conversation, AgentFailedException>
         val duration = measureTime {
-            result = doExecute(input, model).mapFailure { AgentFailedException("Agent $name failed!", it) }
+            result = doExecute(input, model, context).mapFailure { AgentFailedException("Agent $name failed!", it) }
         }
         agentEventHandler?.publish(
             AgentFinishedEvent(
@@ -60,13 +60,13 @@ class ChatAgent(
         return result
     }
 
-    private suspend fun doExecute(conversation: Conversation, model: String?) =
+    private suspend fun doExecute(conversation: Conversation, model: String?, context: Set<Any>) =
         result<Conversation, Exception> {
             val scriptingContext = BasicDSLContext(beanProvider)
             val chatCompleter = chatCompleter(model = model)
             val functions = functions()
 
-            CoroutineBeanProvider().setContext(setOf(conversation, conversation.user)) {
+            CoroutineBeanProvider().setContext(context + setOf(conversation, conversation.user)) {
                 val filterContext = InputFilterContext(scriptingContext, conversation)
                 val filteredInput = filterInput.invoke(filterContext).let { filterContext.input }
 

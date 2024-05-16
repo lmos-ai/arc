@@ -7,6 +7,6 @@ package io.github.lmos.arc.agents.events
 /**
  * EventHandler interface.
  */
-fun interface EventHandler<T : Event> {
+interface EventHandler<T : Event> {
     fun onEvent(event: T)
 }
