@@ -22,6 +22,7 @@ import io.github.lmos.arc.agents.functions.LLMFunctionLoader
 import io.github.lmos.arc.agents.functions.LLMFunctionProvider
 import io.github.lmos.arc.agents.memory.InMemoryMemory
 import io.github.lmos.arc.agents.memory.Memory
+import io.github.lmos.arc.scripting.ScriptHotReload
 import io.github.lmos.arc.scripting.agents.AgentScriptEngine
 import io.github.lmos.arc.scripting.agents.CompiledAgentLoader
 import io.github.lmos.arc.scripting.agents.KtsAgentScriptEngine
@@ -33,11 +34,13 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import java.io.File
 import java.time.Duration
 import kotlin.reflect.KClass
+import kotlin.time.toKotlinDuration
 
 @AutoConfiguration
 @Import(MetricConfiguration::class)
@@ -72,25 +75,32 @@ class ArcAutoConfiguration {
     fun loggingEventHandler() = LoggingEventHandler()
 
     @Bean
+    @ConditionalOnProperty("arc.scripts.hotReload.enable", havingValue = "true")
+    fun scriptHotReload(
+        @Value("\${arc.scripts.folder:/agents}") agentsFolder: File,
+        @Value("\${arc.scripts.hotReload.delay:PT3M}") hotReloadDelay: Duration,
+        agentLoader: ScriptingAgentLoader,
+        functionLoader: ScriptingLLMFunctionLoader,
+    ): ScriptHotReload {
+        if (!agentsFolder.exists()) error("Agents folder does not exist: $agentsFolder!")
+        return ScriptHotReload(agentLoader, functionLoader, hotReloadDelay.toKotlinDuration())
+    }
+
+    @Bean
     @ConditionalOnMissingBean(AgentProvider::class)
     fun agentProvider(loaders: List<AgentLoader>, agents: List<Agent<*, *>>): AgentProvider =
         CompositeAgentProvider(loaders, agents)
 
-    @Bean(destroyMethod = "destroy")
+    @Bean
     fun scriptingAgentLoader(
         agentScriptEngine: AgentScriptEngine,
         agentFactory: AgentFactory<*>,
         compiledAgents: List<CompiledAgentLoader>?,
-        @Value("\${arc.scripts.hotReload.enable:false}") hotReload: Boolean,
         @Value("\${arc.scripts.folder:/agents}") agentsFolder: File,
-        @Value("\${arc.scripts.hotReload.delay:PT3M}") hotReloadDelay: Duration,
     ): ScriptingAgentLoader {
-        return ScriptingAgentLoader(agentFactory, agentScriptEngine).also {
-            compiledAgents?.forEach(it::loadCompiledAgent)
-            if (hotReload) {
-                if (!agentsFolder.exists()) error("Agents folder does not exist: $agentsFolder!")
-                it.startHotReload(agentsFolder, hotReloadDelay)
-            }
+        return ScriptingAgentLoader(agentFactory, agentScriptEngine).also { loader ->
+            compiledAgents?.forEach(loader::loadCompiledAgent)
+            if (agentsFolder.exists()) agentsFolder.listFiles()?.let { loader.loadAgents(*it) }
         }
     }
 
@@ -98,19 +108,14 @@ class ArcAutoConfiguration {
     fun llmFunctionProvider(loaders: List<LLMFunctionLoader>, functions: List<LLMFunction>): LLMFunctionProvider =
         CompositeLLMFunctionProvider(loaders, functions)
 
-    @Bean(destroyMethod = "destroy")
+    @Bean
     fun scriptingLLMFunctionProvider(
         functionScriptEngine: FunctionScriptEngine,
-        @Value("\${arc.scripts.hotReload.enable:false}") hotReload: Boolean,
-        @Value("\${arc.scripts.folder:/agents}") functionsFolder: File,
-        @Value("\${arc.scripts.hotReload.delay:PT3M}") hotReloadDelay: Duration,
         beanProvider: BeanProvider,
+        @Value("\${arc.scripts.folder:/agents}") agentsFolder: File,
     ): ScriptingLLMFunctionLoader {
-        return ScriptingLLMFunctionLoader(beanProvider, functionScriptEngine).also {
-            if (hotReload) {
-                if (!functionsFolder.exists()) error("Functions folder does not exist: $functionsFolder!")
-                it.startHotReload(functionsFolder, hotReloadDelay)
-            }
+        return ScriptingLLMFunctionLoader(beanProvider, functionScriptEngine).also { loader ->
+            if (agentsFolder.exists()) agentsFolder.listFiles()?.let { loader.loadFunctions(*it) }
         }
     }
 
