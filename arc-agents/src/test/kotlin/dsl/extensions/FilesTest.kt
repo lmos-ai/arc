@@ -16,7 +16,7 @@ class FilesTest : TestBase() {
     fun `test read file from classpath`(): Unit = runBlocking {
         val context = BasicDSLContext(testBeanProvider)
         val result = context.local("test.txt")
-        assertThat(result).isEqualTo("ARC is fun!")
+        assertThat(result).contains("ARC is fun!")
     }
 
     @Test

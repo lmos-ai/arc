@@ -12,16 +12,9 @@ import io.github.lmos.arc.core.Result
 import io.github.lmos.arc.core.Success
 import io.github.lmos.arc.core.onFailure
 import io.github.lmos.arc.scripting.ScriptFailedException
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 import java.io.File
-import java.time.Duration
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.script.experimental.api.ResultValue
 
 /**
@@ -35,20 +28,19 @@ class ScriptingAgentLoader(
 
     private val log = LoggerFactory.getLogger(this.javaClass)
     private val agents = ConcurrentHashMap<String, Agent<*, *>>()
-    private val lastModified = ConcurrentHashMap<String, Long>()
-    private val scope = CoroutineScope(SupervisorJob())
-    private val running = AtomicBoolean(false)
 
     override fun getAgents() = agents.values.toList()
 
     fun getAgentByName(name: String) = agents[name]
 
+    /**
+     * Loads the agents defined in an Agent DSL script.
+     */
     fun loadAgent(agentScript: String): Result<ResultValue?, ScriptFailedException> {
         val context = BasicAgentDefinitionContext(agentFactory)
         val result = agentScriptEngine.eval(agentScript, context)
         if (result is Success && context.agents.isNotEmpty()) {
-            log.info("Discovered the following agents (scripting): ${context.agents}")
-            agents.clear()
+            log.info("Discovered the following agents (scripting): ${context.agents.joinToString { it.name }}")
             agents.putAll(context.agents.associateBy { it.name })
         }
         return result
@@ -58,49 +50,23 @@ class ScriptingAgentLoader(
         val context = BasicAgentDefinitionContext(agentFactory)
         compiledAgentScript.load(context)
         if (context.agents.isNotEmpty()) {
-            log.info("Discovered the following agents (compiled): ${context.agents}")
-            agents.clear()
+            log.info("Discovered the following agents (scripting): ${context.agents.joinToString { it.name }}")
             agents.putAll(context.agents.associateBy { it.name })
         }
     }
 
-    fun startHotReload(agentsFolder: File, hotReloadDelay: Duration = Duration.ofMinutes(3)) {
-        log.debug("Starting hot-reload of agents from ${agentsFolder.absoluteFile} which has ${agentsFolder.listFiles()?.size} files")
-        running.set(true)
-        scope.launch {
-            while (running.get()) {
-                loadAgents(agentsFolder)
-                delay(hotReloadDelay.toMillis())
-            }
-        }
-    }
-
-    fun destroy() {
-        running.set(false)
-        scope.cancel()
-    }
-
-    private fun loadAgents(agentsFolder: File) {
-        val discoveredAgents = agentsFolder.listFiles()
-            ?.filter { it.name.endsWith(".agent.kts") }
-            ?.filter { it.lastModified() != lastModified[it.name] }
-            ?.map {
-                lastModified[it.name] = it.lastModified()
-                it
-            }
-            ?.map { it.name to it.readText() }
-            ?.flatMap { script ->
-                val context = BasicAgentDefinitionContext(agentFactory)
-                agentScriptEngine.eval(script.second, context).onFailure { ex ->
-                    log.error("Failed to load script ${script.first}!", ex)
+    /**
+     * Loads the agents defined in a list of Agent DSL script files.
+     */
+    fun loadAgents(vararg files: File) {
+        files
+            .asSequence()
+            .filter { it.name.endsWith(".agent.kts") }
+            .map { it.name to it.readText() }
+            .forEach { (name, script) ->
+                loadAgent(script).onFailure {
+                    log.warn("Failed to load agents from script: $name!", it)
                 }
-                context.agents
             }
-            ?.associateBy { it.name }
-            ?: emptyMap()
-        if (discoveredAgents.isNotEmpty()) {
-            log.info("Discovered the following agents (scripting): $discoveredAgents")
-        }
-        agents.putAll(discoveredAgents)
     }
 }

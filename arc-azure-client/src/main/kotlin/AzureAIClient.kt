@@ -78,7 +78,7 @@ class AzureAIClient(
         result: Result<AssistantMessage, ArcException>,
         chatCompletions: ChatCompletions?,
         duration: Duration,
-        functionCallHandler: FunctionCallHandler
+        functionCallHandler: FunctionCallHandler,
     ) {
         eventHandler?.publish(
             LLMFinishedEvent(

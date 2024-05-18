@@ -52,8 +52,8 @@ class FunctionCallHandler(private val functions: List<LLMFunction>, private val 
                             functionCall.name,
                             functionArguments,
                             functionCallResult,
-                            duration = duration
-                        )
+                            duration = duration,
+                        ),
                     )
                     // add function responses
                     add(functionCall.toResponse(functionCallResult failWith { it }))

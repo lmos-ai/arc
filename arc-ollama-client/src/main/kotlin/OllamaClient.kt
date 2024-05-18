@@ -101,7 +101,7 @@ class OllamaClient(
     private fun publishEvent(
         result: Result<AssistantMessage, ArcException>,
         chatCompletions: ChatResponse?,
-        duration: Duration
+        duration: Duration,
     ) {
         eventHandler?.publish(
             LLMFinishedEvent(

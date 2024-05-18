@@ -60,8 +60,8 @@ class FunctionCallHandler(private val functions: List<LLMFunction>, private val 
                             functionName,
                             functionArguments,
                             functionCallResult,
-                            duration = duration
-                        )
+                            duration = duration,
+                        ),
                     )
 
                     add(ChatRequestToolMessage(functionCallResult failWith { it }, toolCall.id))

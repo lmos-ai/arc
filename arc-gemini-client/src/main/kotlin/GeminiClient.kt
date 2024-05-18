@@ -74,7 +74,7 @@ class GeminiClient(
         result: Result<AssistantMessage, ArcException>,
         response: GenerateContentResponse?,
         duration: Duration,
-        functionCallHandler: FunctionCallHandler
+        functionCallHandler: FunctionCallHandler,
     ) {
         eventHandler?.publish(
             LLMFinishedEvent(
