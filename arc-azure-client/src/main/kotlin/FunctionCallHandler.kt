@@ -15,6 +15,7 @@ import io.github.lmos.arc.agents.HallucinationDetectedException
 import io.github.lmos.arc.agents.events.EventPublisher
 import io.github.lmos.arc.agents.functions.LLMFunction
 import io.github.lmos.arc.agents.functions.LLMFunctionCalledEvent
+import io.github.lmos.arc.agents.functions.LLMFunctionStartedEvent
 import io.github.lmos.arc.agents.functions.convertToJsonMap
 import io.github.lmos.arc.core.Result
 import io.github.lmos.arc.core.failWith
@@ -53,6 +54,7 @@ class FunctionCallHandler(private val functions: List<LLMFunction>, private val 
 
                     val functionCallResult: Result<String, ArcException>
                     val duration = measureTime {
+                        eventHandler?.publish(LLMFunctionStartedEvent(functionName, functionArguments))
                         functionCallResult = callFunction(functionName, functionArguments)
                     }
                     eventHandler?.publish(
