@@ -14,6 +14,7 @@ import io.github.lmos.arc.agents.ArcException
 import io.github.lmos.arc.agents.events.EventPublisher
 import io.github.lmos.arc.agents.functions.LLMFunction
 import io.github.lmos.arc.agents.functions.LLMFunctionCalledEvent
+import io.github.lmos.arc.agents.functions.LLMFunctionStartedEvent
 import io.github.lmos.arc.core.Result
 import io.github.lmos.arc.core.failWith
 import io.github.lmos.arc.core.result
@@ -45,6 +46,7 @@ class FunctionCallHandler(private val functions: List<LLMFunction>, private val 
                     val functionArguments = functionCall.args.fieldsMap.mapValues { it.value.stringValue }
                     val functionCallResult: Result<String, ArcException>
                     val duration = measureTime {
+                        eventHandler?.publish(LLMFunctionStartedEvent(functionCall.name, functionArguments))
                         functionCallResult = callFunction(functionCall.name, functionArguments)
                     }
                     eventHandler?.publish(

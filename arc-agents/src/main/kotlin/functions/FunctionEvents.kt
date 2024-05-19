@@ -14,6 +14,12 @@ import kotlin.time.Duration
  * Events published by the LLM clients when calling functions.
  */
 
+data class LLMFunctionStartedEvent(
+    val name: String,
+    val param: Map<String, Any?>,
+    override val timestamp: Instant = Instant.now(),
+) : Event
+
 data class LLMFunctionCalledEvent(
     val name: String,
     val param: Map<String, Any?>,

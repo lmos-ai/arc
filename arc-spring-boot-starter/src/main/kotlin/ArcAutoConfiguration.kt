@@ -83,7 +83,9 @@ class ArcAutoConfiguration {
         functionLoader: ScriptingLLMFunctionLoader,
     ): ScriptHotReload {
         if (!agentsFolder.exists()) error("Agents folder does not exist: $agentsFolder!")
-        return ScriptHotReload(agentLoader, functionLoader, hotReloadDelay.toKotlinDuration())
+        return ScriptHotReload(agentLoader, functionLoader, hotReloadDelay.toKotlinDuration()).also {
+            it.start(agentsFolder)
+        }
     }
 
     @Bean
