@@ -17,6 +17,9 @@ import io.github.lmos.arc.agents.llm.ChatCompletionSettings
 import io.github.lmos.arc.agents.llm.LLMFinishedEvent
 import io.github.lmos.arc.agents.llm.LLMStartedEvent
 import io.github.lmos.arc.agents.llm.OutputFormat.JSON
+import io.github.lmos.arc.agents.llm.TextEmbedder
+import io.github.lmos.arc.agents.llm.TextEmbedding
+import io.github.lmos.arc.agents.llm.TextEmbeddings
 import io.github.lmos.arc.core.Result
 import io.github.lmos.arc.core.ensure
 import io.github.lmos.arc.core.failWith
@@ -36,6 +39,10 @@ import io.ktor.util.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.double
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import org.slf4j.LoggerFactory
 import kotlin.time.Duration
 import kotlin.time.measureTime
@@ -46,7 +53,7 @@ import kotlin.time.measureTime
 class OllamaClient(
     private val languageModel: OllamaClientConfig,
     private val eventHandler: EventPublisher? = null,
-) : ChatCompleter {
+) : ChatCompleter, TextEmbedder {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -151,6 +158,25 @@ class OllamaClient(
                 is SystemMessage -> ChatMessage(content = it.content, role = "system")
             }
         }
+
+    override suspend fun embed(texts: List<String>) = result<TextEmbeddings, ArcException> {
+        val embeddings = texts.map { embed(it) failWith { it } }
+        TextEmbeddings(embeddings)
+    }
+
+    private suspend fun embed(text: String) = result<TextEmbedding, ArcException> {
+        val response: HttpResponse = client.post("${languageModel.url}/api/embeddings") {
+            contentType(ContentType.Application.Json)
+            setBody(TextEmbeddingRequest(languageModel.modelName, text))
+        }.body()
+        ensure(response.status.isSuccess()) { ArcException("Failed to create text embeddings: ${response.status}!") }
+        TextEmbedding(
+            text = text,
+            embedding = response.bodyAsText().embedding.map { it.jsonPrimitive.double }
+        )
+    }
+
+    private val String.embedding get() = json.parseToJsonElement(this).jsonObject["embedding"]!!.jsonArray
 }
 
 @Serializable
@@ -175,4 +201,10 @@ data class ChatResponse(
     @SerialName("eval_count")
     val responseTokenCount: Int,
     val message: ChatMessage,
+)
+
+@Serializable
+data class TextEmbeddingRequest(
+    val model: String,
+    val prompt: String,
 )

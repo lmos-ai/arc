@@ -13,6 +13,7 @@ import com.azure.ai.openai.models.ChatRequestAssistantMessage
 import com.azure.ai.openai.models.ChatRequestMessage
 import com.azure.ai.openai.models.ChatRequestSystemMessage
 import com.azure.ai.openai.models.ChatRequestUserMessage
+import com.azure.ai.openai.models.EmbeddingsOptions
 import com.azure.ai.openai.models.FunctionDefinition
 import com.azure.core.exception.ClientAuthenticationException
 import com.azure.core.util.BinaryData
@@ -28,12 +29,16 @@ import io.github.lmos.arc.agents.llm.ChatCompletionSettings
 import io.github.lmos.arc.agents.llm.LLMFinishedEvent
 import io.github.lmos.arc.agents.llm.LLMStartedEvent
 import io.github.lmos.arc.agents.llm.OutputFormat.JSON
+import io.github.lmos.arc.agents.llm.TextEmbedder
+import io.github.lmos.arc.agents.llm.TextEmbedding
+import io.github.lmos.arc.agents.llm.TextEmbeddings
 import io.github.lmos.arc.core.Failure
 import io.github.lmos.arc.core.Result
 import io.github.lmos.arc.core.Success
 import io.github.lmos.arc.core.failWith
 import io.github.lmos.arc.core.finally
 import io.github.lmos.arc.core.getOrThrow
+import io.github.lmos.arc.core.mapFailure
 import io.github.lmos.arc.core.result
 import kotlinx.coroutines.reactive.awaitFirst
 import org.slf4j.LoggerFactory
@@ -47,7 +52,7 @@ class AzureAIClient(
     private val config: AzureClientConfig,
     private val client: OpenAIAsyncClient,
     private val eventHandler: EventPublisher? = null,
-) : ChatCompleter {
+) : ChatCompleter, TextEmbedder {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -151,4 +156,11 @@ class AzureAIClient(
             },
         )
     }.takeIf { it.isNotEmpty() }
+
+    override suspend fun embed(texts: List<String>) = result<TextEmbeddings, Exception> {
+        val embedding = client.getEmbeddings(config.modelName, EmbeddingsOptions(texts)).awaitFirst().let { result ->
+            result.data.map { e -> TextEmbedding(texts[e.promptIndex], e.embedding) }
+        }
+        TextEmbeddings(embedding)
+    }.mapFailure { ArcException("Failed to create text embeddings!", it) }
 }
