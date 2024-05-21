@@ -95,7 +95,7 @@ class AzureAIClient(
                 chatCompletions?.usage?.completionTokens ?: -1,
                 functionCallHandler.calledFunctions.size,
                 duration,
-                settings = settings
+                settings = settings,
             ),
         )
     }

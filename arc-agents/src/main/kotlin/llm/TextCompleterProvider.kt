@@ -10,5 +10,5 @@ package io.github.lmos.arc.agents.llm
  */
 fun interface TextEmbedderProvider {
 
-    fun provideByModel(model: String?): ChatCompleter
+    fun provideByModel(model: String?): TextEmbedder
 }

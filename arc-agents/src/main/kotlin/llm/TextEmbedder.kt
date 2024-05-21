@@ -35,7 +35,7 @@ data class TextEmbedding(
     val text: String,
     val embedding: List<Double>,
     val labels: Set<String> = emptySet(),
-    val data: String? = null
+    val data: String? = null,
 )
 
 /**
@@ -52,8 +52,7 @@ class TextEmbeddings(val embeddings: List<TextEmbedding>) {
         var currentSimilarity = -1.0
         var currentTextEmbedding = embeddings.first()
         embeddings.forEach {
-            val s = similarity(it.embedding, text.embedding)
-            println(s to it.text)
+            val s = similarity(text.embedding, it.embedding)
             if (s >= currentSimilarity) {
                 currentSimilarity = s
                 currentTextEmbedding = it

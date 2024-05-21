@@ -20,8 +20,11 @@ import io.github.lmos.arc.agents.functions.CompositeLLMFunctionProvider
 import io.github.lmos.arc.agents.functions.LLMFunction
 import io.github.lmos.arc.agents.functions.LLMFunctionLoader
 import io.github.lmos.arc.agents.functions.LLMFunctionProvider
+import io.github.lmos.arc.agents.llm.TextEmbedderProvider
 import io.github.lmos.arc.agents.memory.InMemoryMemory
 import io.github.lmos.arc.agents.memory.Memory
+import io.github.lmos.arc.agents.router.SemanticRouter
+import io.github.lmos.arc.agents.router.SemanticRoutes
 import io.github.lmos.arc.scripting.ScriptHotReload
 import io.github.lmos.arc.scripting.agents.AgentScriptEngine
 import io.github.lmos.arc.scripting.agents.CompiledAgentLoader
@@ -73,6 +76,17 @@ class ArcAutoConfiguration {
 
     @Bean
     fun loggingEventHandler() = LoggingEventHandler()
+
+    @Bean
+    @ConditionalOnProperty("arc.router.enable", havingValue = "true")
+    fun agentRouter(
+        @Value("\${arc.router.model}") model: String,
+        textEmbedderProvider: TextEmbedderProvider,
+        agentProvider: AgentProvider,
+        initialRoutes: SemanticRoutes? = null,
+    ): SemanticRouter {
+        return SemanticRouter(textEmbedderProvider.provideByModel(model), initialRoutes)
+    }
 
     @Bean
     @ConditionalOnProperty("arc.scripts.hotReload.enable", havingValue = "true")

@@ -17,4 +17,8 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
+
+    // Ktor Server for tests
+    testImplementation("io.ktor:ktor-server-core-jvm:2.3.11")
+    testImplementation("io.ktor:ktor-server-netty-jvm:2.3.11")
 }

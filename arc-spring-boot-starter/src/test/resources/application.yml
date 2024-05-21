@@ -7,6 +7,9 @@ arc:
     hotReload:
       enable: true
       delay: PT1S
+  router:
+    enable: true
+    model: "llama3:8b"
 
 logging:
   level:
