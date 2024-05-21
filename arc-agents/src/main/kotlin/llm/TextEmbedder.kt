@@ -8,6 +8,7 @@ import io.github.lmos.arc.agents.ArcException
 import io.github.lmos.arc.core.Result
 import io.github.lmos.arc.core.failWith
 import io.github.lmos.arc.core.result
+import kotlinx.serialization.Serializable
 
 /**
  * Creates text embeddings for a given text.
@@ -20,11 +21,27 @@ suspend fun TextEmbedder.embed(text: String) = result<TextEmbedding, ArcExceptio
     embed(listOf(text)).failWith { it }.embeddings.first()
 }
 
-data class TextEmbedding(val text: String, val embedding: List<Double>)
+/**
+ * A text embedding.
+ * @param text The text that was embedded.
+ * @param embedding The embedding of the text.
+ * @param labels Labels can be used to categorize the text, for example,
+ * "sports" can be used to label text as something to do with sports.
+ * @param data data can be used to store additional information that is not part of the embedding.
+ * For example, if the text is a question, then data can contain the answer.
+ */
+@Serializable
+data class TextEmbedding(
+    val text: String,
+    val embedding: List<Double>,
+    val labels: Set<String> = emptySet(),
+    val data: String? = null
+)
 
 /**
  * A collection of text embeddings.
  */
+@Serializable
 class TextEmbeddings(val embeddings: List<TextEmbedding>) {
 
     fun findSimilar(text: TextEmbedding, similarity: Double): List<TextEmbedding> {
