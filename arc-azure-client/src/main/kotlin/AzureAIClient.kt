@@ -74,7 +74,7 @@ class AzureAIClient(
             }
 
             var chatCompletions: ChatCompletions? = null
-            finally { publishEvent(it, chatCompletions, duration, functionCallHandler) }
+            finally { publishEvent(it, chatCompletions, duration, functionCallHandler, settings) }
             chatCompletions = result failWith { it }
             chatCompletions.getFirstAssistantMessage(sensitive = functionCallHandler.calledSensitiveFunction())
         }
@@ -84,6 +84,7 @@ class AzureAIClient(
         chatCompletions: ChatCompletions?,
         duration: Duration,
         functionCallHandler: FunctionCallHandler,
+        settings: ChatCompletionSettings?,
     ) {
         eventHandler?.publish(
             LLMFinishedEvent(
@@ -94,6 +95,7 @@ class AzureAIClient(
                 chatCompletions?.usage?.completionTokens ?: -1,
                 functionCallHandler.calledFunctions.size,
                 duration,
+                settings = settings
             ),
         )
     }

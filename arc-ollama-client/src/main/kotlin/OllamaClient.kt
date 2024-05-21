@@ -100,7 +100,7 @@ class OllamaClient(
             result = chat(ollamaMessages, settings)
         }
         var chatCompletions: ChatResponse? = null
-        finally { publishEvent(it, chatCompletions, duration) }
+        finally { publishEvent(it, chatCompletions, duration, settings) }
         chatCompletions = result failWith { it }
         AssistantMessage(chatCompletions.message.content)
     }
@@ -109,6 +109,7 @@ class OllamaClient(
         result: Result<AssistantMessage, ArcException>,
         chatCompletions: ChatResponse?,
         duration: Duration,
+        settings: ChatCompletionSettings?,
     ) {
         eventHandler?.publish(
             LLMFinishedEvent(
@@ -119,6 +120,7 @@ class OllamaClient(
                 chatCompletions?.responseTokenCount ?: -1,
                 0,
                 duration,
+                settings = settings
             ),
         )
     }
