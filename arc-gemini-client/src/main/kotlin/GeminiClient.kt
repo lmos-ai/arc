@@ -86,7 +86,7 @@ class GeminiClient(
                 completionTokens = response?.usageMetadata?.candidatesTokenCount ?: -1,
                 functionCallHandler.calledFunctions.size,
                 duration,
-                settings = settings
+                settings = settings,
             ),
         )
     }

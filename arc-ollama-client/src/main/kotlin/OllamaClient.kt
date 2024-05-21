@@ -120,7 +120,7 @@ class OllamaClient(
                 chatCompletions?.responseTokenCount ?: -1,
                 0,
                 duration,
-                settings = settings
+                settings = settings,
             ),
         )
     }
@@ -174,7 +174,7 @@ class OllamaClient(
         ensure(response.status.isSuccess()) { ArcException("Failed to create text embeddings: ${response.status}!") }
         TextEmbedding(
             text = text,
-            embedding = response.bodyAsText().embedding.map { it.jsonPrimitive.double }
+            embedding = response.bodyAsText().embedding.map { it.jsonPrimitive.double },
         )
     }
 

@@ -4,38 +4,26 @@
 
 package io.github.lmos.arc.client.ollama
 
-import io.github.lmos.arc.agents.llm.TextEmbeddings
+import io.github.lmos.arc.agents.conversation.UserMessage
 import io.github.lmos.arc.agents.llm.embed
-import io.github.lmos.arc.agents.llm.similarity
 import io.github.lmos.arc.core.getOrThrow
 import kotlinx.coroutines.runBlocking
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class OllamaClientTest {
+class OllamaClientTest : TestBase() {
 
     @Test
-    fun `test text`(): Unit = runBlocking {
-        val client = OllamaClient(OllamaClientConfig(modelName = "llama3:8b", url = "http://localhost:11434"))
-        val t1 = client.embed("Hello, world!").getOrThrow().embedding
-        val t2 = client.embed("Hello, world!").getOrThrow().embedding
-        val similarity = similarity(t1, t2)
-       // assertThat(similarity).isEqualTo(1.0000000000000002)
+    fun `test chat completion text`(): Unit = runBlocking {
+        val client = OllamaClient(OllamaClientConfig(modelName = "llama3:8b", url = "http://localhost:8080"))
+        val message = client.complete(listOf(UserMessage("test question"))).getOrThrow()
+        assertThat(message.content).isEqualTo("answer to test")
+    }
 
-        val l = listOf(
-            "Wie hoch ist mein Kontostand?",
-            "Wie viel Geld habe ich auf meinem Konto?",
-            "Was ist mein Kontostand?",
-            "Wie kann ich mein Router neustarten?",
-            "Was ist MagentaTV?",
-            "How much does MagentaTV cost?",
-            "Kontostand?",
-        ).map {
-            client.embed(it).getOrThrow()
-        }
-        val t = TextEmbeddings(l)
-        val look = client.embed("Was kostet TV").getOrThrow()
-
-        val result = t.findClosest(look)
-        println(result)
+    @Test
+    fun `test embed text`(): Unit = runBlocking {
+        val client = OllamaClient(OllamaClientConfig(modelName = "llama3:8b", url = "http://localhost:8080"))
+        val embedding = client.embed("Hello, world!").getOrThrow().embedding
+        assertThat(embedding).containsExactly(0.0, 0.1)
     }
 }

@@ -11,6 +11,10 @@ import io.github.lmos.arc.agents.functions.LLMFunction
 import io.github.lmos.arc.agents.llm.ChatCompleter
 import io.github.lmos.arc.agents.llm.ChatCompleterProvider
 import io.github.lmos.arc.agents.llm.ChatCompletionSettings
+import io.github.lmos.arc.agents.llm.TextEmbedder
+import io.github.lmos.arc.agents.llm.TextEmbedderProvider
+import io.github.lmos.arc.agents.llm.TextEmbedding
+import io.github.lmos.arc.agents.llm.TextEmbeddings
 import io.github.lmos.arc.core.result
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
@@ -30,6 +34,15 @@ open class TestApplication {
                     function.execute(mapOf("param" to "test"))
                 }
                 AssistantMessage("Hello!")
+            }
+        }
+    }
+
+    @Bean
+    open fun textEmbedderProvider() = TextEmbedderProvider {
+        object : TextEmbedder {
+            override suspend fun embed(texts: List<String>) = result<TextEmbeddings, ArcException> {
+                TextEmbeddings(embeddings = texts.map { TextEmbedding(it, listOf(0.0, 0.1)) })
             }
         }
     }
