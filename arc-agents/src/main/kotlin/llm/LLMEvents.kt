@@ -28,5 +28,6 @@ data class LLMFinishedEvent(
     val completionTokens: Int,
     val functionCallCount: Int,
     val duration: Duration,
+    val settings: ChatCompletionSettings? = null,
     override val timestamp: Instant = Instant.now(),
 ) : Event
