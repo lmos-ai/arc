@@ -30,7 +30,7 @@ class SemanticRouter(
     private val scope = CoroutineScope(Dispatchers.Default)
     private val ready = AtomicBoolean(false)
 
-    init {
+    init  {
         log.debug("Initializing SemanticRouter with ${initialRoutes?.routes?.size ?: 0} routes...")
         scope.launch {
             initialRoutes?.routes?.forEach { addRoute(it) }
