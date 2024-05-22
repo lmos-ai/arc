@@ -7,6 +7,7 @@ import io.github.lmos.arc.agents.AgentFinishedEvent
 import io.github.lmos.arc.agents.events.Event
 import io.github.lmos.arc.agents.events.EventHandler
 import io.github.lmos.arc.agents.llm.LLMFinishedEvent
+import io.github.lmos.arc.agents.router.RouterRoutedEvent
 import io.github.lmos.arc.core.Success
 import io.micrometer.core.instrument.MeterRegistry
 import kotlin.time.toJavaDuration
@@ -41,6 +42,16 @@ class MetricsHandler(private val metrics: MeterRegistry) : EventHandler<Event> {
                     "arc.llm.finished",
                     "model",
                     event.model,
+                ).record(event.duration.toJavaDuration())
+            }
+
+            is RouterRoutedEvent -> {
+                metrics.timer(
+                    "arc.router.routed",
+                    "accuracy",
+                    event.destination?.accuracy?.toString() ?: "-1",
+                    "destination",
+                    event.destination?.destination ?: "null",
                 ).record(event.duration.toJavaDuration())
             }
         }

@@ -4,6 +4,7 @@
 
 package io.github.lmos.arc.agents.router
 
+import io.github.lmos.arc.agents.events.EventPublisher
 import io.github.lmos.arc.agents.llm.TextEmbedder
 import io.github.lmos.arc.agents.llm.TextEmbedding
 import io.github.lmos.arc.agents.llm.TextEmbeddings
@@ -16,13 +17,15 @@ import kotlinx.serialization.Serializable
 import org.slf4j.LoggerFactory
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
+import kotlin.time.measureTime
 
 /**
  * SemanticRouter that uses semantic similarity to find destinations for routes.
  */
 class SemanticRouter(
     private val textEmbedder: TextEmbedder,
-    initialRoutes: SemanticRoutes?,
+    initialRoutes: SemanticRoutes? = null,
+    private val eventPublisher: EventPublisher? = null,
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -36,6 +39,7 @@ class SemanticRouter(
             initialRoutes?.routes?.forEach { addRoute(it) }
             log.debug("SemanticRouter initialized")
             ready.set(true)
+            eventPublisher?.publish(RouterReadyEvent())
         }
     }
 
@@ -72,21 +76,26 @@ class SemanticRouter(
      * @return The destination of the route.
      */
     suspend fun route(request: String, default: String? = null): Destination? {
-        if (ready.get().not()) {
-            log.warn("SemanticRouter not ready yet. Returning default $default")
-            return default?.let { Destination(it) }
-        }
-        val (embedding, accuracy) = allRoutes.get().findClosest(textEmbedder.embed(request).getOrThrow())
-        val destination = embedding.labels.firstOrNull()
+        val result: Destination?
+        val duration = measureTime {
+            if (ready.get().not()) {
+                log.warn("SemanticRouter not ready yet. Returning default $default")
+                return default?.let { Destination(it) }
+            }
+            val (embedding, accuracy) = allRoutes.get().findClosest(textEmbedder.embed(request).getOrThrow())
+            val destination = embedding.labels.firstOrNull()
 
-        if (destination != null) {
-            log.debug("Routing [$request] to $destination")
-        } else if (default == null) {
-            log.warn("Cannot route [$request] to any destination. No default provided!")
-        } else {
-            log.debug("Cannot route [$request] to any destination. Using default $default")
+            if (destination != null) {
+                log.debug("Routing [$request] to $destination")
+            } else if (default == null) {
+                log.warn("Cannot route [$request] to any destination. No default provided!")
+            } else {
+                log.debug("Cannot route [$request] to any destination. Using default $default")
+            }
+            result = destination?.let { Destination(it, accuracy) } ?: default?.let { Destination(it) }
         }
-        return destination?.let { Destination(it, accuracy) } ?: default?.let { Destination(it) }
+        eventPublisher?.publish(RouterRoutedEvent(request, result, duration))
+        return result
     }
 }
 
