@@ -79,7 +79,7 @@ class ArcAutoConfiguration {
 
     @Bean
     @ConditionalOnProperty("arc.router.enable", havingValue = "true")
-    fun agentRouter(
+    fun semanticRouter(
         @Value("\${arc.router.model}") model: String,
         textEmbedderProvider: TextEmbedderProvider,
         agentProvider: AgentProvider,
