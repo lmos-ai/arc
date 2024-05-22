@@ -22,4 +22,3 @@ data class RouterRoutedEvent(
     val duration: Duration,
     override val timestamp: Instant = Instant.now(),
 ) : Event
-

@@ -38,7 +38,8 @@ class RouterTest {
         val subject = SemanticRouter(
             textEmbedder,
             semanticRoutes("destination1".routeBy("route1", "route2")),
-            eventPublisher = { event = it })
+            eventPublisher = { event = it },
+        )
 
         delay(100)
         subject.route("route1")
