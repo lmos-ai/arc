@@ -14,6 +14,7 @@ import io.github.lmos.arc.agents.dsl.ChatAgentFactory
 import io.github.lmos.arc.agents.dsl.CoroutineBeanProvider
 import io.github.lmos.arc.agents.events.BasicEventPublisher
 import io.github.lmos.arc.agents.events.EventHandler
+import io.github.lmos.arc.agents.events.EventPublisher
 import io.github.lmos.arc.agents.events.LoggingEventHandler
 import io.github.lmos.arc.agents.events.addAll
 import io.github.lmos.arc.agents.functions.CompositeLLMFunctionProvider
@@ -84,8 +85,9 @@ class ArcAutoConfiguration {
         textEmbedderProvider: TextEmbedderProvider,
         agentProvider: AgentProvider,
         initialRoutes: SemanticRoutes? = null,
+        eventPublisher: EventPublisher,
     ): SemanticRouter {
-        return SemanticRouter(textEmbedderProvider.provideByModel(model), initialRoutes)
+        return SemanticRouter(textEmbedderProvider.provideByModel(model), initialRoutes, eventPublisher)
     }
 
     @Bean
