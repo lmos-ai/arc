@@ -87,6 +87,11 @@ subprojects {
                             name = "Bharat Bhushan"
                             email = "opensource@telekom.de"
                         }
+                        developer {
+                            id = "merrenfx"
+                            name = "Max Erren"
+                            email = "opensource@telekom.de"
+                        }
                     }
                 }
             }
