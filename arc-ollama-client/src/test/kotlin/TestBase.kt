@@ -4,6 +4,7 @@
 
 package io.github.lmos.arc.client.ollama
 
+import io.ktor.network.sockets.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
@@ -14,6 +15,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
+import java.net.ServerSocket
 
 open class TestBase {
 
@@ -21,10 +23,22 @@ open class TestBase {
 
         lateinit var server: ApplicationEngine
 
+        @JvmStatic
+        protected var port: Int = 0
+
+        @JvmStatic
+        fun getFreePort(): Int {
+            val socket = ServerSocket(0)
+            val port = socket.localPort
+            socket.close()
+            return port
+        }
+
         @BeforeAll
         @JvmStatic
         fun setup() {
-            server = embeddedServer(Netty, port = 8080) {
+            this.port = getFreePort()
+            server = embeddedServer(Netty, port = this.port) {
                 routing {
                     post("/api/chat") {
                         require(call.receiveText().contains(""""test question"""))
