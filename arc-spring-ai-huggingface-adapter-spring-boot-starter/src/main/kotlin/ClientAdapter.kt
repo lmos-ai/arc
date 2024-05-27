@@ -12,12 +12,12 @@ import io.github.lmos.arc.agents.llm.ChatCompleter
 import io.github.lmos.arc.agents.llm.ChatCompletionSettings
 import io.github.lmos.arc.core.failWith
 import io.github.lmos.arc.core.result
+import org.springframework.ai.chat.ChatClient
 import org.springframework.ai.chat.messages.ChatMessage
 import org.springframework.ai.chat.messages.Message
 import org.springframework.ai.chat.messages.MessageType
 import org.springframework.ai.chat.prompt.ChatOptions
 import org.springframework.ai.chat.prompt.Prompt
-import org.springframework.ai.huggingface.HuggingfaceChatClient
 
 private fun messageConversion(msg: ConversationMessage): Message {
     val role = when (msg) {
@@ -43,14 +43,15 @@ private class SpringAiChatOptionsAdapter(settings: ChatCompletionSettings) : Cha
     }
 }
 
-class HuggingFaceChatClientAdapter(private val springClient: HuggingfaceChatClient) : ChatCompleter {
+class SpringAiClient(private val client: ChatClient) : ChatCompleter {
     override suspend fun complete(
         messages: List<ConversationMessage>,
         functions: List<LLMFunction>?,
         settings: ChatCompletionSettings?,
     ) = result<AssistantMessage, ArcException> {
         val conversationMessages = messages.map { messageConversion(it) }
-        val response = springClient.call(
+
+        val response = client.call(
             Prompt(
                 conversationMessages,
                 settings?.let { SpringAiChatOptionsAdapter(settings) },
