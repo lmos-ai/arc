@@ -10,11 +10,8 @@ dependencies {
     implementation("org.slf4j:slf4j-api:1.7.25")
 
     // spring.ai
-    implementation("org.springframework.ai:spring-ai-huggingface:0.8.1-SNAPSHOT")
+    implementation("io.springboot.ai:spring-ai-core:1.0.3")
 }
 repositories {
     mavenCentral()
-    google()
-    maven("https://repo.spring.io/milestone")
-    maven("https://repo.spring.io/snapshot")
 }
