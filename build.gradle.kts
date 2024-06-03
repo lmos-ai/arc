@@ -143,6 +143,7 @@ dependencies {
     kover(project("arc-agents"))
     kover(project("arc-spring-boot-starter"))
     kover(project("arc-memory-mongo-spring-boot-starter"))
+    kover(project("arc-spring-ai-client-adapter-spring-boot-starter"))
 }
 
 repositories {
