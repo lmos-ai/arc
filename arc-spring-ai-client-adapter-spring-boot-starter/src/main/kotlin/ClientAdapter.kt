@@ -28,8 +28,7 @@ private fun messageConversion(msg: ConversationMessage): Message {
     return ChatMessage(role, msg.content)
 }
 
-private class SpringAiChatOptionsAdapter(settings: ChatCompletionSettings) : ChatOptions {
-    val settings = settings
+private class SpringAiChatOptionsAdapter(private val settings: ChatCompletionSettings) : ChatOptions {
     override fun getTemperature(): Float {
         return settings.temperature!!.toFloat()
     }
