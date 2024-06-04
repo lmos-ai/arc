@@ -39,6 +39,7 @@ class ScriptHotReload(
             val watchService = FileSystems.getDefault().newWatchService()
             WatchServiceFileWatcher(watchService)
         } catch (e: UnsupportedOperationException) {
+            log.warn("Falling back to PollingFileWatcher...")
             PollingFileWatcher(fallbackInterval)
         }
     }
