@@ -28,13 +28,13 @@ class MetricsHandler(private val metrics: MeterRegistry) : EventHandler<Event> {
                     timer(
                         "arc.agent.finished",
                         duration,
-                        tags = mapOf("agent" to agent.name, "model" to (model ?: "default"))
+                        tags = mapOf("agent" to agent.name, "model" to (model ?: "default")),
                     )
                 } else {
                     timer(
                         "arc.agent.failed",
                         duration,
-                        tags = mapOf("agent" to agent.name)
+                        tags = mapOf("agent" to agent.name),
                     )
                 }
             }
@@ -43,7 +43,7 @@ class MetricsHandler(private val metrics: MeterRegistry) : EventHandler<Event> {
                 timer(
                     "arc.llm.finished",
                     duration,
-                    tags = mapOf("model" to model)
+                    tags = mapOf("model" to model),
                 )
             }
 
@@ -53,7 +53,7 @@ class MetricsHandler(private val metrics: MeterRegistry) : EventHandler<Event> {
                 timer(
                     "arc.router.routed",
                     duration,
-                    tags = mapOf("accuracy" to accuracy, "destination" to destination)
+                    tags = mapOf("accuracy" to accuracy, "destination" to destination),
                 )
             }
         }
@@ -62,7 +62,7 @@ class MetricsHandler(private val metrics: MeterRegistry) : EventHandler<Event> {
     private fun timer(name: String, duration: Duration, tags: Map<String, String>) = Timer.builder(name)
         .tags(tags.map { (k, v) -> Tag.of(k, v) })
         .distributionStatisticExpiry(java.time.Duration.ofMinutes(5))
-        .distributionStatisticBufferLength(50)  //limit memory usage
+        .distributionStatisticBufferLength(50) // limit memory usage
         .publishPercentiles(0.5, 0.95)
         .percentilePrecision(2)
         .register(metrics)
