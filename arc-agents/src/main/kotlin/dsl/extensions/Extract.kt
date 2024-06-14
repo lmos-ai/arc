@@ -6,6 +6,8 @@ package io.github.lmos.arc.agents.dsl.extensions
 
 import io.github.lmos.arc.agents.conversation.ConversationMessage
 import io.github.lmos.arc.agents.dsl.DSLContext
+import io.github.lmos.arc.agents.dsl.InputFilterContext
+import io.github.lmos.arc.agents.dsl.OutputFilterContext
 
 /**
  * Extensions for extracting data from messages.
@@ -29,4 +31,14 @@ val URL_PATTERN =
 
 fun DSLContext.extractUrl(message: ConversationMessage): List<String> {
     return URL_PATTERN.findAll(message.content).map { it.value }.toList()
+}
+
+/**
+ * Extracts patterns from input or output.
+ */
+fun OutputFilterContext.extract(pattern: Regex): List<String> {
+    return pattern.findAll(outputMessage.content).map { it.value }.toList()
+}
+fun InputFilterContext.extract(pattern: Regex): List<String> {
+    return pattern.findAll(inputMessage.content).map { it.value }.toList()
 }
