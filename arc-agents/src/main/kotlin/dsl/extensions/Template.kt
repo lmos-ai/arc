@@ -16,4 +16,4 @@ package io.github.lmos.arc.agents.dsl.extensions
  * This is simply a shorthand for
  * """ Some string template ${if(someVariableThatResultToTrue) "Hello" else "" } """.
  */
-infix fun Any?.then(out: String) = if(this == true) out else ""
+infix fun Any?.then(out: String) = if (this == true) out else ""
