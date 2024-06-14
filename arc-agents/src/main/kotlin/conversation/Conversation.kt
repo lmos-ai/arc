@@ -53,10 +53,17 @@ data class Conversation(
 
     /**
      * Returns a new instance of the conversation with the filter applied to each message.
-     * The filter can remove a  message by returning null.
+     * The filter can remove a message by returning null.
      */
     suspend fun map(filter: suspend (ConversationMessage) -> ConversationMessage?) =
         copy(transcript = transcript.mapNotNull { filter(it) })
+
+    /**
+     * Returns a new instance of the conversation with the filter applied to the latest message.
+     * The filter can remove a message by returning null.
+     */
+    suspend fun mapLatest(filter: suspend (ConversationMessage) -> ConversationMessage?) =
+        copy(transcript = transcript.mapIndexedNotNull { i, m -> if (i == (transcript.size - 1)) filter(m) else m })
 
     /**
      * Returns a new instance of the conversation with the last message removed.

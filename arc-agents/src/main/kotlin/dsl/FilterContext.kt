@@ -29,6 +29,10 @@ class InputFilterContext(
     override suspend fun map(filter: suspend (ConversationMessage) -> ConversationMessage?) {
         input = input.map { msg -> filter(msg) }
     }
+
+    override suspend fun mapLatest(filter: suspend (ConversationMessage) -> ConversationMessage?) {
+        input = input.mapLatest { msg -> filter(msg) }
+    }
 }
 
 /**
@@ -52,38 +56,50 @@ class OutputFilterContext(
     override suspend fun map(filter: suspend (ConversationMessage) -> ConversationMessage?) {
         output = output.map { msg -> filter(msg) }
     }
+
+    override suspend fun mapLatest(filter: suspend (ConversationMessage) -> ConversationMessage?) {
+        output = output.mapLatest { msg -> filter(msg) }
+    }
 }
 
 abstract class FilterContext(scriptingContext: DSLContext) : DSLContext by scriptingContext {
-    suspend infix fun String.replaces(s: String) = this@FilterContext.map {
+    suspend infix fun String.replaces(s: String) = this@FilterContext.mapLatest {
         it.update(it.content.replace(s, this))
     }
 
-    suspend infix fun String.replaces(s: Regex) = this@FilterContext.map {
+    suspend infix fun String.replaces(s: Regex) = this@FilterContext.mapLatest {
         it.update(it.content.replace(s, this))
     }
 
     suspend operator fun String.unaryMinus() {
-        this@FilterContext.map {
+        this@FilterContext.mapLatest {
             it.update(it.content.replace(this, ""))
         }
     }
 
     suspend operator fun Regex.unaryMinus() {
-        this@FilterContext.map {
+        this@FilterContext.mapLatest {
             it.update(it.content.replace(this, ""))
         }
     }
 
     suspend operator fun AgentFilter.unaryPlus() {
-        this@FilterContext.map { msg -> filter(msg) }
+        this@FilterContext.mapLatest { msg -> filter(msg) }
     }
 
     suspend operator fun KClass<out AgentFilter>.unaryPlus() {
-        this@FilterContext.map { msg -> context(this).filter(msg) }
+        this@FilterContext.mapLatest { msg -> context(this).filter(msg) }
     }
 
+    /**
+     * Maps all message in a Conversation transcript.
+     */
     abstract suspend fun map(filter: suspend (ConversationMessage) -> ConversationMessage?)
+
+    /**
+     * Maps the latest message in a Conversation transcript.
+     */
+    abstract suspend fun mapLatest(filter: suspend (ConversationMessage) -> ConversationMessage?)
 }
 
 /**
