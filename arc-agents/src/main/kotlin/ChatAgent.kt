@@ -24,6 +24,8 @@ import io.github.lmos.arc.core.mapFailure
 import io.github.lmos.arc.core.result
 import kotlin.time.measureTime
 
+const val AGENT_LOG_CONTEXT_KEY = "agent"
+
 /**
  * A ChatAgent is an Agent that can interact with a user in a chat-like manner.
  */
@@ -40,24 +42,26 @@ class ChatAgent(
 ) : Agent<Conversation, Conversation> {
 
     override suspend fun execute(input: Conversation, context: Set<Any>): Result<Conversation, AgentFailedException> {
-        val agentEventHandler = beanProvider.provideOptional<EventPublisher>()
-        val model = model()
+        return withLogContext(mapOf(AGENT_LOG_CONTEXT_KEY to name)) {
+            val agentEventHandler = beanProvider.provideOptional<EventPublisher>()
+            val model = model()
 
-        agentEventHandler?.publish(AgentStartedEvent(this@ChatAgent))
-        val result: Result<Conversation, AgentFailedException>
-        val duration = measureTime {
-            result = doExecute(input, model, context).mapFailure { AgentFailedException("Agent $name failed!", it) }
+            agentEventHandler?.publish(AgentStartedEvent(this@ChatAgent))
+            val result: Result<Conversation, AgentFailedException>
+            val duration = measureTime {
+                result = doExecute(input, model, context).mapFailure { AgentFailedException("Agent $name failed!", it) }
+            }
+            agentEventHandler?.publish(
+                AgentFinishedEvent(
+                    this@ChatAgent,
+                    input = input,
+                    output = result,
+                    model = model,
+                    duration = duration,
+                ),
+            )
+            result
         }
-        agentEventHandler?.publish(
-            AgentFinishedEvent(
-                this@ChatAgent,
-                input = input,
-                output = result,
-                model = model,
-                duration = duration,
-            ),
-        )
-        return result
     }
 
     private suspend fun doExecute(conversation: Conversation, model: String?, context: Set<Any>) =

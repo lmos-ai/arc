@@ -13,7 +13,7 @@ import kotlin.time.Duration
 /**
  * Collection of events that can be published by Agents.
  */
-sealed class AgentEvent : Event {
+sealed class AgentEvent : Event() {
     abstract val agent: Agent<*, *>
 }
 

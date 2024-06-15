@@ -14,11 +14,11 @@ import kotlin.time.Duration
 
 data class RouterReadyEvent(
     override val timestamp: Instant = Instant.now(),
-) : Event
+) : Event()
 
 data class RouterRoutedEvent(
     val request: String,
     val destination: Destination?,
     val duration: Duration,
     override val timestamp: Instant = Instant.now(),
-) : Event
+) : Event()

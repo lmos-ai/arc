@@ -18,7 +18,7 @@ data class LLMFunctionStartedEvent(
     val name: String,
     val param: Map<String, Any?>,
     override val timestamp: Instant = Instant.now(),
-) : Event
+) : Event()
 
 data class LLMFunctionCalledEvent(
     val name: String,
@@ -26,4 +26,4 @@ data class LLMFunctionCalledEvent(
     val result: Result<String, ArcException>,
     val duration: Duration,
     override val timestamp: Instant = Instant.now(),
-) : Event
+) : Event()

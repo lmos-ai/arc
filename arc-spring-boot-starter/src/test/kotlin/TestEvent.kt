@@ -7,6 +7,6 @@ package io.github.lmos.arc.spring
 import io.github.lmos.arc.agents.events.Event
 import java.time.Instant
 
-class TestEvent : Event {
+class TestEvent : Event() {
     override val timestamp: Instant = Instant.now()
 }

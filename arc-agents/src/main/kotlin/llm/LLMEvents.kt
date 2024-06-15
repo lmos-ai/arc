@@ -18,7 +18,7 @@ import kotlin.time.Duration
 data class LLMStartedEvent(
     val model: String,
     override val timestamp: Instant = Instant.now(),
-) : Event
+) : Event()
 
 data class LLMFinishedEvent(
     val result: Result<AssistantMessage, ArcException>,
@@ -30,4 +30,4 @@ data class LLMFinishedEvent(
     val duration: Duration,
     val settings: ChatCompletionSettings? = null,
     override val timestamp: Instant = Instant.now(),
-) : Event
+) : Event()

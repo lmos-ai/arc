@@ -4,11 +4,13 @@
 
 package io.github.lmos.arc.agents.events
 
+import io.github.lmos.arc.agents.logContext
 import java.time.Instant
 
 /**
  * Interface for all event types.
  */
-interface Event {
-    val timestamp: Instant
+abstract class Event {
+    abstract val timestamp: Instant
+    val context: Map<String, String> = logContext()
 }
