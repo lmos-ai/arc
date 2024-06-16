@@ -46,6 +46,6 @@ class OtherTestHandler : EventHandler<OtherTestEvent> {
     }
 }
 
-open class TestEvent(override val timestamp: Instant = Instant.now(), val value: String = "Test") : Event()
+open class TestEvent(override val timestamp: Instant = Instant.now(), val value: String = "Test") : Event
 class SubTestEvent(override val timestamp: Instant = Instant.now(), val sub: String = "Sub") : TestEvent()
-class OtherTestEvent(override val timestamp: Instant = Instant.now(), val value: String = "Other") : Event()
+class OtherTestEvent(override val timestamp: Instant = Instant.now(), val value: String = "Other") : Event

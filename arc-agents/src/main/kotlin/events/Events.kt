@@ -9,6 +9,6 @@ import java.time.Instant
 /**
  * Interface for all event types.
  */
-abstract class Event {
-    abstract val timestamp: Instant
+interface Event {
+    val timestamp: Instant
 }
