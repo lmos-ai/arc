@@ -9,7 +9,7 @@ import org.slf4j.MDC
  */
 suspend fun <T> withLogContext(
     map: Map<String, String>,
-    block: suspend kotlinx.coroutines.CoroutineScope.() -> T
+    block: suspend kotlinx.coroutines.CoroutineScope.() -> T,
 ): T {
     return withContext(MDCContext(logContext() + map), block)
 }
