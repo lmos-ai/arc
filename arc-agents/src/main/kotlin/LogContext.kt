@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package io.github.lmos.arc.agents
 
 import kotlinx.coroutines.slf4j.MDCContext
