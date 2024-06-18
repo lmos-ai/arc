@@ -7,6 +7,7 @@ package io.github.lmos.arc.scripting.agents
 import io.github.lmos.arc.agents.dsl.AgentDefinitionContext
 import kotlin.script.experimental.annotations.KotlinScript
 import kotlin.script.experimental.api.ScriptCompilationConfiguration
+import kotlin.script.experimental.api.compilerOptions
 import kotlin.script.experimental.api.defaultImports
 import kotlin.script.experimental.api.implicitReceivers
 import kotlin.script.experimental.jvm.dependenciesFromCurrentContext
@@ -25,6 +26,8 @@ abstract class ScriptDeps
 object ScriptConfiguration : ScriptCompilationConfiguration(
     {
         implicitReceivers(AgentDefinitionContext::class)
+
+        compilerOptions("-Xcontext-receivers")
 
         defaultImports(
             "io.github.lmos.arc.agents.dsl.get",
