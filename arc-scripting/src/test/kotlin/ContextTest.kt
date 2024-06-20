@@ -44,7 +44,6 @@ class ContextTest : TestBase() {
         """
         functionEngine.eval(script, context).getOrThrow()
     }
-
 }
 
 context(DSLContext)

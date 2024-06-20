@@ -65,13 +65,15 @@ class GeminiClient(
         }
 
         var response: GenerateContentResponse? = null
-        finally { publishEvent(it, response, duration, functionCallHandler, settings) }
+        finally { publishEvent(it, messages, functions, response, duration, functionCallHandler, settings) }
         response = result failWith { ArcException("Failed to call Gemini!", it) }
         AssistantMessage(ResponseHandler.getText(response), sensitive = functionCallHandler.calledSensitiveFunction())
     }
 
     private fun publishEvent(
         result: Result<AssistantMessage, ArcException>,
+        messages: List<ConversationMessage>,
+        functions: List<LLMFunction>?,
         response: GenerateContentResponse?,
         duration: Duration,
         functionCallHandler: FunctionCallHandler,
@@ -80,6 +82,8 @@ class GeminiClient(
         eventHandler?.publish(
             LLMFinishedEvent(
                 result,
+                messages,
+                functions,
                 languageModel.modelName,
                 totalTokens = response?.usageMetadata?.totalTokenCount ?: -1,
                 promptTokens = response?.usageMetadata?.promptTokenCount ?: -1,

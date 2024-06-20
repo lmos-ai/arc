@@ -6,7 +6,9 @@ package io.github.lmos.arc.agents.llm
 
 import io.github.lmos.arc.agents.ArcException
 import io.github.lmos.arc.agents.conversation.AssistantMessage
+import io.github.lmos.arc.agents.conversation.ConversationMessage
 import io.github.lmos.arc.agents.events.Event
+import io.github.lmos.arc.agents.functions.LLMFunction
 import io.github.lmos.arc.core.Result
 import java.time.Instant
 import kotlin.time.Duration
@@ -22,6 +24,8 @@ data class LLMStartedEvent(
 
 data class LLMFinishedEvent(
     val result: Result<AssistantMessage, ArcException>,
+    val messages: List<ConversationMessage>,
+    val functions: List<LLMFunction>?,
     val model: String,
     val totalTokens: Int,
     val promptTokens: Int,
