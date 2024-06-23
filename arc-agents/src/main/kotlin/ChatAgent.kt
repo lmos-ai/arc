@@ -71,17 +71,19 @@ class ChatAgent(
             val functions = functions()
 
             CoroutineBeanProvider().setContext(context + setOf(conversation, conversation.user)) {
+                val generatedSystemPrompt = systemPrompt.invoke(scriptingContext)
                 val filterContext = InputFilterContext(scriptingContext, conversation)
                 val filteredInput = filterInput.invoke(filterContext).let { filterContext.input }
 
                 if (filteredInput.isEmpty()) failWith { AgentNotExecutedException("Input has been filtered") }
 
                 val fullConversation =
-                    listOf(SystemMessage(systemPrompt.invoke(scriptingContext))) + filteredInput.transcript
+                    listOf(SystemMessage(generatedSystemPrompt)) + filteredInput.transcript
                 val completedConversation =
                     conversation + chatCompleter.complete(fullConversation, functions, settings()).getOrThrow()
 
-                val filterOutputContext = OutputFilterContext(scriptingContext, conversation, completedConversation)
+                val filterOutputContext =
+                    OutputFilterContext(scriptingContext, conversation, completedConversation, generatedSystemPrompt)
                 filterOutput.invoke(filterOutputContext).let { filterOutputContext.output }
             }
         }
