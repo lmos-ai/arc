@@ -89,16 +89,15 @@ class SpringChatClient(
         duration: Duration,
         settings: ChatCompletionSettings?,
     ) {
-        // TODO add missing token fields
         eventHandler?.publish(
             LLMFinishedEvent(
                 result,
                 messages,
                 functions,
                 modelName,
-                -1,
-                -1,
-                -1,
+                chatResponse?.metadata?.usage?.totalTokens?.toInt() ?: -1,
+                chatResponse?.metadata?.usage?.promptTokens?.toInt() ?: -1,
+                chatResponse?.metadata?.usage?.generationTokens?.toInt() ?: -1,
                 0,
                 duration,
                 settings = settings,
