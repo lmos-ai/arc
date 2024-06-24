@@ -8,6 +8,7 @@ data class ChatCompletionSettings(
     val temperature: Double? = null,
     val maxTokens: Int? = null,
     val topP: Double? = null,
+    val topK: Int? = null,
     val n: Int? = null,
     val seed: Long? = null,
     val format: OutputFormat? = null,

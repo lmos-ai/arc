@@ -7,6 +7,7 @@ package io.github.lmos.arc.agents.llm
 import io.github.lmos.arc.agents.ArcException
 import io.github.lmos.arc.agents.conversation.AssistantMessage
 import io.github.lmos.arc.agents.conversation.ConversationMessage
+import io.github.lmos.arc.agents.conversation.UserMessage
 import io.github.lmos.arc.agents.functions.LLMFunction
 import io.github.lmos.arc.core.Result
 
@@ -21,3 +22,9 @@ interface ChatCompleter {
         settings: ChatCompletionSettings? = null,
     ): Result<AssistantMessage, ArcException>
 }
+
+suspend fun ChatCompleter.complete(
+    userMessage: String,
+    functions: List<LLMFunction>? = null,
+    settings: ChatCompletionSettings? = null,
+) = complete(listOf(UserMessage(userMessage)), functions, settings)
