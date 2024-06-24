@@ -18,7 +18,7 @@ plugins {
 
 subprojects {
     group = "io.github.lmos-ai.arc"
-    version = "0.29.0"
+    version = "0.30.0"
 
     apply(plugin = "org.cyclonedx.bom")
     apply(plugin = "org.jetbrains.dokka")
@@ -127,6 +127,7 @@ subprojects {
     }
 
     repositories {
+        mavenLocal()
         mavenCentral()
         google()
     }
@@ -143,7 +144,7 @@ dependencies {
     kover(project("arc-agents"))
     kover(project("arc-spring-boot-starter"))
     kover(project("arc-memory-mongo-spring-boot-starter"))
-    kover(project("arc-spring-ai-client-adapter-spring-boot-starter"))
+    kover(project("arc-spring-ai"))
 }
 
 repositories {
