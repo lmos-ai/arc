@@ -39,6 +39,7 @@ open class TestBase {
                 routing {
                     post("/api/chat") {
                         require(call.receiveText().contains(""""test question"""))
+                        call.response.header("content-type", "application/json")
                         call.respondText(
                             Json.encodeToString(
                                 ChatResponse(
