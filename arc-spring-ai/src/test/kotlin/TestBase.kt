@@ -2,22 +2,28 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.client.ollama
+package io.github.lmos.arc.spring.ai
 
-import io.ktor.network.sockets.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
-import java.net.ServerSocket
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
 
+@SpringBootTest
 open class TestBase {
+
+    @Autowired
+    lateinit var springChatClient: SpringChatClient
 
     companion object {
 
@@ -26,22 +32,14 @@ open class TestBase {
         @JvmStatic
         protected var port: Int = 0
 
-        @JvmStatic
-        fun getFreePort(): Int {
-            val socket = ServerSocket(0)
-            val port = socket.localPort
-            socket.close()
-            return port
-        }
-
         @BeforeAll
         @JvmStatic
         fun setup() {
-            this.port = getFreePort()
-            server = embeddedServer(Netty, port = this.port) {
+            server = embeddedServer(Netty, port = 8888) {
                 routing {
                     post("/api/chat") {
                         require(call.receiveText().contains(""""test question"""))
+                        call.response.header("content-type", "application/json")
                         call.respondText(
                             Json.encodeToString(
                                 ChatResponse(
@@ -51,10 +49,6 @@ open class TestBase {
                                 ),
                             ),
                         )
-                    }
-                    post("/api/embeddings") {
-                        require(call.receiveText().contains(""""model":"llama3:8b""""))
-                        call.respondText(""" {  "embedding": [0.0, 0.1] } """)
                     }
                 }
             }.start()
@@ -67,3 +61,19 @@ open class TestBase {
         }
     }
 }
+
+@Serializable
+data class ChatMessage(
+    val role: String,
+    val content: String,
+    val images: List<String>? = null,
+)
+
+@Serializable
+data class ChatResponse(
+    @SerialName("prompt_eval_count")
+    val promptTokenCount: Int = -1,
+    @SerialName("eval_count")
+    val responseTokenCount: Int,
+    val message: ChatMessage,
+)
