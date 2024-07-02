@@ -25,6 +25,8 @@ import java.io.File
 open class TestBase {
 
     val scripts = File("tmp-scripts")
+    val scriptsSubFolder = File(scripts, "subFolder")
+
     val functionEngine = KtsFunctionScriptEngine()
     val agentEngine = KtsAgentScriptEngine()
     val testBeanProvider = CoroutineBeanProvider()
@@ -44,6 +46,7 @@ open class TestBase {
     fun setup() {
         clearMocks(chatCompleter)
         scripts.mkdirs()
+        scriptsSubFolder.mkdirs()
     }
 
     @AfterEach
