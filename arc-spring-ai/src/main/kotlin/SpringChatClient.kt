@@ -6,8 +6,6 @@ package io.github.lmos.arc.spring.ai
 import io.github.lmos.arc.agents.ArcException
 import io.github.lmos.arc.agents.conversation.AssistantMessage
 import io.github.lmos.arc.agents.conversation.ConversationMessage
-import io.github.lmos.arc.agents.conversation.SystemMessage
-import io.github.lmos.arc.agents.conversation.UserMessage
 import io.github.lmos.arc.agents.events.EventPublisher
 import io.github.lmos.arc.agents.functions.LLMFunction
 import io.github.lmos.arc.agents.llm.ChatCompleter
@@ -24,18 +22,27 @@ import org.springframework.ai.chat.prompt.ChatOptionsBuilder
 import org.springframework.ai.chat.prompt.Prompt
 import kotlin.time.Duration
 import kotlin.time.measureTime
-import org.springframework.ai.chat.messages.AssistantMessage as SpringAssistantMessage
-import org.springframework.ai.chat.messages.SystemMessage as SpringSystemMessage
-import org.springframework.ai.chat.messages.UserMessage as SpringUserMessage
 
 /**
- * Implements the ChatCompleter interface using the Spring AI ChatClient.
+ * Implements the ChatCompleter interface using the Spring AI ChatModel.
  */
-class SpringChatClient(
-    private val client: ChatModel,
+open class SpringChatClient(
+    protected val client: ChatModel,
     private val modelName: String,
     private val eventHandler: EventPublisher? = null,
 ) : ChatCompleter {
+
+    /**
+     * Calls the LLM.
+     */
+    protected open fun call(
+        messages: List<ConversationMessage>,
+        functions: List<LLMFunction>?,
+        settings: ChatCompletionSettings?,
+    ): Result<ChatResponse, Exception> = result<ChatResponse, Exception> {
+        val prompt = Prompt(messages.toSpringAI(), settings.toSpringAI())
+        client.call(prompt)
+    }
 
     override suspend fun complete(
         messages: List<ConversationMessage>,
@@ -44,29 +51,17 @@ class SpringChatClient(
     ) = result<AssistantMessage, ArcException> {
         eventHandler?.publish(LLMStartedEvent(modelName))
 
-        val prompt = Prompt(messages.toSpringAI(), settings.toSpringAI())
         var chatResponse: ChatResponse? = null
         val result: Result<AssistantMessage, ArcException>
         val duration = measureTime {
             result = result<AssistantMessage, Exception> {
-                chatResponse = client.call(prompt)
+                chatResponse = call(messages, functions, settings) failWith { it }
                 AssistantMessage(chatResponse!!.result.output.content)
             }.mapFailure { ArcException(it.message ?: "Unknown exception!", it) }
         }
 
         publishEvent(result, messages, functions, chatResponse, duration, settings)
         result failWith { it }
-    }
-
-    /**
-     * Converts a list of ConversationMessages to a list of Spring AI messages.
-     */
-    private fun List<ConversationMessage>.toSpringAI() = map { msg ->
-        when (msg) {
-            is UserMessage -> SpringUserMessage(msg.content)
-            is AssistantMessage -> SpringAssistantMessage(msg.content)
-            is SystemMessage -> SpringSystemMessage(msg.content)
-        }
     }
 
     /**

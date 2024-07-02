@@ -9,13 +9,14 @@ dependencies {
 
     // spring.ai
     implementation(platform("org.springframework.ai:spring-ai-bom:1.0.0-SNAPSHOT"))
-    implementation("org.springframework.ai:spring-ai-core")
+    compileOnly("org.springframework.ai:spring-ai-core")
 
     // testing
     testImplementation("org.springframework.boot:spring-boot-starter-test:3.2.4")
     testImplementation("org.springframework.boot:spring-boot-starter:3.2.4")
     testImplementation("org.springframework.boot:spring-boot-starter-webflux:3.2.4")
-    testImplementation("org.springframework.ai:spring-ai-ollama:1.0.0-M1")
+    testImplementation("org.springframework.ai:spring-ai-core")
+    testImplementation("org.springframework.ai:spring-ai-ollama")
 
     // Ktor Server for tests
     testImplementation("io.ktor:ktor-server-core-jvm:2.3.11")
