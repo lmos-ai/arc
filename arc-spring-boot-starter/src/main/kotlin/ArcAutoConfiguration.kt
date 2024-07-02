@@ -99,8 +99,8 @@ class ArcAutoConfiguration {
         functionLoader: ScriptingLLMFunctionLoader,
     ): ScriptHotReload {
         if (!agentsFolder.exists()) error("Agents folder does not exist: $agentsFolder!")
-        return ScriptHotReload(agentLoader, functionLoader, hotReloadDelay.toKotlinDuration()).also {
-            it.start(agentsFolder)
+        return ScriptHotReload(agentLoader, functionLoader, hotReloadDelay.toKotlinDuration()).also { r ->
+            agentsFolder.walk().filter { it.isDirectory }.forEach { r.start(it) }
         }
     }
 
@@ -118,7 +118,7 @@ class ArcAutoConfiguration {
     ): ScriptingAgentLoader {
         return ScriptingAgentLoader(agentFactory, agentScriptEngine).also { loader ->
             compiledAgents?.forEach(loader::loadCompiledAgent)
-            if (agentsFolder.exists()) agentsFolder.listFiles()?.let { loader.loadAgents(*it) }
+            if (agentsFolder.exists()) agentsFolder.walk().filter { it.isFile }.forEach { loader.loadAgents(it) }
         }
     }
 
@@ -133,7 +133,7 @@ class ArcAutoConfiguration {
         @Value("\${arc.scripts.folder:/agents}") agentsFolder: File,
     ): ScriptingLLMFunctionLoader {
         return ScriptingLLMFunctionLoader(beanProvider, functionScriptEngine).also { loader ->
-            if (agentsFolder.exists()) agentsFolder.listFiles()?.let { loader.loadFunctions(*it) }
+            if (agentsFolder.exists()) agentsFolder.walk().filter { it.isFile }.forEach { loader.loadFunctions(it) }
         }
     }
 

@@ -20,6 +20,7 @@ import java.io.IOException
 import java.nio.file.FileSystems
 import java.nio.file.StandardWatchEventKinds.*
 import java.nio.file.WatchService
+import java.util.concurrent.Executors.newCachedThreadPool
 import java.util.concurrent.Executors.newFixedThreadPool
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.time.Duration
@@ -50,11 +51,13 @@ class ScriptHotReload(
             result<Unit, Exception> {
                 when (event) {
                     is FileEvent.Created -> {
+                        if (event.file.isDirectory) return@watch
                         scriptAgentLoader.loadAgents(event.file)
                         scriptFunctionLoader.loadFunctions(event.file)
                     }
 
                     is FileEvent.Modified -> {
+                        if (event.file.isDirectory) return@watch
                         scriptAgentLoader.loadAgents(event.file)
                         scriptFunctionLoader.loadFunctions(event.file)
                     }
@@ -89,7 +92,7 @@ private interface FileWatcher {
 
 private class WatchServiceFileWatcher(private val watchService: WatchService) : FileWatcher {
 
-    private val scope = CoroutineScope(SupervisorJob() + newFixedThreadPool(1).asCoroutineDispatcher())
+    private val scope = CoroutineScope(SupervisorJob() + newCachedThreadPool().asCoroutineDispatcher())
 
     override fun watch(directory: File, onEvent: (FileEvent) -> Unit) {
         scope.launch {
@@ -109,7 +112,6 @@ private class WatchServiceFileWatcher(private val watchService: WatchService) : 
                     }
                     if (!watchKey.reset()) {
                         watchKey.cancel()
-                        watchService.close()
                         break
                     }
                 }
@@ -131,7 +133,7 @@ private class PollingFileWatcher(private val interval: Duration) : FileWatcher {
         scope.launch {
             result<Unit, Exception> {
                 running.set(true)
-                var lastFiles = directory.listFiles()?.toList() ?: emptyList()
+                var lastFiles = directory.walk().filter { it.isFile }.toList()
                 var lastModified = lastFiles.associate { it.name to it.lastModified() }
 
                 while (running.get()) {

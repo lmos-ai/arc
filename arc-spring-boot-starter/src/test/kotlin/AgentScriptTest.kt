@@ -35,6 +35,16 @@ class AgentScriptTest {
     }
 
     @Test
+    fun `test agent defined in subfolder is loaded`(): Unit = runBlocking {
+        var i = 0
+        while (agentProvider.getAgentByName("travel-agent") == null && i < 30) {
+            delay(1000)
+            i++
+        }
+        assertThat(agentProvider.getAgentByName("travel-agent")).isNotNull
+    }
+
+    @Test
     fun `test function defined as script`(): Unit = runBlocking {
         var i = 0
 
@@ -49,5 +59,22 @@ class AgentScriptTest {
         }
 
         assertThatNoException().isThrownBy { (llmFunctionProvider.provide("get_weather")) }
+    }
+
+    @Test
+    fun `test function defined in subfolder is loaded`(): Unit = runBlocking {
+        var i = 0
+
+        while (i < 30) {
+            try {
+                llmFunctionProvider.provide("get_travel_info")
+                break // If no exception is thrown, break the loop
+            } catch (e: NoSuchElementException) {
+                delay(1000)
+                i++
+            }
+        }
+
+        assertThatNoException().isThrownBy { (llmFunctionProvider.provide("get_travel_info")) }
     }
 }
