@@ -1,0 +1,22 @@
+[
+  {
+    "name": "io.github.lmos.arc.client.ollama.ChatRequest",
+    "fields":[{"name":"Companion"}],
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true,
+    "allDeclaredConstructors": true,
+    "allPublicMethods": true,
+    "allPublicFields": true,
+    "allPublicConstructors": true,
+    "queryAllDeclaredMethods": true,
+    "queryAllDeclaredConstructors": true,
+    "queryAllPublicMethods": true,
+    "queryAllPublicConstructors": true,
+    "unsafeAllocated": true
+  },
+  {
+    "name":"io.github.lmos.arc.client.ollama.ChatRequest$Companion",
+    "methods":[{"name":"serializer","parameterTypes":[] }]
+  }
+]
+
