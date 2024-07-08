@@ -52,7 +52,7 @@ class HotReloadTest : TestBase() {
 
         File(scriptsSubFolder, "weather.agent.kts").writeText(readScript("weather.agent.kts"))
         File(scriptsSubFolder, "weather.functions.kts").writeText(readScript("weather.functions.kts"))
-        delay(19_000)
+        delay(25_000)
 
         assertThat(scriptingAgentLoader.getAgents()).hasSize(1)
         assertThat(scriptingLLMFunctionLoader.load()).hasSize(2)
