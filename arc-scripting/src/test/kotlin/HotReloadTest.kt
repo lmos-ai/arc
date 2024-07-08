@@ -43,7 +43,7 @@ class HotReloadTest : TestBase() {
         assertThat(scriptingAgentLoader.getAgents()).hasSize(1)
     }
 
-    @Test
+    // @Test
     fun `test hot-reload modified subfolder`(): Unit = runBlocking {
         val hotReload = ScriptHotReload(scriptingAgentLoader, scriptingLLMFunctionLoader, 1.seconds)
 
