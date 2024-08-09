@@ -28,8 +28,7 @@ class FunctionCallHandler(
     private val functions: List<LLMFunction>,
     private val eventHandler: EventPublisher?,
     private val functionCallLimit: Int = 60,
-    ) {
-
+) {
     private val log = LoggerFactory.getLogger(javaClass)
     private val functionCallCount = AtomicInteger(0)
 
@@ -41,8 +40,10 @@ class FunctionCallHandler(
     suspend fun handle(chatCompletions: ChatCompletions) = result<List<ChatRequestMessage>, ArcException> {
         val choice = chatCompletions.choices[0]
 
-        if (functionCallCount.incrementAndGet() > functionCallLimit) failWith {
-            ArcException("Function call limit exceeded!")
+        if (functionCallCount.incrementAndGet() > functionCallLimit) {
+            failWith {
+                ArcException("Function call limit exceeded!")
+            }
         }
 
         // The LLM is requesting the calling of the function we defined in the original request
