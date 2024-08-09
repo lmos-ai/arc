@@ -4,6 +4,10 @@ SPDX-FileCopyrightText: 2023 Deutsche Telekom AG
 SPDX-License-Identifier: CC0-1.0    
 -->
 
+[![GitHub Actions Build Status](https://github.com/lmos-ai/arc/actions/workflows/gradle.yml/badge.svg?branch=main)](https://github.com/lmos-ai/arc/actions/workflows/gradle.yml)
+[![GitHub Actions Publish Status](https://github.com/lmos-ai/arc/actions/workflows/gradle-publish.yml/badge.svg?branch=main)](https://github.com/lmos-ai/arc/actions/workflows/gradle-publish.yml)
+[![Apache 2.0 License](https://img.shields.io/badge/license-Apache%202.0-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+
 # The Arc Project
 
 The goal of the Arc project is to utilize the power of Kotlin DSL and Kotlin Scripting to define
