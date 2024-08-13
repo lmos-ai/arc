@@ -17,6 +17,7 @@ sealed class ConversationMessage {
     abstract val sensitive: Boolean
     abstract val anonymized: Boolean
     abstract val binaryData: List<BinaryData>
+    abstract val format: MessageFormat
 
     /**
      * Returns a new instance of the message with the turn id applied.
@@ -40,6 +41,7 @@ data class UserMessage(
     override val sensitive: Boolean = false,
     override val anonymized: Boolean = false,
     override val binaryData: List<BinaryData> = emptyList(),
+    override val format: MessageFormat = MessageFormat.TEXT,
 ) : ConversationMessage() {
     override fun applyTurn(turnId: String): UserMessage = copy(turnId = turnId)
     override fun update(content: String): UserMessage = copy(content = content)
@@ -60,6 +62,7 @@ data class SystemMessage(
     override val sensitive: Boolean = false,
     override val anonymized: Boolean = false,
     override val binaryData: List<BinaryData> = emptyList(),
+    override val format: MessageFormat = MessageFormat.TEXT,
 ) : ConversationMessage() {
     override fun applyTurn(turnId: String): SystemMessage = copy(turnId = turnId)
     override fun update(content: String): SystemMessage = copy(content = content)
@@ -75,6 +78,7 @@ data class AssistantMessage(
     override val sensitive: Boolean = false,
     override val anonymized: Boolean = false,
     override val binaryData: List<BinaryData> = emptyList(),
+    override val format: MessageFormat = MessageFormat.TEXT,
 ) : ConversationMessage() {
     override fun applyTurn(turnId: String): AssistantMessage = copy(turnId = turnId)
     override fun update(content: String): AssistantMessage = copy(content = content)
@@ -82,3 +86,7 @@ data class AssistantMessage(
 
 @Serializable
 class BinaryData(val mimeType: String, val data: ByteArray)
+
+enum class MessageFormat {
+    JSON, TEXT, BINARY
+}
