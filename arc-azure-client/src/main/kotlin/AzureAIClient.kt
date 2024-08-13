@@ -20,6 +20,7 @@ import com.azure.core.util.BinaryData
 import io.github.lmos.arc.agents.ArcException
 import io.github.lmos.arc.agents.conversation.AssistantMessage
 import io.github.lmos.arc.agents.conversation.ConversationMessage
+import io.github.lmos.arc.agents.conversation.MessageFormat
 import io.github.lmos.arc.agents.conversation.SystemMessage
 import io.github.lmos.arc.agents.conversation.UserMessage
 import io.github.lmos.arc.agents.events.EventPublisher
@@ -76,7 +77,10 @@ class AzureAIClient(
             var chatCompletions: ChatCompletions? = null
             finally { publishEvent(it, messages, functions, chatCompletions, duration, functionCallHandler, settings) }
             chatCompletions = result failWith { it }
-            chatCompletions.getFirstAssistantMessage(sensitive = functionCallHandler.calledSensitiveFunction())
+            chatCompletions.getFirstAssistantMessage(
+                sensitive = functionCallHandler.calledSensitiveFunction(),
+                settings = settings,
+            )
         }
 
     private fun publishEvent(
@@ -104,8 +108,18 @@ class AzureAIClient(
         )
     }
 
-    private fun ChatCompletions.getFirstAssistantMessage(sensitive: Boolean = false) =
-        choices.first().message.content.let { AssistantMessage(it, sensitive = sensitive) }
+    private fun ChatCompletions.getFirstAssistantMessage(
+        sensitive: Boolean = false,
+        settings: ChatCompletionSettings?
+    ) = choices.first().message.content.let {
+        AssistantMessage(
+            it, sensitive = sensitive,
+            format = when (settings?.format) {
+                JSON -> MessageFormat.JSON
+                else -> MessageFormat.TEXT
+            }
+        )
+    }
 
     private suspend fun getChatCompletions(
         messages: List<ChatRequestMessage>,
@@ -127,6 +141,7 @@ class AzureAIClient(
         val chatCompletions = try {
             client.getChatCompletions(config.modelName, chatCompletionsOptions).awaitFirst()
         } catch (ex: Exception) {
+            log.error("Calling Azure OpenAI failed!", ex)
             return Failure(mapOpenAIException(ex))
         }
         log.debug("ChatCompletions: ${chatCompletions.choices[0].finishReason} (${chatCompletions.choices.size})")
@@ -140,7 +155,7 @@ class AzureAIClient(
 
     private fun mapOpenAIException(ex: Exception): ArcException = when (ex) {
         is ClientAuthenticationException -> ArcException(ex.message ?: "Unexpected error!", ex)
-        else -> ArcException("Unexpected error!", ex)
+        else -> ArcException(ex.message ?: "Unexpected error!", ex)
     }
 
     private fun toOpenAIMessages(messages: List<ConversationMessage>) = messages.map { msg ->
