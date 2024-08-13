@@ -22,6 +22,7 @@ import io.github.lmos.arc.core.failWith
 import io.github.lmos.arc.core.getOrThrow
 import io.github.lmos.arc.core.mapFailure
 import io.github.lmos.arc.core.result
+import org.slf4j.LoggerFactory
 import kotlin.time.measureTime
 
 const val AGENT_LOG_CONTEXT_KEY = "agent"
@@ -41,6 +42,8 @@ class ChatAgent(
     private val filterInput: suspend InputFilterContext.() -> Unit,
 ) : Agent<Conversation, Conversation> {
 
+    private val log = LoggerFactory.getLogger(javaClass)
+
     override suspend fun execute(input: Conversation, context: Set<Any>): Result<Conversation, AgentFailedException> {
         return withLogContext(mapOf(AGENT_LOG_CONTEXT_KEY to name)) {
             val agentEventHandler = beanProvider.provideOptional<EventPublisher>()
@@ -49,7 +52,10 @@ class ChatAgent(
             agentEventHandler?.publish(AgentStartedEvent(this@ChatAgent))
             val result: Result<Conversation, AgentFailedException>
             val duration = measureTime {
-                result = doExecute(input, model, context).mapFailure { AgentFailedException("Agent $name failed!", it) }
+                result = doExecute(input, model, context).mapFailure {
+                    log.error("Agent $name failed!", it)
+                    AgentFailedException("Agent $name failed!", it)
+                }
             }
             agentEventHandler?.publish(
                 AgentFinishedEvent(
