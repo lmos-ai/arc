@@ -12,9 +12,9 @@ dependencies {
     compileOnly("org.springframework.ai:spring-ai-core")
 
     // testing
-    testImplementation("org.springframework.boot:spring-boot-starter-test:3.2.4")
-    testImplementation("org.springframework.boot:spring-boot-starter:3.2.4")
-    testImplementation("org.springframework.boot:spring-boot-starter-webflux:3.2.4")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:3.3.2")
+    testImplementation("org.springframework.boot:spring-boot-starter:3.3.2")
+    testImplementation("org.springframework.boot:spring-boot-starter-webflux:3.3.2")
     testImplementation("org.springframework.ai:spring-ai-core")
     testImplementation("org.springframework.ai:spring-ai-ollama")
 

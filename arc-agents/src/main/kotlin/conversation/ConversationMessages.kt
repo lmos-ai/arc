@@ -88,5 +88,7 @@ data class AssistantMessage(
 class BinaryData(val mimeType: String, val data: ByteArray)
 
 enum class MessageFormat {
-    JSON, TEXT, BINARY
+    JSON,
+    TEXT,
+    BINARY,
 }

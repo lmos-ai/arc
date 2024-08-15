@@ -1,6 +1,10 @@
+// SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package io.github.lmos.arc.graphql.context
 
-import io.github.lmos.arc.api.AnonymizationEntity
+import io.github.lmos.arc.agents.conversation.AnonymizationEntity
 import java.util.concurrent.atomic.AtomicReference
 
 class AnonymizationEntities(anonymizationEntities: List<AnonymizationEntity>) {

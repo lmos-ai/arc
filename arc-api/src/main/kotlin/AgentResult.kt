@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package io.github.lmos.arc.api
 
 import kotlinx.serialization.Serializable
@@ -7,6 +11,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class AgentResult(
+    val status: String? = null,
     val messages: List<Message>,
     val anonymizationEntities: List<AnonymizationEntity>? = null,
 )

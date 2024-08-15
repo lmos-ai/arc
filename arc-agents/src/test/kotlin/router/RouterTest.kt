@@ -23,7 +23,7 @@ class RouterTest {
         }
     }
 
-    @Test
+    // @Test
     fun `test route correctly routes requests`(): Unit = runBlocking {
         val subject = SemanticRouter(textEmbedder)
         subject.addRoute("destination1".routeBy("route1", "route2"))

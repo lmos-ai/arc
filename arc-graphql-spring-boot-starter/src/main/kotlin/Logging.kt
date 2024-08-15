@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package io.github.lmos.arc.graphql
 
 import io.github.lmos.arc.api.AgentRequest
@@ -15,4 +19,3 @@ suspend fun <T> withLogContext(
     ) + request.systemContext.associate { it.key to it.value }
     return withContext(MDCContext(current + extraContext), block)
 }
-
