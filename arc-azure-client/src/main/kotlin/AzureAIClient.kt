@@ -5,42 +5,16 @@
 package io.github.lmos.arc.client.azure
 
 import com.azure.ai.openai.OpenAIAsyncClient
-import com.azure.ai.openai.models.ChatCompletions
-import com.azure.ai.openai.models.ChatCompletionsFunctionToolDefinition
-import com.azure.ai.openai.models.ChatCompletionsJsonResponseFormat
-import com.azure.ai.openai.models.ChatCompletionsOptions
-import com.azure.ai.openai.models.ChatRequestAssistantMessage
-import com.azure.ai.openai.models.ChatRequestMessage
-import com.azure.ai.openai.models.ChatRequestSystemMessage
-import com.azure.ai.openai.models.ChatRequestUserMessage
-import com.azure.ai.openai.models.EmbeddingsOptions
-import com.azure.ai.openai.models.FunctionDefinition
+import com.azure.ai.openai.models.*
 import com.azure.core.exception.ClientAuthenticationException
 import com.azure.core.util.BinaryData
 import io.github.lmos.arc.agents.ArcException
-import io.github.lmos.arc.agents.conversation.AssistantMessage
-import io.github.lmos.arc.agents.conversation.ConversationMessage
-import io.github.lmos.arc.agents.conversation.MessageFormat
-import io.github.lmos.arc.agents.conversation.SystemMessage
-import io.github.lmos.arc.agents.conversation.UserMessage
+import io.github.lmos.arc.agents.conversation.*
 import io.github.lmos.arc.agents.events.EventPublisher
 import io.github.lmos.arc.agents.functions.LLMFunction
-import io.github.lmos.arc.agents.llm.ChatCompleter
-import io.github.lmos.arc.agents.llm.ChatCompletionSettings
-import io.github.lmos.arc.agents.llm.LLMFinishedEvent
-import io.github.lmos.arc.agents.llm.LLMStartedEvent
+import io.github.lmos.arc.agents.llm.*
 import io.github.lmos.arc.agents.llm.OutputFormat.JSON
-import io.github.lmos.arc.agents.llm.TextEmbedder
-import io.github.lmos.arc.agents.llm.TextEmbedding
-import io.github.lmos.arc.agents.llm.TextEmbeddings
-import io.github.lmos.arc.core.Failure
-import io.github.lmos.arc.core.Result
-import io.github.lmos.arc.core.Success
-import io.github.lmos.arc.core.failWith
-import io.github.lmos.arc.core.finally
-import io.github.lmos.arc.core.getOrThrow
-import io.github.lmos.arc.core.mapFailure
-import io.github.lmos.arc.core.result
+import io.github.lmos.arc.core.*
 import kotlinx.coroutines.reactive.awaitFirst
 import org.slf4j.LoggerFactory
 import kotlin.time.Duration
@@ -110,14 +84,15 @@ class AzureAIClient(
 
     private fun ChatCompletions.getFirstAssistantMessage(
         sensitive: Boolean = false,
-        settings: ChatCompletionSettings?
+        settings: ChatCompletionSettings?,
     ) = choices.first().message.content.let {
         AssistantMessage(
-            it, sensitive = sensitive,
+            it,
+            sensitive = sensitive,
             format = when (settings?.format) {
                 JSON -> MessageFormat.JSON
                 else -> MessageFormat.TEXT
-            }
+            },
         )
     }
 

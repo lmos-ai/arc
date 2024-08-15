@@ -2,23 +2,25 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+import org.gradle.crypto.checksum.Checksum
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import java.lang.System.getenv
 import java.net.URI
 
 plugins {
-    kotlin("jvm") version "1.9.23" apply false
-    kotlin("plugin.serialization") version "1.9.23" apply false
+    kotlin("jvm") version "2.0.10" apply false
+    kotlin("plugin.serialization") version "2.0.10" apply false
     id("org.jetbrains.dokka") version "1.9.20"
     id("org.cyclonedx.bom") version "1.8.2" apply false
     id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
-    id("org.jetbrains.kotlinx.kover") version "0.7.6"
+    id("org.jetbrains.kotlinx.kover") version "0.8.3"
     id("org.gradle.crypto.checksum") version "1.4.0" apply false
 }
 
 subprojects {
     group = "io.github.lmos-ai.arc"
-    version = "0.40.0"
 
     apply(plugin = "org.cyclonedx.bom")
     apply(plugin = "org.jetbrains.dokka")
@@ -64,6 +66,7 @@ subprojects {
                 from(components["java"])
                 artifact(javadocJar)
                 pom {
+                    if (project.isBOM()) packaging = "pom"
                     description = "ARC is an AI framework."
                     url = "https://github.com/lmos-ai/arc"
                     scm {
@@ -112,24 +115,97 @@ subprojects {
             sign(publications)
         }
     }
+    if (!project.name.endsWith("-bom")) {
+        dependencies {
+            val kotlinXVersion = "1.8.1"
+            "implementation"("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:$kotlinXVersion")
+            "implementation"("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$kotlinXVersion")
+            "implementation"("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:$kotlinXVersion")
+            "implementation"("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1")
 
-    dependencies {
-        val kotlinXVersion = "1.8.0"
-        "implementation"("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:$kotlinXVersion")
-        "implementation"("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$kotlinXVersion")
-        "implementation"("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:$kotlinXVersion")
-        "implementation"("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
-
-        // Testing
-        "testImplementation"("org.junit.jupiter:junit-jupiter:5.10.2")
-        "testImplementation"("org.assertj:assertj-core:3.25.3")
-        "testImplementation"("io.mockk:mockk:1.13.10")
+            // Testing
+            "testImplementation"("org.junit.jupiter:junit-jupiter:5.10.2")
+            "testImplementation"("org.assertj:assertj-core:3.25.3")
+            "testImplementation"("io.mockk:mockk:1.13.10")
+        }
     }
 
     repositories {
         mavenLocal()
         mavenCentral()
         google()
+    }
+
+    tasks.named("dokkaJavadoc") {
+        mustRunAfter("checksum")
+    }
+
+    tasks.register("copyPom") {
+        doLast {
+            println("${findProperty("LOCAL_MAVEN_REPO")}/io/github/lmos-ai/arc/${project.name}/${project.version}")
+            val pomFolder =
+                File("${findProperty("LOCAL_MAVEN_REPO")}/io/github/lmos-ai/arc/${project.name}/${project.version}")
+            pomFolder.listFiles()?.forEach { file ->
+                if (file.name.endsWith(".pom") || file.name.endsWith(".pom.asc")) {
+                    file.copyTo(
+                        File(project.layout.buildDirectory.dir("libs").get().asFile, file.name),
+                        overwrite = true,
+                    )
+                }
+            }
+        }
+    }
+
+    tasks.register<Checksum>("checksum") {
+        dependsOn("copyPom")
+        inputFiles.setFrom(project.layout.buildDirectory.dir("libs"))
+        outputDirectory.set(project.layout.buildDirectory.dir("libs"))
+        checksumAlgorithm.set(Checksum.Algorithm.MD5)
+    }
+
+    tasks.register("sha1") {
+        dependsOn("checksum")
+        doLast {
+            project.layout.buildDirectory.dir("libs").get().asFile.listFiles()?.forEach { file ->
+                if (!file.name.endsWith(".md5")) {
+                    "shasum ${file.name}".execWithCode(workingDir = file.parentFile).second.forEach {
+                        File(file.parentFile, "${file.name}.sha1").writeText(it.substringBefore(" "))
+                    }
+                }
+            }
+        }
+    }
+
+    tasks.register("setupFolders") {
+        dependsOn("sha1")
+        doLast {
+            val build = File(
+                project.layout.buildDirectory.dir("out").get().asFile,
+                "io/github/lmos-ai/arc/${project.name}/${project.version}",
+            )
+            build.mkdirs()
+            project.layout.buildDirectory.dir("libs").get().asFile.listFiles()?.forEach { file ->
+                file.copyTo(File(build, file.name), overwrite = true)
+            }
+        }
+    }
+
+    tasks.register<Zip>("packageSonatype") {
+        doFirst {
+            if (project.isBOM()) {
+                println("Packaging BOM")
+                project.layout.buildDirectory.dir("out").get().asFile.walk().forEach { file ->
+                    if (file.isFile && !file.name.contains(".pom")) {
+                        println("Deleting ${file.name}")
+                        file.delete()
+                    }
+                }
+            }
+        }
+        dependsOn("setupFolders")
+        archiveFileName.set("${project.name}.zip")
+        destinationDirectory.set(parent!!.layout.buildDirectory.dir("dist"))
+        from(layout.buildDirectory.dir("out"))
     }
 }
 
@@ -147,6 +223,7 @@ dependencies {
     kover(project("arc-spring-ai"))
     kover(project("arc-api"))
     kover(project("arc-graphql-spring-boot-starter"))
+    kover(project("arc-agent-client"))
 }
 
 repositories {
@@ -155,3 +232,48 @@ repositories {
 
 fun Project.java(configure: Action<JavaPluginExtension>): Unit =
     (this as ExtensionAware).extensions.configure("java", configure)
+
+fun String.execWithCode(workingDir: File? = null): Pair<CommandResult, Sequence<String>> {
+    ProcessBuilder().apply {
+        workingDir?.let { directory(it) }
+        command(split(" "))
+        redirectErrorStream(true)
+        val process = start()
+        val result = process.readStream()
+        val code = process.waitFor()
+        return CommandResult(code) to result
+    }
+}
+
+class CommandResult(val code: Int) {
+
+    val isFailed = code != 0
+    val isSuccess = !isFailed
+
+    fun ifFailed(block: () -> Unit) {
+        if (isFailed) block()
+    }
+}
+
+/**
+ * Executes a string as a command.
+ */
+fun String.exec(workingDir: File? = null) = execWithCode(workingDir).second
+
+fun Project.isBOM() = name.endsWith("-bom")
+
+private fun Process.readStream() = sequence<String> {
+    val reader = BufferedReader(InputStreamReader(inputStream))
+    try {
+        var line: String?
+        while (true) {
+            line = reader.readLine()
+            if (line == null) {
+                break
+            }
+            yield(line)
+        }
+    } finally {
+        reader.close()
+    }
+}

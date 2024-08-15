@@ -9,9 +9,9 @@ dependencies {
 
     compileOnly("io.micrometer:micrometer-registry-atlas:1.12.3")
 
-    implementation("org.springframework.boot:spring-boot-autoconfigure:3.2.4")
-    implementation("org.springframework.boot:spring-boot-configuration-processor:3.2.4")
+    implementation("org.springframework.boot:spring-boot-autoconfigure:3.3.2")
+    implementation("org.springframework.boot:spring-boot-configuration-processor:3.3.2")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test:3.2.4")
-    testImplementation("org.springframework.boot:spring-boot-starter:3.2.4")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:3.3.2")
+    testImplementation("org.springframework.boot:spring-boot-starter:3.3.2")
 }
