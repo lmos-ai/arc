@@ -59,4 +59,20 @@ class CoroutineBeanProvider(private val fallbackBeanProvider: BeanProvider? = nu
     }
 }
 
+/**
+ * Composite BeanProvider
+ */
+class CompositeBeanProvider(
+    private val beans: Set<Any>,
+    private val fallbackBeanProvider: BeanProvider? = null,
+) : BeanProvider {
+
+    override suspend fun <T : Any> provide(bean: KClass<T>): T {
+        return beans.firstOrNull { bean.isInstance(it) }?.let { it as T } ?: fallbackOrThrow(bean)
+    }
+
+    private suspend fun <T : Any> fallbackOrThrow(type: KClass<T>) =
+        fallbackBeanProvider?.provide(type) ?: throw MissingBeanException("Bean of type $type cannot be located!")
+}
+
 class MissingBeanException(message: String) : Exception(message)

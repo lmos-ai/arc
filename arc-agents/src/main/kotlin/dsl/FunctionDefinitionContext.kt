@@ -4,11 +4,7 @@
 
 package io.github.lmos.arc.agents.dsl
 
-import io.github.lmos.arc.agents.functions.LLMFunction
-import io.github.lmos.arc.agents.functions.LambdaLLMFunction
-import io.github.lmos.arc.agents.functions.ParameterSchema
-import io.github.lmos.arc.agents.functions.ParameterType
-import io.github.lmos.arc.agents.functions.ParametersSchema
+import io.github.lmos.arc.agents.functions.*
 
 @DslMarker
 annotation class FunctionDefinitionContextMarker
@@ -65,7 +61,7 @@ class BasicFunctionDefinitionContext(private val beanProvider: BeanProvider) : F
                     parameters = params.map { it.first },
                     required = params.filter { it.second }.map { it.first.name },
                 ),
-                beanProvider,
+                BasicDSLContext(beanProvider),
                 wrapOutput(fn),
             ),
         )

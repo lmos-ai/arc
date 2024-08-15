@@ -6,22 +6,13 @@ package io.github.lmos.arc.agents
 
 import io.github.lmos.arc.agents.conversation.Conversation
 import io.github.lmos.arc.agents.conversation.SystemMessage
-import io.github.lmos.arc.agents.dsl.BasicDSLContext
-import io.github.lmos.arc.agents.dsl.BeanProvider
-import io.github.lmos.arc.agents.dsl.CoroutineBeanProvider
-import io.github.lmos.arc.agents.dsl.DSLContext
-import io.github.lmos.arc.agents.dsl.InputFilterContext
-import io.github.lmos.arc.agents.dsl.OutputFilterContext
-import io.github.lmos.arc.agents.dsl.provideOptional
+import io.github.lmos.arc.agents.dsl.*
 import io.github.lmos.arc.agents.events.EventPublisher
+import io.github.lmos.arc.agents.functions.FunctionWithContext
 import io.github.lmos.arc.agents.functions.LLMFunctionProvider
 import io.github.lmos.arc.agents.llm.ChatCompleterProvider
 import io.github.lmos.arc.agents.llm.ChatCompletionSettings
-import io.github.lmos.arc.core.Result
-import io.github.lmos.arc.core.failWith
-import io.github.lmos.arc.core.getOrThrow
-import io.github.lmos.arc.core.mapFailure
-import io.github.lmos.arc.core.result
+import io.github.lmos.arc.core.*
 import org.slf4j.LoggerFactory
 import kotlin.time.measureTime
 
@@ -72,34 +63,36 @@ class ChatAgent(
 
     private suspend fun doExecute(conversation: Conversation, model: String?, context: Set<Any>) =
         result<Conversation, Exception> {
-            val scriptingContext = BasicDSLContext(beanProvider)
+            val fullContext = context + setOf(conversation, conversation.user)
+            val scriptingContext = BasicDSLContext(CompositeBeanProvider(fullContext, beanProvider))
             val chatCompleter = chatCompleter(model = model)
-            val functions = functions()
+            val functions = functions(scriptingContext)
 
-            CoroutineBeanProvider().setContext(context + setOf(conversation, conversation.user)) {
-                val generatedSystemPrompt = systemPrompt.invoke(scriptingContext)
-                val filterContext = InputFilterContext(scriptingContext, conversation)
-                val filteredInput = filterInput.invoke(filterContext).let { filterContext.input }
+            val generatedSystemPrompt = systemPrompt.invoke(scriptingContext)
+            val filterContext = InputFilterContext(scriptingContext, conversation)
+            val filteredInput = filterInput.invoke(filterContext).let { filterContext.input }
 
-                if (filteredInput.isEmpty()) failWith { AgentNotExecutedException("Input has been filtered") }
+            if (filteredInput.isEmpty()) failWith { AgentNotExecutedException("Input has been filtered") }
 
-                val fullConversation =
-                    listOf(SystemMessage(generatedSystemPrompt)) + filteredInput.transcript
-                val completedConversation =
-                    conversation + chatCompleter.complete(fullConversation, functions, settings()).getOrThrow()
+            val fullConversation =
+                listOf(SystemMessage(generatedSystemPrompt)) + filteredInput.transcript
+            val completedConversation =
+                conversation + chatCompleter.complete(fullConversation, functions, settings()).getOrThrow()
 
-                val filterOutputContext =
-                    OutputFilterContext(scriptingContext, conversation, completedConversation, generatedSystemPrompt)
-                filterOutput.invoke(filterOutputContext).let { filterOutputContext.output }
-            }
+            val filterOutputContext =
+                OutputFilterContext(scriptingContext, conversation, completedConversation, generatedSystemPrompt)
+            filterOutput.invoke(filterOutputContext).let { filterOutputContext.output }
         }
 
     private suspend fun chatCompleter(model: String?) =
         beanProvider.provide(ChatCompleterProvider::class).provideByModel(model = model)
 
-    private suspend fun functions() = if (tools.isNotEmpty()) {
+    private suspend fun functions(context: DSLContext) = if (tools.isNotEmpty()) {
         val functionProvider = beanProvider.provide(LLMFunctionProvider::class)
-        tools.map { functionProvider.provide(it).getOrThrow() }
+        tools.map {
+            val fn = functionProvider.provide(it).getOrThrow()
+            if (fn is FunctionWithContext) fn.withContext(context) else fn
+        }
     } else {
         null
     }
