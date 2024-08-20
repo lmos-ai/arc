@@ -156,8 +156,19 @@ subprojects {
         }
     }
 
-    tasks.register<Checksum>("checksum") {
+    tasks.register("cleanChecksum") {
         dependsOn("copyPom")
+        doFirst {
+            layout.buildDirectory.dir("libs").get().asFile.walk().forEach { file ->
+                if (file.name.endsWith(".sha1") || file.name.endsWith(".md5")) {
+                    println("Deleting ${file.name} ${file.delete()}")
+                }
+            }
+        }
+    }
+
+    tasks.register<Checksum>("checksum") {
+        dependsOn("cleanChecksum")
         inputFiles.setFrom(project.layout.buildDirectory.dir("libs"))
         outputDirectory.set(project.layout.buildDirectory.dir("libs"))
         checksumAlgorithm.set(Checksum.Algorithm.MD5)

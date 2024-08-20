@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package io.github.lmos.arc.graphql.inbound
 
 import com.expediagroup.graphql.server.operations.Subscription
