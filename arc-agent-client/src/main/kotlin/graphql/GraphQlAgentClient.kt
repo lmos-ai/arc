@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 /**
  * Implementation of [AgentClient] that uses GraphQL over WebSockets to communicate with the agents.
  */
-class GraphQlAgentClient(private val url: String) : AgentClient, Closeable {
+class GraphQlAgentClient(private val defaultUrl: String? = null) : AgentClient, Closeable {
 
     private val log = LoggerFactory.getLogger(this.javaClass)
     private val closing = AtomicBoolean(false)
@@ -38,9 +38,10 @@ class GraphQlAgentClient(private val url: String) : AgentClient, Closeable {
         }
     }
 
-    override suspend fun callAgent(agentRequest: AgentRequest) = flow {
+    override suspend fun callAgent(agentRequest: AgentRequest, url: String?) = flow {
+        if (url == null && defaultUrl == null) error("Agent Url not provided!")
         val opId = UUID.randomUUID().toString()
-        client.webSocket(url) {
+        client.webSocket(url ?: defaultUrl!!) {
             initConnection()
             sendSubscription(opId, agentRequest)
             while (closing.get().not()) {
