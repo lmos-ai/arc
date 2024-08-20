@@ -13,7 +13,10 @@ import kotlinx.coroutines.flow.Flow
  */
 interface AgentClient {
 
-    suspend fun callAgent(agentRequest: AgentRequest): Flow<Message>
+    /**
+     * Calls the agent with the given request. If a url is not provided, the client will use the default url.
+     */
+    suspend fun callAgent(agentRequest: AgentRequest, url: String? = null): Flow<Message>
 }
 
 /**
