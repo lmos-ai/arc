@@ -4,12 +4,7 @@
 
 package io.github.lmos.arc.client.azure
 
-import com.azure.ai.openai.models.ChatCompletions
-import com.azure.ai.openai.models.ChatCompletionsFunctionToolCall
-import com.azure.ai.openai.models.ChatRequestAssistantMessage
-import com.azure.ai.openai.models.ChatRequestMessage
-import com.azure.ai.openai.models.ChatRequestToolMessage
-import com.azure.ai.openai.models.CompletionsFinishReason
+import com.azure.ai.openai.models.*
 import io.github.lmos.arc.agents.ArcException
 import io.github.lmos.arc.agents.HallucinationDetectedException
 import io.github.lmos.arc.agents.events.EventPublisher
@@ -23,14 +18,20 @@ import io.github.lmos.arc.core.getOrNull
 import io.github.lmos.arc.core.result
 import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.time.measureTime
 
 /**
  * Finds function calls in ChatCompletions and calls the callback function if any are found.
  */
-class FunctionCallHandler(private val functions: List<LLMFunction>, private val eventHandler: EventPublisher?) {
+class FunctionCallHandler(
+    private val functions: List<LLMFunction>,
+    private val eventHandler: EventPublisher?,
+    private val functionCallLimit: Int = 60,
+    ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
+    private val functionCallCount = AtomicInteger(0)
 
     private val _calledFunctions = ConcurrentHashMap<String, LLMFunction>()
     val calledFunctions get(): Map<String, LLMFunction> = _calledFunctions
@@ -39,6 +40,10 @@ class FunctionCallHandler(private val functions: List<LLMFunction>, private val 
 
     suspend fun handle(chatCompletions: ChatCompletions) = result<List<ChatRequestMessage>, ArcException> {
         val choice = chatCompletions.choices[0]
+
+        if (functionCallCount.incrementAndGet() > functionCallLimit) failWith {
+            ArcException("Function call limit exceeded!")
+        }
 
         // The LLM is requesting the calling of the function we defined in the original request
         if (CompletionsFinishReason.TOOL_CALLS == choice.finishReason) {
