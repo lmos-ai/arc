@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkarc=self.webpackChunkarc||[]).push([[3057],{8786:a=>{a.exports=JSON.parse('{"metadata":{"permalink":"/arc/blog","page":1,"postsPerPage":10,"totalPages":1,"totalCount":2,"blogDescription":"Blog","blogTitle":"Blog"}}')}}]);
