@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.scripting
+package ai.ancf.lmos.arc.scripting
 
 /**
  * Thrown when a script fails to execute. This can be due to syntax errors or runtime exceptions.

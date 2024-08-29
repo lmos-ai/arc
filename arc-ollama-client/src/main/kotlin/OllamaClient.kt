@@ -2,29 +2,29 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.client.ollama
+package ai.ancf.lmos.arc.client.ollama
 
-import io.github.lmos.arc.agents.ArcException
-import io.github.lmos.arc.agents.FeatureNotSupportedException
-import io.github.lmos.arc.agents.conversation.AssistantMessage
-import io.github.lmos.arc.agents.conversation.ConversationMessage
-import io.github.lmos.arc.agents.conversation.SystemMessage
-import io.github.lmos.arc.agents.conversation.UserMessage
-import io.github.lmos.arc.agents.events.EventPublisher
-import io.github.lmos.arc.agents.functions.LLMFunction
-import io.github.lmos.arc.agents.llm.ChatCompleter
-import io.github.lmos.arc.agents.llm.ChatCompletionSettings
-import io.github.lmos.arc.agents.llm.LLMFinishedEvent
-import io.github.lmos.arc.agents.llm.LLMStartedEvent
-import io.github.lmos.arc.agents.llm.OutputFormat.JSON
-import io.github.lmos.arc.agents.llm.TextEmbedder
-import io.github.lmos.arc.agents.llm.TextEmbedding
-import io.github.lmos.arc.agents.llm.TextEmbeddings
-import io.github.lmos.arc.core.Result
-import io.github.lmos.arc.core.ensure
-import io.github.lmos.arc.core.failWith
-import io.github.lmos.arc.core.finally
-import io.github.lmos.arc.core.result
+import ai.ancf.lmos.arc.agents.ArcException
+import ai.ancf.lmos.arc.agents.FeatureNotSupportedException
+import ai.ancf.lmos.arc.agents.conversation.AssistantMessage
+import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
+import ai.ancf.lmos.arc.agents.conversation.SystemMessage
+import ai.ancf.lmos.arc.agents.conversation.UserMessage
+import ai.ancf.lmos.arc.agents.events.EventPublisher
+import ai.ancf.lmos.arc.agents.functions.LLMFunction
+import ai.ancf.lmos.arc.agents.llm.ChatCompleter
+import ai.ancf.lmos.arc.agents.llm.ChatCompletionSettings
+import ai.ancf.lmos.arc.agents.llm.LLMFinishedEvent
+import ai.ancf.lmos.arc.agents.llm.LLMStartedEvent
+import ai.ancf.lmos.arc.agents.llm.OutputFormat.JSON
+import ai.ancf.lmos.arc.agents.llm.TextEmbedder
+import ai.ancf.lmos.arc.agents.llm.TextEmbedding
+import ai.ancf.lmos.arc.agents.llm.TextEmbeddings
+import ai.ancf.lmos.arc.core.Result
+import ai.ancf.lmos.arc.core.ensure
+import ai.ancf.lmos.arc.core.failWith
+import ai.ancf.lmos.arc.core.finally
+import ai.ancf.lmos.arc.core.result
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*

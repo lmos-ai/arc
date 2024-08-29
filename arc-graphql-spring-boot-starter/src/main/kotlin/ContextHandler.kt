@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.graphql
+package ai.ancf.lmos.arc.graphql
 
-import io.github.lmos.arc.api.AgentRequest
+import ai.ancf.lmos.arc.api.AgentRequest
 
 interface ContextHandler {
 

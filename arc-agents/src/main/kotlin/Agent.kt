@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.agents
+package ai.ancf.lmos.arc.agents
 
-import io.github.lmos.arc.core.Result
+import ai.ancf.lmos.arc.core.Result
 
 /**
  * The main Agent interface.

@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
 //
 // SPDX-License-Identifier: Apache-2.0
-package io.github.lmos.arc.spring.ai
+package ai.ancf.lmos.arc.spring.ai
 
 import org.springframework.ai.ollama.OllamaChatModel
 import org.springframework.ai.ollama.api.OllamaApi

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.scripting
+package ai.ancf.lmos.arc.scripting
 
 /**
  * Reads a script from the resource folder.

@@ -14,4 +14,4 @@ arc:
 logging:
   level:
     root: WARN
-    io.github.lmos.ai: DEBUG
+    ai.ancf.lmos.ai: DEBUG

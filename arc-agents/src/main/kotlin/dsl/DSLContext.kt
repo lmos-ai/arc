@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.agents.dsl
+package ai.ancf.lmos.arc.agents.dsl
 
-import io.github.lmos.arc.agents.functions.LLMFunction
+import ai.ancf.lmos.arc.agents.functions.LLMFunction
 import kotlinx.coroutines.future.await
 import java.net.URI
 import java.net.http.HttpClient

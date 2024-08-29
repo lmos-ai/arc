@@ -2,14 +2,14 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.agents.dsl.extensions
+package ai.ancf.lmos.arc.agents.dsl.extensions
 
-import io.github.lmos.arc.agents.conversation.Conversation
-import io.github.lmos.arc.agents.dsl.DSLContext
-import io.github.lmos.arc.agents.dsl.extensions.MemoryScope.LONG_TERM
-import io.github.lmos.arc.agents.dsl.extensions.MemoryScope.SHORT_TERM
-import io.github.lmos.arc.agents.dsl.get
-import io.github.lmos.arc.agents.memory.Memory
+import ai.ancf.lmos.arc.agents.conversation.Conversation
+import ai.ancf.lmos.arc.agents.dsl.DSLContext
+import ai.ancf.lmos.arc.agents.dsl.extensions.MemoryScope.LONG_TERM
+import ai.ancf.lmos.arc.agents.dsl.extensions.MemoryScope.SHORT_TERM
+import ai.ancf.lmos.arc.agents.dsl.get
+import ai.ancf.lmos.arc.agents.memory.Memory
 
 enum class MemoryScope {
     SHORT_TERM,

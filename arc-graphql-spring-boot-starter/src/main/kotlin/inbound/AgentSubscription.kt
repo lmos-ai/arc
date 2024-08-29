@@ -2,26 +2,26 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.graphql.inbound
+package ai.ancf.lmos.arc.graphql.inbound
 
+import ai.ancf.lmos.arc.agents.AgentProvider
+import ai.ancf.lmos.arc.agents.ChatAgent
+import ai.ancf.lmos.arc.agents.User
+import ai.ancf.lmos.arc.agents.conversation.AssistantMessage
+import ai.ancf.lmos.arc.agents.conversation.Conversation
+import ai.ancf.lmos.arc.agents.conversation.latest
+import ai.ancf.lmos.arc.agents.getAgentByName
+import ai.ancf.lmos.arc.api.AgentRequest
+import ai.ancf.lmos.arc.api.AgentResult
+import ai.ancf.lmos.arc.core.Failure
+import ai.ancf.lmos.arc.core.Success
+import ai.ancf.lmos.arc.core.getOrThrow
+import ai.ancf.lmos.arc.graphql.ContextHandler
+import ai.ancf.lmos.arc.graphql.EmptyContextHandler
+import ai.ancf.lmos.arc.graphql.ErrorHandler
+import ai.ancf.lmos.arc.graphql.context.AnonymizationEntities
+import ai.ancf.lmos.arc.graphql.withLogContext
 import com.expediagroup.graphql.server.operations.Subscription
-import io.github.lmos.arc.agents.AgentProvider
-import io.github.lmos.arc.agents.ChatAgent
-import io.github.lmos.arc.agents.User
-import io.github.lmos.arc.agents.conversation.AssistantMessage
-import io.github.lmos.arc.agents.conversation.Conversation
-import io.github.lmos.arc.agents.conversation.latest
-import io.github.lmos.arc.agents.getAgentByName
-import io.github.lmos.arc.api.AgentRequest
-import io.github.lmos.arc.api.AgentResult
-import io.github.lmos.arc.core.Failure
-import io.github.lmos.arc.core.Success
-import io.github.lmos.arc.core.getOrThrow
-import io.github.lmos.arc.graphql.ContextHandler
-import io.github.lmos.arc.graphql.EmptyContextHandler
-import io.github.lmos.arc.graphql.ErrorHandler
-import io.github.lmos.arc.graphql.context.AnonymizationEntities
-import io.github.lmos.arc.graphql.withLogContext
 import kotlinx.coroutines.flow.flow
 import org.slf4j.LoggerFactory
 

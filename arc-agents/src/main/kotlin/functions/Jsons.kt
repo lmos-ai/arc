@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.agents.functions
+package ai.ancf.lmos.arc.agents.functions
 
-import io.github.lmos.arc.core.failWith
-import io.github.lmos.arc.core.result
+import ai.ancf.lmos.arc.core.failWith
+import ai.ancf.lmos.arc.core.result
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray

@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.spring.ai
+package ai.ancf.lmos.arc.spring.ai
 
-import io.github.lmos.arc.agents.llm.complete
-import io.github.lmos.arc.core.getOrNull
+import ai.ancf.lmos.arc.agents.llm.complete
+import ai.ancf.lmos.arc.core.getOrNull
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.client.ollama
+package ai.ancf.lmos.arc.client.ollama
 
 import io.ktor.network.sockets.*
 import io.ktor.server.application.*

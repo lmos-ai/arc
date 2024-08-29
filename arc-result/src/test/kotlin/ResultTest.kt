@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.core
+package ai.ancf.lmos.arc.core
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

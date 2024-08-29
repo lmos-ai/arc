@@ -1,12 +1,12 @@
 // SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
 //
 // SPDX-License-Identifier: Apache-2.0
-package io.github.lmos.arc.spring.ai
+package ai.ancf.lmos.arc.spring.ai
 
-import io.github.lmos.arc.agents.conversation.AssistantMessage
-import io.github.lmos.arc.agents.conversation.ConversationMessage
-import io.github.lmos.arc.agents.conversation.SystemMessage
-import io.github.lmos.arc.agents.conversation.UserMessage
+import ai.ancf.lmos.arc.agents.conversation.AssistantMessage
+import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
+import ai.ancf.lmos.arc.agents.conversation.SystemMessage
+import ai.ancf.lmos.arc.agents.conversation.UserMessage
 
 /**
  * Converts a list of ConversationMessages to a list of Spring AI messages.

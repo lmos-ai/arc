@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.scripting
+package ai.ancf.lmos.arc.scripting
 
-import io.github.lmos.arc.agents.dsl.BasicFunctionDefinitionContext
-import io.github.lmos.arc.agents.dsl.DSLContext
-import io.github.lmos.arc.agents.dsl.FunctionDefinitionContext
-import io.github.lmos.arc.core.getOrThrow
+import ai.ancf.lmos.arc.agents.dsl.BasicFunctionDefinitionContext
+import ai.ancf.lmos.arc.agents.dsl.DSLContext
+import ai.ancf.lmos.arc.agents.dsl.FunctionDefinitionContext
+import ai.ancf.lmos.arc.core.getOrThrow
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
 
@@ -16,7 +16,7 @@ class ContextTest : TestBase() {
     @Test
     fun `test that context receivers are supported in agents`(): Unit = runBlocking {
         val script = """
-            import io.github.lmos.arc.scripting.ContextFilter
+            import ai.ancf.lmos.arc.scripting.ContextFilter
             agent {
                 name = "weather"
                 description = ""
@@ -33,7 +33,7 @@ class ContextTest : TestBase() {
     fun `test that context receivers are supported in functions`(): Unit = runBlocking {
         val context = BasicFunctionDefinitionContext(testBeanProvider)
         val script = """
-           import io.github.lmos.arc.scripting.ContextFilter
+           import ai.ancf.lmos.arc.scripting.ContextFilter
            function(
                 name = "get_weather",
                 description = ""

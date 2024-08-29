@@ -1,4 +1,4 @@
 # SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
 #
 # SPDX-License-Identifier: Apache-2.0
-io.github.lmos.arc.spring.ArcAutoConfiguration
+ai.ancf.lmos.arc.spring.ArcAutoConfiguration
