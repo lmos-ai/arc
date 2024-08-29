@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.agents
+package ai.ancf.lmos.arc.agents
 
-import io.github.lmos.arc.agents.conversation.Conversation
-import io.github.lmos.arc.agents.events.Event
-import io.github.lmos.arc.core.Result
+import ai.ancf.lmos.arc.agents.conversation.Conversation
+import ai.ancf.lmos.arc.agents.events.Event
+import ai.ancf.lmos.arc.core.Result
 import java.time.Instant
 import kotlin.time.Duration
 

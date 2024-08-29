@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.graphql
+package ai.ancf.lmos.arc.graphql
 
+import ai.ancf.lmos.arc.agents.AgentProvider
+import ai.ancf.lmos.arc.graphql.inbound.AgentQuery
+import ai.ancf.lmos.arc.graphql.inbound.AgentSubscription
 import com.expediagroup.graphql.server.spring.GraphQLAutoConfiguration
-import io.github.lmos.arc.agents.AgentProvider
-import io.github.lmos.arc.graphql.inbound.AgentQuery
-import io.github.lmos.arc.graphql.inbound.AgentSubscription
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.AutoConfigureBefore
 import org.springframework.context.annotation.Bean

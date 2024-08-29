@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
 //
 // SPDX-License-Identifier: Apache-2.0
-package io.github.lmos.arc.memory.mongo
+package ai.ancf.lmos.arc.memory.mongo
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking

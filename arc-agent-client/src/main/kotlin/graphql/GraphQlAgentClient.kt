@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.agent.client.graphql
+package ai.ancf.lmos.arc.agent.client.graphql
 
-import io.github.lmos.arc.agent.client.AgentClient
-import io.github.lmos.arc.agent.client.AgentException
-import io.github.lmos.arc.api.AgentRequest
-import io.github.lmos.arc.api.Message
+import ai.ancf.lmos.arc.agent.client.AgentClient
+import ai.ancf.lmos.arc.agent.client.AgentException
+import ai.ancf.lmos.arc.api.AgentRequest
+import ai.ancf.lmos.arc.api.Message
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.websocket.*

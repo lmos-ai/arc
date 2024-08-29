@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.agents.dsl.extensions
+package ai.ancf.lmos.arc.agents.dsl.extensions
 
-import io.github.lmos.arc.agents.dsl.DSLContext
-import io.github.lmos.arc.core.closeWith
-import io.github.lmos.arc.core.failWith
-import io.github.lmos.arc.core.result
+import ai.ancf.lmos.arc.agents.dsl.DSLContext
+import ai.ancf.lmos.arc.core.closeWith
+import ai.ancf.lmos.arc.core.failWith
+import ai.ancf.lmos.arc.core.result
 import org.apache.pdfbox.Loader
 import org.apache.pdfbox.text.PDFTextStripper
 import java.net.URI

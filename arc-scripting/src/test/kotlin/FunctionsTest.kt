@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.scripting
+package ai.ancf.lmos.arc.scripting
 
-import io.github.lmos.arc.agents.dsl.BasicFunctionDefinitionContext
+import ai.ancf.lmos.arc.agents.dsl.BasicFunctionDefinitionContext
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

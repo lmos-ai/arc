@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.agents.dsl.extensions
+package ai.ancf.lmos.arc.agents.dsl.extensions
 
-import io.github.lmos.arc.agents.conversation.ConversationMessage
-import io.github.lmos.arc.agents.dsl.DSLContext
-import io.github.lmos.arc.agents.dsl.InputFilterContext
-import io.github.lmos.arc.agents.dsl.OutputFilterContext
+import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
+import ai.ancf.lmos.arc.agents.dsl.DSLContext
+import ai.ancf.lmos.arc.agents.dsl.InputFilterContext
+import ai.ancf.lmos.arc.agents.dsl.OutputFilterContext
 
 /**
  * Extensions for extracting data from messages.

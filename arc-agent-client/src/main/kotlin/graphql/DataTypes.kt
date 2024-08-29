@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.agent.client.graphql
+package ai.ancf.lmos.arc.agent.client.graphql
 
-import io.github.lmos.arc.api.AgentRequest
-import io.github.lmos.arc.api.AnonymizationEntity
+import ai.ancf.lmos.arc.api.AgentRequest
+import ai.ancf.lmos.arc.api.AnonymizationEntity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

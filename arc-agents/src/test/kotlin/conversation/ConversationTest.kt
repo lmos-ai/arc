@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.agents.conversation
+package ai.ancf.lmos.arc.agents.conversation
 
-import io.github.lmos.arc.agents.User
+import ai.ancf.lmos.arc.agents.User
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

@@ -20,7 +20,7 @@ plugins {
 }
 
 subprojects {
-    group = "io.github.lmos-ai.arc"
+    group = "ai.ancf.lmos"
 
     apply(plugin = "org.cyclonedx.bom")
     apply(plugin = "org.jetbrains.dokka")

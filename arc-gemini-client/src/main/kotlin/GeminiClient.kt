@@ -2,8 +2,26 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.client.gemini
+package ai.ancf.lmos.arc.client.gemini
 
+import ai.ancf.lmos.arc.agents.ArcException
+import ai.ancf.lmos.arc.agents.conversation.AssistantMessage
+import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
+import ai.ancf.lmos.arc.agents.conversation.SystemMessage
+import ai.ancf.lmos.arc.agents.conversation.UserMessage
+import ai.ancf.lmos.arc.agents.events.EventPublisher
+import ai.ancf.lmos.arc.agents.functions.LLMFunction
+import ai.ancf.lmos.arc.agents.llm.ChatCompleter
+import ai.ancf.lmos.arc.agents.llm.ChatCompletionSettings
+import ai.ancf.lmos.arc.agents.llm.LLMFinishedEvent
+import ai.ancf.lmos.arc.agents.llm.LLMStartedEvent
+import ai.ancf.lmos.arc.client.gemini.ByteMapper.map
+import ai.ancf.lmos.arc.core.Result
+import ai.ancf.lmos.arc.core.Success
+import ai.ancf.lmos.arc.core.failWith
+import ai.ancf.lmos.arc.core.finally
+import ai.ancf.lmos.arc.core.getOrThrow
+import ai.ancf.lmos.arc.core.result
 import com.google.cloud.vertexai.VertexAI
 import com.google.cloud.vertexai.api.Content
 import com.google.cloud.vertexai.api.FunctionDeclaration
@@ -15,24 +33,6 @@ import com.google.cloud.vertexai.api.Type
 import com.google.cloud.vertexai.generativeai.ContentMaker.forRole
 import com.google.cloud.vertexai.generativeai.GenerativeModel
 import com.google.cloud.vertexai.generativeai.ResponseHandler
-import io.github.lmos.arc.agents.ArcException
-import io.github.lmos.arc.agents.conversation.AssistantMessage
-import io.github.lmos.arc.agents.conversation.ConversationMessage
-import io.github.lmos.arc.agents.conversation.SystemMessage
-import io.github.lmos.arc.agents.conversation.UserMessage
-import io.github.lmos.arc.agents.events.EventPublisher
-import io.github.lmos.arc.agents.functions.LLMFunction
-import io.github.lmos.arc.agents.llm.ChatCompleter
-import io.github.lmos.arc.agents.llm.ChatCompletionSettings
-import io.github.lmos.arc.agents.llm.LLMFinishedEvent
-import io.github.lmos.arc.agents.llm.LLMStartedEvent
-import io.github.lmos.arc.client.gemini.ByteMapper.map
-import io.github.lmos.arc.core.Result
-import io.github.lmos.arc.core.Success
-import io.github.lmos.arc.core.failWith
-import io.github.lmos.arc.core.finally
-import io.github.lmos.arc.core.getOrThrow
-import io.github.lmos.arc.core.result
 import org.slf4j.LoggerFactory
 import kotlin.time.Duration
 import kotlin.time.measureTime

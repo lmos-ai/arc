@@ -1,14 +1,14 @@
 // SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
 //
 // SPDX-License-Identifier: Apache-2.0
-package io.github.lmos.arc.spring
+package ai.ancf.lmos.arc.spring
 
-import io.github.lmos.arc.agents.AgentFinishedEvent
-import io.github.lmos.arc.agents.events.Event
-import io.github.lmos.arc.agents.events.EventHandler
-import io.github.lmos.arc.agents.llm.LLMFinishedEvent
-import io.github.lmos.arc.agents.router.RouterRoutedEvent
-import io.github.lmos.arc.core.Success
+import ai.ancf.lmos.arc.agents.AgentFinishedEvent
+import ai.ancf.lmos.arc.agents.events.Event
+import ai.ancf.lmos.arc.agents.events.EventHandler
+import ai.ancf.lmos.arc.agents.llm.LLMFinishedEvent
+import ai.ancf.lmos.arc.agents.router.RouterRoutedEvent
+import ai.ancf.lmos.arc.core.Success
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.core.instrument.Tag
 import io.micrometer.core.instrument.Timer

@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.agents.dsl
+package ai.ancf.lmos.arc.agents.dsl
 
-import io.github.lmos.arc.agents.conversation.ConversationMessage
+import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
 
 class NumberFilter : AgentFilter {
     override suspend fun filter(m: ConversationMessage): ConversationMessage {

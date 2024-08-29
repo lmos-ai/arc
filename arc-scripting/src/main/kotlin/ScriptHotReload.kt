@@ -1,13 +1,13 @@
 // SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
 //
 // SPDX-License-Identifier: Apache-2.0
-package io.github.lmos.arc.scripting
+package ai.ancf.lmos.arc.scripting
 
-import io.github.lmos.arc.core.closeWith
-import io.github.lmos.arc.core.onFailure
-import io.github.lmos.arc.core.result
-import io.github.lmos.arc.scripting.agents.ScriptingAgentLoader
-import io.github.lmos.arc.scripting.functions.ScriptingLLMFunctionLoader
+import ai.ancf.lmos.arc.core.closeWith
+import ai.ancf.lmos.arc.core.onFailure
+import ai.ancf.lmos.arc.core.result
+import ai.ancf.lmos.arc.scripting.agents.ScriptingAgentLoader
+import ai.ancf.lmos.arc.scripting.functions.ScriptingLLMFunctionLoader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.asCoroutineDispatcher
