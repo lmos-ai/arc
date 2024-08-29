@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.client.azure
+package ai.ancf.lmos.arc.client.azure
 
 data class AzureClientConfig(
     val modelName: String,

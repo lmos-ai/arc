@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.scripting.agents
+package ai.ancf.lmos.arc.scripting.agents
 
-import io.github.lmos.arc.agents.dsl.AgentDefinitionContext
+import ai.ancf.lmos.arc.agents.dsl.AgentDefinitionContext
 import kotlin.script.experimental.annotations.KotlinScript
 import kotlin.script.experimental.api.ScriptCompilationConfiguration
 import kotlin.script.experimental.api.compilerOptions
@@ -30,11 +30,11 @@ object ScriptConfiguration : ScriptCompilationConfiguration(
         compilerOptions("-Xcontext-receivers")
 
         defaultImports(
-            "io.github.lmos.arc.agents.dsl.get",
-            "io.github.lmos.arc.agents.dsl.*",
-            "io.github.lmos.arc.agents.conversation.UserMessage",
-            "io.github.lmos.arc.agents.conversation.latest",
-            "io.github.lmos.arc.agents.dsl.extensions.*",
+            "ai.ancf.lmos.arc.agents.dsl.get",
+            "ai.ancf.lmos.arc.agents.dsl.*",
+            "ai.ancf.lmos.arc.agents.conversation.UserMessage",
+            "ai.ancf.lmos.arc.agents.conversation.latest",
+            "ai.ancf.lmos.arc.agents.dsl.extensions.*",
         )
 
         jvm {

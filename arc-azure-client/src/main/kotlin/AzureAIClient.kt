@@ -2,19 +2,44 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.client.azure
+package ai.ancf.lmos.arc.client.azure
 
+import ai.ancf.lmos.arc.agents.ArcException
+import ai.ancf.lmos.arc.agents.conversation.AssistantMessage
+import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
+import ai.ancf.lmos.arc.agents.conversation.SystemMessage
+import ai.ancf.lmos.arc.agents.conversation.UserMessage
+import ai.ancf.lmos.arc.agents.events.EventPublisher
+import ai.ancf.lmos.arc.agents.functions.LLMFunction
+import ai.ancf.lmos.arc.agents.llm.ChatCompleter
+import ai.ancf.lmos.arc.agents.llm.ChatCompletionSettings
+import ai.ancf.lmos.arc.agents.llm.LLMFinishedEvent
+import ai.ancf.lmos.arc.agents.llm.LLMStartedEvent
+import ai.ancf.lmos.arc.agents.llm.OutputFormat.JSON
+import ai.ancf.lmos.arc.agents.llm.TextEmbedder
+import ai.ancf.lmos.arc.agents.llm.TextEmbedding
+import ai.ancf.lmos.arc.agents.llm.TextEmbeddings
+import ai.ancf.lmos.arc.core.Failure
+import ai.ancf.lmos.arc.core.Result
+import ai.ancf.lmos.arc.core.Success
+import ai.ancf.lmos.arc.core.failWith
+import ai.ancf.lmos.arc.core.finally
+import ai.ancf.lmos.arc.core.getOrThrow
+import ai.ancf.lmos.arc.core.mapFailure
+import ai.ancf.lmos.arc.core.result
 import com.azure.ai.openai.OpenAIAsyncClient
-import com.azure.ai.openai.models.*
+import com.azure.ai.openai.models.ChatCompletions
+import com.azure.ai.openai.models.ChatCompletionsFunctionToolDefinition
+import com.azure.ai.openai.models.ChatCompletionsJsonResponseFormat
+import com.azure.ai.openai.models.ChatCompletionsOptions
+import com.azure.ai.openai.models.ChatRequestAssistantMessage
+import com.azure.ai.openai.models.ChatRequestMessage
+import com.azure.ai.openai.models.ChatRequestSystemMessage
+import com.azure.ai.openai.models.ChatRequestUserMessage
+import com.azure.ai.openai.models.EmbeddingsOptions
+import com.azure.ai.openai.models.FunctionDefinition
 import com.azure.core.exception.ClientAuthenticationException
 import com.azure.core.util.BinaryData
-import io.github.lmos.arc.agents.ArcException
-import io.github.lmos.arc.agents.conversation.*
-import io.github.lmos.arc.agents.events.EventPublisher
-import io.github.lmos.arc.agents.functions.LLMFunction
-import io.github.lmos.arc.agents.llm.*
-import io.github.lmos.arc.agents.llm.OutputFormat.JSON
-import io.github.lmos.arc.core.*
 import kotlinx.coroutines.reactive.awaitFirst
 import org.slf4j.LoggerFactory
 import kotlin.time.Duration
@@ -51,10 +76,7 @@ class AzureAIClient(
             var chatCompletions: ChatCompletions? = null
             finally { publishEvent(it, messages, functions, chatCompletions, duration, functionCallHandler, settings) }
             chatCompletions = result failWith { it }
-            chatCompletions.getFirstAssistantMessage(
-                sensitive = functionCallHandler.calledSensitiveFunction(),
-                settings = settings,
-            )
+            chatCompletions.getFirstAssistantMessage(sensitive = functionCallHandler.calledSensitiveFunction())
         }
 
     private fun publishEvent(
@@ -82,19 +104,8 @@ class AzureAIClient(
         )
     }
 
-    private fun ChatCompletions.getFirstAssistantMessage(
-        sensitive: Boolean = false,
-        settings: ChatCompletionSettings?,
-    ) = choices.first().message.content.let {
-        AssistantMessage(
-            it,
-            sensitive = sensitive,
-            format = when (settings?.format) {
-                JSON -> MessageFormat.JSON
-                else -> MessageFormat.TEXT
-            },
-        )
-    }
+    private fun ChatCompletions.getFirstAssistantMessage(sensitive: Boolean = false) =
+        choices.first().message.content.let { AssistantMessage(it, sensitive = sensitive) }
 
     private suspend fun getChatCompletions(
         messages: List<ChatRequestMessage>,
@@ -116,7 +127,6 @@ class AzureAIClient(
         val chatCompletions = try {
             client.getChatCompletions(config.modelName, chatCompletionsOptions).awaitFirst()
         } catch (ex: Exception) {
-            log.error("Calling Azure OpenAI failed!", ex)
             return Failure(mapOpenAIException(ex))
         }
         log.debug("ChatCompletions: ${chatCompletions.choices[0].finishReason} (${chatCompletions.choices.size})")
@@ -130,7 +140,7 @@ class AzureAIClient(
 
     private fun mapOpenAIException(ex: Exception): ArcException = when (ex) {
         is ClientAuthenticationException -> ArcException(ex.message ?: "Unexpected error!", ex)
-        else -> ArcException(ex.message ?: "Unexpected error!", ex)
+        else -> ArcException("Unexpected error!", ex)
     }
 
     private fun toOpenAIMessages(messages: List<ConversationMessage>) = messages.map { msg ->

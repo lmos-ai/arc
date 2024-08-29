@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.agents.llm
+package ai.ancf.lmos.arc.agents.llm
 
 /**
  * Provides ChatCompleter based on their model name.

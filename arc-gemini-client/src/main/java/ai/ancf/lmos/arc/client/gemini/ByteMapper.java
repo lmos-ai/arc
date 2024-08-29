@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.client.gemini;
+package ai.ancf.lmos.arc.client.gemini;
 
 import com.google.cloud.vertexai.api.Part;
 import com.google.cloud.vertexai.generativeai.PartMaker;

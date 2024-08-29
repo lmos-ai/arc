@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.agents.dsl.extensions
+package ai.ancf.lmos.arc.agents.dsl.extensions
 
 /**
  * Extensions to make using kotlin string templating easier.

@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.agent.client
+package ai.ancf.lmos.arc.agent.client
 
-import io.github.lmos.arc.api.AgentRequest
-import io.github.lmos.arc.api.Message
+import ai.ancf.lmos.arc.api.AgentRequest
+import ai.ancf.lmos.arc.api.Message
 import kotlinx.coroutines.flow.Flow
 
 /**

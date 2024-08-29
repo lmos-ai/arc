@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.memory.mongo
+package ai.ancf.lmos.arc.memory.mongo
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.index.Indexed

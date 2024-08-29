@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.agents.functions
+package ai.ancf.lmos.arc.agents.functions
 
-import io.github.lmos.arc.agents.dsl.DSLContext
+import ai.ancf.lmos.arc.agents.dsl.DSLContext
 
 /**
  * Tags a function that requires a DSLContext to be executed.

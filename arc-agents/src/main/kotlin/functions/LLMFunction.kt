@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.agents.functions
+package ai.ancf.lmos.arc.agents.functions
 
-import io.github.lmos.arc.core.Result
+import ai.ancf.lmos.arc.core.Result
 
 /**
  * Describes a function that can be passed to a Large Language Model.

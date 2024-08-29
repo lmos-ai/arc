@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.agent.client.graphql
+package ai.ancf.lmos.arc.agent.client.graphql
 
 /**
  * GraphQL subscription for Agent messages.

@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.agents.dsl
+package ai.ancf.lmos.arc.agents.dsl
 
-import io.github.lmos.arc.agents.Agent
-import io.github.lmos.arc.agents.ChatAgent
+import ai.ancf.lmos.arc.agents.Agent
+import ai.ancf.lmos.arc.agents.ChatAgent
 
 /**
  * Factory for creating agents from Agent Definitions.

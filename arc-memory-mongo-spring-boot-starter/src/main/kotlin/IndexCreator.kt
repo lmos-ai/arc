@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.memory.mongo
+package ai.ancf.lmos.arc.memory.mongo
 
 import org.springframework.context.event.ContextRefreshedEvent
 import org.springframework.context.event.EventListener

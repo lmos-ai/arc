@@ -2,19 +2,19 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.agents.dsl
+package ai.ancf.lmos.arc.agents.dsl
 
-import io.github.lmos.arc.agents.*
-import io.github.lmos.arc.agents.conversation.Conversation
-import io.github.lmos.arc.agents.conversation.toConversation
-import io.github.lmos.arc.agents.events.BasicEventPublisher
-import io.github.lmos.arc.agents.events.EventHandler
-import io.github.lmos.arc.agents.functions.LLMFunction
-import io.github.lmos.arc.agents.functions.ParametersSchema
-import io.github.lmos.arc.core.Failure
-import io.github.lmos.arc.core.Result
-import io.github.lmos.arc.core.Success
-import io.github.lmos.arc.core.getOrThrow
+import ai.ancf.lmos.arc.agents.*
+import ai.ancf.lmos.arc.agents.conversation.Conversation
+import ai.ancf.lmos.arc.agents.conversation.toConversation
+import ai.ancf.lmos.arc.agents.events.BasicEventPublisher
+import ai.ancf.lmos.arc.agents.events.EventHandler
+import ai.ancf.lmos.arc.agents.functions.LLMFunction
+import ai.ancf.lmos.arc.agents.functions.ParametersSchema
+import ai.ancf.lmos.arc.core.Failure
+import ai.ancf.lmos.arc.core.Result
+import ai.ancf.lmos.arc.core.Success
+import ai.ancf.lmos.arc.core.getOrThrow
 import io.mockk.coEvery
 import io.mockk.slot
 import kotlinx.coroutines.runBlocking

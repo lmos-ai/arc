@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.spring
+package ai.ancf.lmos.arc.spring
 
-import io.github.lmos.arc.agents.AgentProvider
-import io.github.lmos.arc.agents.functions.LLMFunctionProvider
-import io.github.lmos.arc.agents.getAgentByName
+import ai.ancf.lmos.arc.agents.AgentProvider
+import ai.ancf.lmos.arc.agents.functions.LLMFunctionProvider
+import ai.ancf.lmos.arc.agents.getAgentByName
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat

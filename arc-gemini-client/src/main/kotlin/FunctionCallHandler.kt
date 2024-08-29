@@ -2,22 +2,22 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.client.gemini
+package ai.ancf.lmos.arc.client.gemini
 
+import ai.ancf.lmos.arc.agents.ArcException
+import ai.ancf.lmos.arc.agents.events.EventPublisher
+import ai.ancf.lmos.arc.agents.functions.LLMFunction
+import ai.ancf.lmos.arc.agents.functions.LLMFunctionCalledEvent
+import ai.ancf.lmos.arc.agents.functions.LLMFunctionStartedEvent
+import ai.ancf.lmos.arc.core.Result
+import ai.ancf.lmos.arc.core.failWith
+import ai.ancf.lmos.arc.core.result
 import com.google.cloud.vertexai.api.Content
 import com.google.cloud.vertexai.api.FunctionCall
 import com.google.cloud.vertexai.api.GenerateContentResponse
 import com.google.cloud.vertexai.generativeai.ContentMaker.fromMultiModalData
 import com.google.cloud.vertexai.generativeai.PartMaker.fromFunctionResponse
 import com.google.cloud.vertexai.generativeai.ResponseHandler
-import io.github.lmos.arc.agents.ArcException
-import io.github.lmos.arc.agents.events.EventPublisher
-import io.github.lmos.arc.agents.functions.LLMFunction
-import io.github.lmos.arc.agents.functions.LLMFunctionCalledEvent
-import io.github.lmos.arc.agents.functions.LLMFunctionStartedEvent
-import io.github.lmos.arc.core.Result
-import io.github.lmos.arc.core.failWith
-import io.github.lmos.arc.core.result
 import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.measureTime

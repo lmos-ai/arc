@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.client.ollama
+package ai.ancf.lmos.arc.client.ollama
 
-import io.github.lmos.arc.agents.conversation.UserMessage
-import io.github.lmos.arc.agents.llm.embed
-import io.github.lmos.arc.core.getOrThrow
+import ai.ancf.lmos.arc.agents.conversation.UserMessage
+import ai.ancf.lmos.arc.agents.llm.embed
+import ai.ancf.lmos.arc.core.getOrThrow
 import io.ktor.server.engine.*
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat

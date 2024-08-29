@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.client.gemini
+package ai.ancf.lmos.arc.client.gemini
 
 data class GeminiClientConfig(
     val modelName: String,

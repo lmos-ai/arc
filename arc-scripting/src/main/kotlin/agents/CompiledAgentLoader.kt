@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.scripting.agents
+package ai.ancf.lmos.arc.scripting.agents
 
-import io.github.lmos.arc.agents.dsl.AgentDefinitionContext
+import ai.ancf.lmos.arc.agents.dsl.AgentDefinitionContext
 
 /**
  * Interface for loading compiled agents.

@@ -2,8 +2,13 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.client.azure
+package ai.ancf.lmos.arc.client.azure
 
+import ai.ancf.lmos.arc.agents.conversation.UserMessage
+import ai.ancf.lmos.arc.agents.functions.LLMFunction
+import ai.ancf.lmos.arc.agents.functions.ParametersSchema
+import ai.ancf.lmos.arc.core.Success
+import ai.ancf.lmos.arc.core.getOrThrow
 import com.azure.ai.openai.OpenAIAsyncClient
 import com.azure.ai.openai.models.ChatChoice
 import com.azure.ai.openai.models.ChatCompletions
@@ -12,11 +17,6 @@ import com.azure.ai.openai.models.ChatResponseMessage
 import com.azure.ai.openai.models.CompletionsFinishReason.STOPPED
 import com.azure.ai.openai.models.CompletionsFinishReason.TOOL_CALLS
 import com.azure.ai.openai.models.FunctionCall
-import io.github.lmos.arc.agents.conversation.UserMessage
-import io.github.lmos.arc.agents.functions.LLMFunction
-import io.github.lmos.arc.agents.functions.ParametersSchema
-import io.github.lmos.arc.core.Success
-import io.github.lmos.arc.core.getOrThrow
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every

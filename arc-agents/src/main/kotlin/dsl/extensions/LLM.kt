@@ -2,17 +2,17 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.agents.dsl.extensions
+package ai.ancf.lmos.arc.agents.dsl.extensions
 
-import io.github.lmos.arc.agents.ArcException
-import io.github.lmos.arc.agents.conversation.AssistantMessage
-import io.github.lmos.arc.agents.conversation.SystemMessage
-import io.github.lmos.arc.agents.conversation.UserMessage
-import io.github.lmos.arc.agents.dsl.DSLContext
-import io.github.lmos.arc.agents.dsl.get
-import io.github.lmos.arc.agents.llm.ChatCompleterProvider
-import io.github.lmos.arc.agents.llm.ChatCompletionSettings
-import io.github.lmos.arc.core.result
+import ai.ancf.lmos.arc.agents.ArcException
+import ai.ancf.lmos.arc.agents.conversation.AssistantMessage
+import ai.ancf.lmos.arc.agents.conversation.SystemMessage
+import ai.ancf.lmos.arc.agents.conversation.UserMessage
+import ai.ancf.lmos.arc.agents.dsl.DSLContext
+import ai.ancf.lmos.arc.agents.dsl.get
+import ai.ancf.lmos.arc.agents.llm.ChatCompleterProvider
+import ai.ancf.lmos.arc.agents.llm.ChatCompletionSettings
+import ai.ancf.lmos.arc.core.result
 
 /**
  * Extensions enabling accessing LLMs in the DSLContext.

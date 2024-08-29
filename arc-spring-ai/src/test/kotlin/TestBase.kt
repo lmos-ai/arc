@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.spring.ai
+package ai.ancf.lmos.arc.spring.ai
 
 import io.ktor.server.application.*
 import io.ktor.server.engine.*

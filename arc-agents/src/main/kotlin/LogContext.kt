@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.agents
+package ai.ancf.lmos.arc.agents
 
 import kotlinx.coroutines.slf4j.MDCContext
 import kotlinx.coroutines.withContext

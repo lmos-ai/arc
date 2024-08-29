@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.graphql
+package ai.ancf.lmos.arc.graphql
 
-import io.github.lmos.arc.agents.conversation.AssistantMessage
-import io.github.lmos.arc.core.Result
+import ai.ancf.lmos.arc.agents.conversation.AssistantMessage
+import ai.ancf.lmos.arc.core.Result
 
 interface ErrorHandler {
 

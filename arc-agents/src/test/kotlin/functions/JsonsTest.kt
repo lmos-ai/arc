@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.agents.functions
+package ai.ancf.lmos.arc.agents.functions
 
-import io.github.lmos.arc.agents.TestBase
-import io.github.lmos.arc.core.Failure
-import io.github.lmos.arc.core.getOrThrow
+import ai.ancf.lmos.arc.agents.TestBase
+import ai.ancf.lmos.arc.core.Failure
+import ai.ancf.lmos.arc.core.getOrThrow
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

@@ -2,20 +2,20 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.spring
+package ai.ancf.lmos.arc.spring
 
-import io.github.lmos.arc.agents.ArcException
-import io.github.lmos.arc.agents.conversation.AssistantMessage
-import io.github.lmos.arc.agents.conversation.ConversationMessage
-import io.github.lmos.arc.agents.functions.LLMFunction
-import io.github.lmos.arc.agents.llm.ChatCompleter
-import io.github.lmos.arc.agents.llm.ChatCompleterProvider
-import io.github.lmos.arc.agents.llm.ChatCompletionSettings
-import io.github.lmos.arc.agents.llm.TextEmbedder
-import io.github.lmos.arc.agents.llm.TextEmbedderProvider
-import io.github.lmos.arc.agents.llm.TextEmbedding
-import io.github.lmos.arc.agents.llm.TextEmbeddings
-import io.github.lmos.arc.core.result
+import ai.ancf.lmos.arc.agents.ArcException
+import ai.ancf.lmos.arc.agents.conversation.AssistantMessage
+import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
+import ai.ancf.lmos.arc.agents.functions.LLMFunction
+import ai.ancf.lmos.arc.agents.llm.ChatCompleter
+import ai.ancf.lmos.arc.agents.llm.ChatCompleterProvider
+import ai.ancf.lmos.arc.agents.llm.ChatCompletionSettings
+import ai.ancf.lmos.arc.agents.llm.TextEmbedder
+import ai.ancf.lmos.arc.agents.llm.TextEmbedderProvider
+import ai.ancf.lmos.arc.agents.llm.TextEmbedding
+import ai.ancf.lmos.arc.agents.llm.TextEmbeddings
+import ai.ancf.lmos.arc.core.result
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
 

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.client.ollama
+package ai.ancf.lmos.arc.client.ollama
 
 data class OllamaClientConfig(
     val modelName: String,

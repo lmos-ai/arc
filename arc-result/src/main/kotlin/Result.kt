@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package io.github.lmos.arc.core
+package ai.ancf.lmos.arc.core
 
 import org.slf4j.LoggerFactory.getLogger
 import java.util.*
