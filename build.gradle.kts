@@ -102,7 +102,7 @@ subprojects {
 
         repositories {
             maven {
-                name = "github"
+                name = "GitHubPackages"
                 url = URI("https://maven.pkg.github.com/lmos-ai/arc")
                 credentials {
                     username = findProperty("GITHUB_USER")?.toString() ?: getenv("GITHUB_USER")
@@ -112,9 +112,15 @@ subprojects {
         }
 
         configure<SigningExtension> {
+            useInMemoryPgpKeys(
+                findProperty("signing.keyId") as String?,
+                System.getenv("PGP_SECRET_KEY"),
+                System.getenv("PGP_PASSPHRASE")
+            )
             sign(publications)
         }
     }
+
     if (!project.name.endsWith("-bom")) {
         dependencies {
             val kotlinXVersion = "1.8.1"
