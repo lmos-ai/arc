@@ -109,6 +109,14 @@ subprojects {
                     password = findProperty("GITHUB_TOKEN")?.toString() ?: getenv("GITHUB_TOKEN")
                 }
             }
+            maven {
+                name = "OSSRH"
+                url = URI("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+                credentials {
+                    username = getenv("OSSRH_USER")
+                    password = getenv("OSSRH_TOKEN")
+                }
+            }
         }
 
         configure<SigningExtension> {
