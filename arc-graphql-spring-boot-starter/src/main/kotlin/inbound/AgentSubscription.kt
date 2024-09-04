@@ -24,6 +24,7 @@ import ai.ancf.lmos.arc.graphql.withLogContext
 import com.expediagroup.graphql.server.operations.Subscription
 import kotlinx.coroutines.flow.flow
 import org.slf4j.LoggerFactory
+import java.time.Duration
 
 class AgentSubscription(
     private val agentProvider: AgentProvider,
@@ -37,11 +38,12 @@ class AgentSubscription(
         val agent = findAgent(agentName)
         val anonymizationEntities =
             AnonymizationEntities(request.conversationContext.anonymizationEntities.convertConversationEntities())
+        val start = System.nanoTime()
 
         log.info("Received request: ${request.systemContext}")
 
         val result = contextHandler.inject(request) {
-            withLogContext(request) {
+            withLogContext(agent.name, request) {
                 agent.execute(
                     Conversation(
                         user = User(request.userContext.userId),
@@ -52,9 +54,12 @@ class AgentSubscription(
                 )
             }
         }
+
+        val responseTime = Duration.ofNanos(System.nanoTime() - start).toMillis() / 1000.0
         when (result) {
             is Success -> emit(
                 AgentResult(
+                    responseTime = responseTime,
                     messages = listOf(result.value.latest<AssistantMessage>().toMessage()),
                     anonymizationEntities = anonymizationEntities.entities.convertAPIEntities(),
                 ),
@@ -64,6 +69,7 @@ class AgentSubscription(
                 val handledResult = (errorHandler?.handleError(result.reason) ?: result).getOrThrow()
                 emit(
                     AgentResult(
+                        responseTime = responseTime,
                         messages = listOf(handledResult.toMessage()),
                         anonymizationEntities = emptyList(),
                     ),
