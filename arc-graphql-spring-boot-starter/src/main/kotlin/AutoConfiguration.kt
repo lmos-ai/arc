@@ -10,8 +10,11 @@ import ai.ancf.lmos.arc.graphql.inbound.AgentSubscription
 import com.expediagroup.graphql.server.spring.GraphQLAutoConfiguration
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.AutoConfigureBefore
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.PropertySource
+import org.springframework.core.io.ClassPathResource
+import org.springframework.web.reactive.function.server.RouterFunctions
 
 @AutoConfiguration
 @AutoConfigureBefore(
@@ -25,4 +28,8 @@ open class AgentGraphQLAutoConfiguration {
 
     @Bean
     fun agentSubscription(agentProvider: AgentProvider) = AgentSubscription(agentProvider)
+
+    @Bean
+    @ConditionalOnProperty("arc.chat.ui.enabled", havingValue = "true")
+    fun chatResourceRouter() = RouterFunctions.resources("/chat/**", ClassPathResource("chat/"))
 }
