@@ -35,6 +35,8 @@ object ScriptConfiguration : ScriptCompilationConfiguration(
             "ai.ancf.lmos.arc.agents.conversation.UserMessage",
             "ai.ancf.lmos.arc.agents.conversation.latest",
             "ai.ancf.lmos.arc.agents.dsl.extensions.*",
+            "ai.ancf.lmos.arc.agents.llm.ChatCompletionSettings",
+            "ai.ancf.lmos.arc.agents.llm.OutputFormat",
         )
 
         jvm {
