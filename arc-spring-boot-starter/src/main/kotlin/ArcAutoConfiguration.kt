@@ -12,11 +12,7 @@ import ai.ancf.lmos.arc.agents.dsl.AgentFactory
 import ai.ancf.lmos.arc.agents.dsl.BeanProvider
 import ai.ancf.lmos.arc.agents.dsl.ChatAgentFactory
 import ai.ancf.lmos.arc.agents.dsl.CoroutineBeanProvider
-import ai.ancf.lmos.arc.agents.events.BasicEventPublisher
-import ai.ancf.lmos.arc.agents.events.EventHandler
-import ai.ancf.lmos.arc.agents.events.EventPublisher
-import ai.ancf.lmos.arc.agents.events.LoggingEventHandler
-import ai.ancf.lmos.arc.agents.events.addAll
+import ai.ancf.lmos.arc.agents.events.*
 import ai.ancf.lmos.arc.agents.functions.CompositeLLMFunctionProvider
 import ai.ancf.lmos.arc.agents.functions.LLMFunction
 import ai.ancf.lmos.arc.agents.functions.LLMFunctionLoader
@@ -47,7 +43,7 @@ import kotlin.reflect.KClass
 import kotlin.time.toKotlinDuration
 
 @AutoConfiguration
-@Import(MetricConfiguration::class)
+@Import(MetricConfiguration::class, ClientsConfiguration::class)
 class ArcAutoConfiguration {
 
     @Bean

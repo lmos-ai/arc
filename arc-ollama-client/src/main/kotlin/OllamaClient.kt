@@ -65,7 +65,7 @@ class OllamaClient(
 
     private val client = HttpClient(CIO) {
         install(DefaultRequest) {
-            url(languageModel.url)
+            url(languageModel.url ?: "http://localhost:11434")
         }
         install(Logging) {
             logger = object : Logger {

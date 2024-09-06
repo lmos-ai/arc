@@ -123,7 +123,7 @@ subprojects {
             useInMemoryPgpKeys(
                 findProperty("signing.keyId") as String?,
                 System.getenv("PGP_SECRET_KEY"),
-                System.getenv("PGP_PASSPHRASE")
+                System.getenv("PGP_PASSPHRASE"),
             )
             sign(publications)
         }
@@ -156,9 +156,9 @@ subprojects {
 
     tasks.register("copyPom") {
         doLast {
-            println("${findProperty("LOCAL_MAVEN_REPO")}/io/github/lmos-ai/arc/${project.name}/${project.version}")
+            println("${findProperty("LOCAL_MAVEN_REPO")}/ai/ancf/lmos/${project.name}/${project.version}")
             val pomFolder =
-                File("${findProperty("LOCAL_MAVEN_REPO")}/io/github/lmos-ai/arc/${project.name}/${project.version}")
+                File("${findProperty("LOCAL_MAVEN_REPO")}/ai/ancf/lmos/${project.name}/${project.version}")
             pomFolder.listFiles()?.forEach { file ->
                 if (file.name.endsWith(".pom") || file.name.endsWith(".pom.asc")) {
                     file.copyTo(
@@ -206,7 +206,7 @@ subprojects {
         doLast {
             val build = File(
                 project.layout.buildDirectory.dir("out").get().asFile,
-                "io/github/lmos-ai/arc/${project.name}/${project.version}",
+                "/ai/ancf/lmos/${project.name}/${project.version}",
             )
             build.mkdirs()
             project.layout.buildDirectory.dir("libs").get().asFile.listFiles()?.forEach { file ->
@@ -228,9 +228,21 @@ subprojects {
             }
         }
         dependsOn("setupFolders")
-        archiveFileName.set("${project.name}.zip")
+        archiveFileName.set("${project.name}-${project.version}.zip")
         destinationDirectory.set(parent!!.layout.buildDirectory.dir("dist"))
         from(layout.buildDirectory.dir("out"))
+    }
+
+    // WIP
+    tasks.register<Exec>("uploadSonatype") {
+        group = "sonatype"
+        dependsOn("packageSonatype")
+        workingDir = project.rootDir
+        commandLine(
+            "./upload.sh",
+            "build/dist/${project.name}-${project.version}.zip",
+            findProperty("SONATYPE_TOKEN"),
+        )
     }
 }
 

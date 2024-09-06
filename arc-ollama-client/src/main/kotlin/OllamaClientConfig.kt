@@ -6,5 +6,5 @@ package ai.ancf.lmos.arc.client.ollama
 
 data class OllamaClientConfig(
     val modelName: String,
-    val url: String,
+    val url: String?,
 )
