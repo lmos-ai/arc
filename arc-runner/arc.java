@@ -42,6 +42,7 @@ public class arc {
 
     public static void main(String[] args) throws Exception {
         File home = new File(System.getProperty("user.home"), ".arc");
+        home.mkdirs();
 
         if(args.length > 0 && args[0].equals("install")) {
             if(args.length < 1) {
@@ -53,7 +54,6 @@ public class arc {
                 System.out.println("Invalid Agent name. Please provide a valid Agent name without '.' or '/'...");
                 return;
             }
-            home.mkdirs();
             System.out.println("Installing Arc Runner...");
             InputStream in = new URL("https://raw.githubusercontent.com/lmos-ai/arc/main/arc-runner/" + agent + ".kts").openStream();
             Files.copy(in, new File(home, agent).toPath(), StandardCopyOption.REPLACE_EXISTING);
