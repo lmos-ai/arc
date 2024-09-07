@@ -55,7 +55,7 @@ public class arc {
                 return;
             }
             System.out.println("Installing Arc Runner...");
-            InputStream in = new URL("https://raw.githubusercontent.com/lmos-ai/arc/main/arc-runner/" + agent + ".kts").openStream();
+            InputStream in = new URL("https://raw.githubusercontent.com/lmos-ai/arc/main/arc-runner/" + agent + ".agent.kts").openStream();
             Files.copy(in, new File(home, agent).toPath(), StandardCopyOption.REPLACE_EXISTING);
             return;
         }
