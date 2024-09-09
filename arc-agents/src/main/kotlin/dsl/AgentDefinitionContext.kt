@@ -34,7 +34,7 @@ class BasicAgentDefinitionContext(
 
 class AgentDefinition {
     lateinit var name: String
-    lateinit var description: String
+    var description: String = ""
     var model: () -> String? = { null }
     var settings: () -> ChatCompletionSettings? = { null }
 
