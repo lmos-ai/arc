@@ -22,11 +22,14 @@
 package arc.runner;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 import java.util.Properties;
+
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
+
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
@@ -44,13 +47,23 @@ public class arc {
         File home = new File(System.getProperty("user.home"), ".arc");
         home.mkdirs();
 
-        if(args.length > 0 && args[0].equals("install")) {
-            if(args.length < 1) {
+        if (args.length > 0 && args[0].equals("list")) {
+           for (File file : home.listFiles()) {
+               System.out.println("The following Agents are installed:");
+               if (file.getName().endsWith(".agent.kts")) {
+                   System.out.println("- " + file.getName().replace(".agent.kts", ""));
+               }
+           }
+           return;
+        }
+
+        if (args.length > 0 && args[0].equals("install")) {
+            if (args.length < 1) {
                 System.out.println("Please provide the name of the Agent you would like to install...");
                 return;
             }
             String agent = args[1];
-            if(agent.contains(".") || agent.contains("/")) {
+            if (agent.contains(".") || agent.contains("/")) {
                 System.out.println("Invalid Agent name. Please provide a valid Agent name without '.' or '/'...");
                 return;
             }
@@ -58,6 +71,13 @@ public class arc {
             String fullName = agent + ".agent.kts";
             InputStream in = new URL("https://raw.githubusercontent.com/lmos-ai/arc/main/arc-runner/" + fullName).openStream();
             Files.copy(in, new File(home, fullName).toPath(), StandardCopyOption.REPLACE_EXISTING);
+            return;
+        }
+
+        var aiKey = System.getenv("ARC_AI_KEY");
+        var aiUrl = System.getenv("ARC_AI_URL");
+        if (aiUrl == null && aiKey == null) {
+            System.out.println("Please set either ARC_AI_URL and ARC_AI_KEY environment variables...");
             return;
         }
 
@@ -73,7 +93,7 @@ public class arc {
         properties.put("arc.ai.clients[0].id", "GPT-4o");
         properties.put("arc.ai.clients[0].model-name", "GPT-4o");
         properties.put("arc.ai.clients[0].client", "azure");
-        properties.put("arc.ai.clients[0].url", System.getenv("ARC_AI_URL"));
+        properties.put("arc.ai.clients[0].url", aiUrl);
 
         new SpringApplicationBuilder(arc.class).properties(properties).build().run(args);
     }
