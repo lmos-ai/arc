@@ -109,19 +109,10 @@ subprojects {
                     password = findProperty("GITHUB_TOKEN")?.toString() ?: getenv("GITHUB_TOKEN")
                 }
             }
-            maven {
-                name = "OSSRH"
-                url = URI("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
-                credentials {
-                    username = getenv("OSSRH_USER")
-                    password = getenv("OSSRH_TOKEN")
-                }
-            }
         }
 
         configure<SigningExtension> {
             useInMemoryPgpKeys(
-                findProperty("signing.keyId") as String?,
                 System.getenv("PGP_SECRET_KEY"),
                 System.getenv("PGP_PASSPHRASE"),
             )
