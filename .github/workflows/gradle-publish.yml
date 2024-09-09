@@ -14,6 +14,7 @@ name: Gradle Package
 on:
   release:
     types: [created]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -48,5 +49,3 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PGP_SECRET_KEY: ${{ secrets.PGP_SECRET_KEY }}
         PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
-        OSSRH_USER: ${{ secrets.OSSRH_USER }}
-        OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
