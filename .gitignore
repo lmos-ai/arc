@@ -50,3 +50,4 @@ bin/
 ### Secrets ###
 **/application-secret.yml
 
+.kotlin
