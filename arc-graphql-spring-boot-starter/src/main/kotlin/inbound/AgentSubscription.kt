@@ -16,11 +16,8 @@ import ai.ancf.lmos.arc.api.AgentResult
 import ai.ancf.lmos.arc.core.Failure
 import ai.ancf.lmos.arc.core.Success
 import ai.ancf.lmos.arc.core.getOrThrow
-import ai.ancf.lmos.arc.graphql.ContextHandler
-import ai.ancf.lmos.arc.graphql.EmptyContextHandler
-import ai.ancf.lmos.arc.graphql.ErrorHandler
+import ai.ancf.lmos.arc.graphql.*
 import ai.ancf.lmos.arc.graphql.context.AnonymizationEntities
-import ai.ancf.lmos.arc.graphql.withLogContext
 import com.expediagroup.graphql.server.operations.Subscription
 import kotlinx.coroutines.flow.flow
 import org.slf4j.LoggerFactory
@@ -30,12 +27,13 @@ class AgentSubscription(
     private val agentProvider: AgentProvider,
     private val errorHandler: ErrorHandler? = null,
     private val contextHandler: ContextHandler = EmptyContextHandler(),
+    private val agentResolver: AgentResolver? = null,
 ) : Subscription {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
     fun agent(agentName: String? = null, request: AgentRequest) = flow {
-        val agent = findAgent(agentName)
+        val agent = findAgent(agentName, request)
         val anonymizationEntities =
             AnonymizationEntities(request.conversationContext.anonymizationEntities.convertConversationEntities())
         val start = System.nanoTime()
@@ -78,8 +76,9 @@ class AgentSubscription(
         }
     }
 
-    private fun findAgent(agentName: String?): ChatAgent =
+    private fun findAgent(agentName: String?, request: AgentRequest): ChatAgent =
         agentName?.let { agentProvider.getAgentByName(it) } as ChatAgent?
+            ?: agentResolver?.resolveAgent(request) as ChatAgent?
             ?: agentProvider.getAgents().firstOrNull() as ChatAgent?
             ?: error("No Agent defined!")
 }
