@@ -15,8 +15,9 @@ dependencies {
     implementation("com.graphql-java:graphql-java:21.5")
 
     // Spring
-    implementation("org.springframework.boot:spring-boot-starter-webflux:3.3.2")
+    implementation("org.springframework.boot:spring-boot-starter-webflux:3.3.3")
 
     // Test
-    testImplementation("org.springframework.boot:spring-boot-starter-test:3.3.2")
+    testImplementation(project(":arc-spring-boot-starter"))
+    testImplementation("org.springframework.boot:spring-boot-starter-test:3.3.3")
 }
