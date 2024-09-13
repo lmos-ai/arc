@@ -5,6 +5,8 @@
 package ai.ancf.lmos.arc.agents.functions
 
 import ai.ancf.lmos.arc.core.Result
+import kotlinx.serialization.Serializable
+
 
 /**
  * Describes a function that can be passed to a Large Language Model.
@@ -27,36 +29,29 @@ class LLMFunctionException(msg: String, override val cause: Exception? = null) :
 /**
  * Schema tha describes LLM Functions parameters.
  */
-data class ParametersSchema(val required: List<String>, val parameters: List<ParameterSchema>) {
-    fun asMap() = mapOf(
-        "type" to "object",
-        "required" to required,
-        "properties" to parameters.associate { it.name to it.asMap() },
-    )
-}
+@Serializable
+data class ParametersSchema(val required: List<String>, val parameters: List<ParameterSchema>)
 
 /**
  * Schema that describes a single parameter of an LLM Function.
  */
+@Serializable
 data class ParameterSchema(
     val name: String,
     val description: String,
     val type: ParameterType,
     val enum: List<String>,
-) {
-    fun asMap() = mapOf(
-        "type" to type.schemaType,
-        "description" to description,
-    ).let {
-        if (enum.isNotEmpty()) {
-            it + ("enum" to enum)
-        } else {
-            it
-        }
-    }
-}
+)
+
 
 /**
  * A parameter type that can be used by LLM Functions.
  */
-class ParameterType(val schemaType: String)
+
+@Serializable
+class ParameterType(
+    val schemaType: String,
+    val items: ParameterType? = null , // This field will be used for array types to define the items
+    val properties: List<ParameterSchema>? = null
+)
+
