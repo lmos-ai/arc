@@ -78,7 +78,7 @@ class AgentSubscription(
 
     private fun findAgent(agentName: String?, request: AgentRequest): ChatAgent =
         agentName?.let { agentProvider.getAgentByName(it) } as ChatAgent?
-            ?: agentResolver?.resolveAgent(request) as ChatAgent?
+            ?: agentResolver?.resolveAgent(agentName, request) as ChatAgent?
             ?: agentProvider.getAgents().firstOrNull() as ChatAgent?
             ?: error("No Agent defined!")
 }

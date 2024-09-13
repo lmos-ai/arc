@@ -13,5 +13,5 @@ import ai.ancf.lmos.arc.api.AgentRequest
  */
 interface AgentResolver {
 
-    fun resolveAgent(request: AgentRequest): Agent<*, *>?
+    fun resolveAgent(agentName: String? = null, request: AgentRequest): Agent<*, *>?
 }
