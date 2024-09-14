@@ -160,6 +160,21 @@ inline fun <R, E : Exception, T : Exception> Result<R, E>.mapFailure(transform: 
 }
 
 /**
+ * Provides a way to recover from a failure.
+ * The transform block is only called if the result is a [Failure].
+ */
+@OptIn(ExperimentalContracts::class)
+inline fun <R, E : Exception> Result<R, E>.recover(transform: (E) -> Result<R, E>): Result<R, E> {
+    contract {
+        callsInPlace(transform, InvocationKind.AT_MOST_ONCE)
+    }
+    return when (this) {
+        is Success -> this
+        is Failure -> transform(reason)
+    }
+}
+
+/**
  * Creates a new Result with the value mapped to a new type.
  */
 inline fun <R, E : Exception, T> Result<R, E>.map(transform: (R) -> T): Result<T, E> {
