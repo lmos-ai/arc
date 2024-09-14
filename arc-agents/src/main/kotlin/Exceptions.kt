@@ -4,6 +4,8 @@
 
 package ai.ancf.lmos.arc.agents
 
+import ai.ancf.lmos.arc.agents.conversation.Conversation
+
 /**
  * Indicates that calling the Azure client has failed.
  * In the case of Hallucinations exceptions, the cause field will contain a HallucinationDetectedException.
@@ -39,3 +41,11 @@ class InvalidSettingsException(msg: String) : ArcException(msg)
  * Indicates that the provided function could not be found.
  */
 class FunctionNotFoundException(msg: String) : ArcException(msg)
+
+/**
+ * Exceptions implementing this interface will not cause the Agent to fail.
+ * Instead, the Agent will return the attached Conversation.
+ */
+interface WithConversationResult {
+    val conversation: Conversation
+}
