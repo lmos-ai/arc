@@ -48,7 +48,9 @@ class ChatAgent(
                         if (it is WithConversationResult) {
                             log.info("Agent $name interrupted!", it)
                             it.conversation
-                        } else null
+                        } else {
+                            null
+                        }
                     }.mapFailure {
                         log.error("Agent $name failed!", it)
                         AgentFailedException("Agent $name failed!", it)

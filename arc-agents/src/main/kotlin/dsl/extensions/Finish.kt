@@ -17,12 +17,11 @@ import ai.ancf.lmos.arc.agents.dsl.get
 suspend fun DSLContext.breakWithMessage(
     message: String,
     classification: ConversationClassification? = null,
-    reason: String? = null
+    reason: String? = null,
 ): Any? {
     val conversationResult = get<Conversation>().copy(classification = classification) + AssistantMessage(message)
     throw InterruptProcessingException(conversationResult, reason)
 }
-
 
 class InterruptProcessingException(override val conversation: Conversation, reason: String?) :
     Exception("Agent processing interrupted. Reason:[${reason ?: "none"}]"), WithConversationResult
