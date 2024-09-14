@@ -57,6 +57,7 @@ class AgentSubscription(
         when (result) {
             is Success -> emit(
                 AgentResult(
+                    status = result.value.classification.toString(),
                     responseTime = responseTime,
                     messages = listOf(result.value.latest<AssistantMessage>().toMessage()),
                     anonymizationEntities = anonymizationEntities.entities.convertAPIEntities(),

@@ -43,10 +43,16 @@ class ChatAgent(
             agentEventHandler?.publish(AgentStartedEvent(this@ChatAgent))
             val result: Result<Conversation, AgentFailedException>
             val duration = measureTime {
-                result = doExecute(input, model, context).mapFailure {
-                    log.error("Agent $name failed!", it)
-                    AgentFailedException("Agent $name failed!", it)
-                }
+                result = doExecute(input, model, context)
+                    .recover {
+                        if (it is WithConversationResult) {
+                            log.info("Agent $name interrupted!", it)
+                            it.conversation
+                        } else null
+                    }.mapFailure {
+                        log.error("Agent $name failed!", it)
+                        AgentFailedException("Agent $name failed!", it)
+                    }
             }
             agentEventHandler?.publish(
                 AgentFinishedEvent(
@@ -64,8 +70,9 @@ class ChatAgent(
     private suspend fun doExecute(conversation: Conversation, model: String?, context: Set<Any>) =
         result<Conversation, Exception> {
             val fullContext = context + setOf(conversation, conversation.user)
-            val scriptingContext = BasicDSLContext(CompositeBeanProvider(fullContext, beanProvider))
-            val chatCompleter = chatCompleter(model = model)
+            val compositeBeanProvider = CompositeBeanProvider(fullContext, beanProvider)
+            val scriptingContext = BasicDSLContext(compositeBeanProvider)
+            val chatCompleter = compositeBeanProvider.chatCompleter(model = model)
             val functions = functions(scriptingContext)
 
             val generatedSystemPrompt = systemPrompt.invoke(scriptingContext)
@@ -84,8 +91,8 @@ class ChatAgent(
             filterOutput.invoke(filterOutputContext).let { filterOutputContext.output }
         }
 
-    private suspend fun chatCompleter(model: String?) =
-        beanProvider.provide(ChatCompleterProvider::class).provideByModel(model = model)
+    private suspend fun BeanProvider.chatCompleter(model: String?) =
+        provide(ChatCompleterProvider::class).provideByModel(model = model)
 
     private suspend fun functions(context: DSLContext) = if (tools.isNotEmpty()) {
         val functionProvider = beanProvider.provide(LLMFunctionProvider::class)

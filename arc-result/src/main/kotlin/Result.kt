@@ -164,13 +164,13 @@ inline fun <R, E : Exception, T : Exception> Result<R, E>.mapFailure(transform: 
  * The transform block is only called if the result is a [Failure].
  */
 @OptIn(ExperimentalContracts::class)
-inline fun <R, E : Exception> Result<R, E>.recover(transform: (E) -> Result<R, E>): Result<R, E> {
+inline fun <R, E : Exception> Result<R, E>.recover(transform: (E) -> R?): Result<R, E> {
     contract {
         callsInPlace(transform, InvocationKind.AT_MOST_ONCE)
     }
     return when (this) {
         is Success -> this
-        is Failure -> transform(reason)
+        is Failure -> transform(reason)?.let { Success(it) } ?: this
     }
 }
 
