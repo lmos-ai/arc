@@ -14,7 +14,7 @@ import ai.ancf.lmos.arc.agents.dsl.get
 /**
  * Cancels the current execution of the Agent and returns the given message.
  */
-suspend fun DSLContext.breakWithMessage(
+suspend fun DSLContext.breakWith(
     message: String,
     classification: ConversationClassification? = null,
     reason: String? = null,

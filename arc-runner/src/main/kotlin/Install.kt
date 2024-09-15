@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+@file:Suppress("ktlint")
+
 package ai.ancf.lmos.arc.runner
 
 import picocli.CommandLine.Command

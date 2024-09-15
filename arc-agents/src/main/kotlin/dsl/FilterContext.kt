@@ -26,6 +26,12 @@ class InputFilterContext(
             input = updatedConversation + message
         }
 
+    var message
+        get() = inputMessage.content
+        set(message) {
+            inputMessage = inputMessage.update(message)
+        }
+
     override suspend fun map(filter: suspend (ConversationMessage) -> ConversationMessage?) {
         input = input.map { msg -> filter(msg) }
     }
@@ -52,6 +58,12 @@ class OutputFilterContext(
         get() = output.transcript.last()
         set(message) {
             output = input + message
+        }
+
+    var message
+        get() = outputMessage.content
+        set(message) {
+            outputMessage = outputMessage.update(message)
         }
 
     override suspend fun map(filter: suspend (ConversationMessage) -> ConversationMessage?) {

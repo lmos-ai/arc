@@ -45,6 +45,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+/* ktlint-disable */
 @Command(name = "arc",
         mixinStandardHelpOptions = true,
         version = "1.0.0",
@@ -157,3 +158,4 @@ public class arc {
         }
     }
 }
+/* ktlint-enable */
