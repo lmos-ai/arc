@@ -16,7 +16,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
 
 @SpringBootApplication
-open class TestApplication{
+open class TestApplication {
 
     @Bean
     open fun chatCompleterProvider() = ChatCompleterProvider {
