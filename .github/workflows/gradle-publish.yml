@@ -85,3 +85,25 @@ jobs:
         ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.ORG_GRADLE_PROJECT_MAVENCENTRALPASSWORD }}
         ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGINMEMORYKEY }}
         ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGINMEMORYKEYPASSWORD }}
+
+    - name: "Create release info"
+      uses: "actions/github-script@v7"
+      with:
+        github-token: "${{ secrets.GITHUB_TOKEN }}"
+        script: |
+          try {
+            const response = await github.rest.repos.createRelease({
+              draft: false,
+              generate_release_notes: true,
+              name: process.env.RELEASE_VERSION,
+              owner: context.repo.owner,
+              prerelease: false,
+              repo: context.repo.repo,
+              tag_name: process.env.RELEASE_VERSION,
+            });
+
+            core.exportVariable('RELEASE_ID', response.data.id);
+            core.exportVariable('RELEASE_UPLOAD_URL', response.data.upload_url);
+          } catch (error) {
+            core.setFailed(error.message);
+          }
