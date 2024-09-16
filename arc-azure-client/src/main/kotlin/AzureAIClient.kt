@@ -146,7 +146,10 @@ class AzureAIClient(
      */
     private fun toOpenAIFunctions(functions: List<LLMFunction>) = functions.map { fn ->
         ChatCompletionsFunctionToolDefinition(
-            AzureOpenAIFunctionAdaptor.toAzureOpenAIFunction(fn),
+            FunctionDefinition(fn.name).apply {
+                description = fn.description
+                parameters = BinaryData.fromObject(fn.parameters.toAzureOpenAIJson())
+            },
         )
     }.takeIf { it.isNotEmpty() }
 
