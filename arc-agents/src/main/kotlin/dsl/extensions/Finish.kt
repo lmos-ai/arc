@@ -18,7 +18,7 @@ suspend fun DSLContext.breakWith(
     message: String,
     classification: ConversationClassification? = null,
     reason: String? = null,
-): Any? {
+): Nothing {
     val conversationResult = get<Conversation>().copy(classification = classification) + AssistantMessage(message)
     throw InterruptProcessingException(conversationResult, reason)
 }
