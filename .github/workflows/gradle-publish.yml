@@ -25,11 +25,19 @@ jobs:
       packages: write
 
     steps:
+    - name: Get Token
+      uses: actions/create-github-app-token@v1
+      id: app-token
+      with:
+        app-id: ${{ secrets.LMOS_COMMITER_APPID }}
+        private-key: ${{ secrets.LMOS_COMMITER }}
+
     - name: Checkout main
       uses: actions/checkout@v4
       with:
         ref: 'main'
         fetch-depth: '0'
+        token: ${{ steps.app-token.outputs.token }}
 
     - name: Drop release tag
       run: git push origin :releasemain
