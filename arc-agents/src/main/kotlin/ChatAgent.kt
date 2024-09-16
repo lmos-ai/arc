@@ -77,12 +77,12 @@ class ChatAgent(
             val chatCompleter = compositeBeanProvider.chatCompleter(model = model)
             val functions = functions(scriptingContext)
 
-            val generatedSystemPrompt = systemPrompt.invoke(scriptingContext)
             val filterContext = InputFilterContext(scriptingContext, conversation)
             val filteredInput = filterInput.invoke(filterContext).let { filterContext.input }
 
             if (filteredInput.isEmpty()) failWith { AgentNotExecutedException("Input has been filtered") }
 
+            val generatedSystemPrompt = systemPrompt.invoke(scriptingContext)
             val fullConversation =
                 listOf(SystemMessage(generatedSystemPrompt)) + filteredInput.transcript
             val completedConversation =
