@@ -32,6 +32,7 @@ object ScriptConfiguration : ScriptCompilationConfiguration(
         defaultImports(
             "ai.ancf.lmos.arc.agents.dsl.get",
             "ai.ancf.lmos.arc.agents.dsl.*",
+            "ai.ancf.lmos.arc.core.*",
             "ai.ancf.lmos.arc.agents.conversation.UserMessage",
             "ai.ancf.lmos.arc.agents.conversation.latest",
             "ai.ancf.lmos.arc.agents.dsl.extensions.*",
