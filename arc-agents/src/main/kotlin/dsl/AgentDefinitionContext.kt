@@ -49,6 +49,9 @@ class AgentDefinition {
                 result.trimIndent()
             }
         }
+    fun prompt(fn: suspend DSLContext.() -> String) {
+        systemPrompt = fn
+    }
 
     var outputFilter: suspend OutputFilterContext.() -> Unit = { }
     fun filterOutput(fn: suspend OutputFilterContext.() -> Unit) {
