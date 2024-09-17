@@ -15,7 +15,7 @@ import kotlinx.serialization.json.buildJsonObject
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 
-class AzureOpenAIFunctionAdaptorTest {
+class LLMFunctionParamExtensionsTest {
 
     @Test
     fun `test toAzureOpenAIJson for ParametersSchema with nested objects and arrays`() {
