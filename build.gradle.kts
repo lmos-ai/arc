@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import com.vanniktech.maven.publish.SonatypeHost
-import net.researchgate.release.ReleaseExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.BufferedReader
 import java.io.InputStreamReader
