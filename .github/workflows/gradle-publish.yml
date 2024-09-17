@@ -14,8 +14,6 @@ name: Gradle Package
 on:
   push:
     tags: [ 'releasemain' ]
-    paths-ignore:
-    - README.md
 
 jobs:
   build:
@@ -59,7 +57,7 @@ jobs:
         next-version-increment-minor: true
 
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
+      uses: gradle/actions/setup-gradle@v4
 
     - name: Git init
       run: git config --global user.email "cicd@ancf.ai" && git config --global user.name "CICD"
