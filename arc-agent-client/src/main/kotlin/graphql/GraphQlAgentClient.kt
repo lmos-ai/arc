@@ -47,8 +47,14 @@ class GraphQlAgentClient(private val defaultUrl: String? = null) : AgentClient, 
             sendSubscription(opId, agentRequest)
             while (closing.get().not()) {
                 when (val next = nextMessage()) {
-                    is NextMessage -> next.payload.data.agent.messages.forEach { message ->
-                        emit(Message(content = message.content, role = "assistant"))
+                    is NextMessage -> {
+                        if(next.id != opId) {
+                            log.debug("Ignoring message with unexpected id: ${next.id}")
+                            continue
+                        }
+                        next.payload.data.agent.messages.forEach { message ->
+                            emit(Message(content = message.content, role = "assistant"))
+                        }
                     }
 
                     is CompleteMessage -> break
