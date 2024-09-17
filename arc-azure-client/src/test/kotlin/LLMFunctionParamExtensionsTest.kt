@@ -86,7 +86,7 @@ class AzureOpenAIFunctionAdaptorTest {
         )
 
         // Convert to Azure OpenAI JSON format
-        val jsonResult: JsonObject = parametersSchema.toAzureOpenAIJson()
+        val jsonResult: JsonObject = parametersSchema.toAzureOpenAIObject()
 
         // Expected JSON structure
         val expectedJson = buildJsonObject {
@@ -137,5 +137,7 @@ class AzureOpenAIFunctionAdaptorTest {
 
         // Validate the conversion result
         assertEquals(expectedJson, jsonResult, "The JSON conversion is not correct.")
+
+        jsonResult.toString().also { println(it) }
     }
 }
