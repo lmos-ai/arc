@@ -20,7 +20,7 @@ fun ParametersSchema.toAzureOpenAIObject(): JsonObject {
     }
 }
 
-fun ParametersSchema.toAzureOpenAIFunctionMap() = jsonObjectToMap(toAzureOpenAIObject())
+fun ParametersSchema.toAzureOpenAISchemaAsMap() = jsonObjectToMap(toAzureOpenAIObject())
 
 
 /**

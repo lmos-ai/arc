@@ -148,7 +148,7 @@ class AzureAIClient(
         ChatCompletionsFunctionToolDefinition(
             FunctionDefinition(fn.name).apply {
                 description = fn.description
-                parameters = BinaryData.fromObject(fn.parameters.toAzureOpenAIFunctionMap())
+                parameters = BinaryData.fromObject(fn.parameters.toAzureOpenAISchemaAsMap())
             },
         )
     }.takeIf { it.isNotEmpty() }
