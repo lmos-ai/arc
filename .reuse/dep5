@@ -1,9 +1,0 @@
-Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: arc
-Upstream-Contact: Deutsche Telekom AG <opensource@telekom.de>
-Source: https://github.com/ancf-ai/arc
-
-
-Files: gradle/* gradlew gradle.properties
-Copyright: Copyright 2015 the original author or authors.
-License: Apache-2.0
