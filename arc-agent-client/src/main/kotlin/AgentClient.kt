@@ -5,7 +5,7 @@
 package ai.ancf.lmos.arc.agent.client
 
 import ai.ancf.lmos.arc.api.AgentRequest
-import ai.ancf.lmos.arc.api.Message
+import ai.ancf.lmos.arc.api.AgentResult
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -16,7 +16,7 @@ interface AgentClient {
     /**
      * Calls the agent with the given request. If a url is not provided, the client will use the default url.
      */
-    suspend fun callAgent(agentRequest: AgentRequest, url: String? = null): Flow<Message>
+    suspend fun callAgent(agentRequest: AgentRequest, url: String? = null): Flow<AgentResult>
 }
 
 /**

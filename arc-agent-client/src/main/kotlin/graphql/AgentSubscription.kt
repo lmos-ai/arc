@@ -10,13 +10,17 @@ package ai.ancf.lmos.arc.agent.client.graphql
 internal const val AGENT_SUBSCRIPTION = """
 subscription(${'$'}request: AgentRequestInput!) {
   agent(request: ${'$'}request) {
+        status,
+        responseTime,
         anonymizationEntities {
-          type
-          value
-          replacement
-        }
+          type,
+          value,
+          replacement,
+        },
         messages {
            content
+           format,
+           role,
         }
   }
 }

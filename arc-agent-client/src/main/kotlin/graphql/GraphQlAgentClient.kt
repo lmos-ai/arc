@@ -7,7 +7,6 @@ package ai.ancf.lmos.arc.agent.client.graphql
 import ai.ancf.lmos.arc.agent.client.AgentClient
 import ai.ancf.lmos.arc.agent.client.AgentException
 import ai.ancf.lmos.arc.api.AgentRequest
-import ai.ancf.lmos.arc.api.Message
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.websocket.*
@@ -52,9 +51,7 @@ class GraphQlAgentClient(private val defaultUrl: String? = null) : AgentClient, 
                             log.debug("Ignoring message with unexpected id: ${next.id}")
                             continue
                         }
-                        next.payload.data.agent.messages.forEach { message ->
-                            emit(Message(content = message.content, role = "assistant"))
-                        }
+                        emit(next.payload.data.agent)
                     }
 
                     is CompleteMessage -> break
