@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Implementation of [AgentClient] that uses GraphQL over WebSockets to communicate with the agents.
+ * See https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md
  */
 class GraphQlAgentClient(private val defaultUrl: String? = null) : AgentClient, Closeable {
 
@@ -55,8 +56,8 @@ class GraphQlAgentClient(private val defaultUrl: String? = null) : AgentClient, 
                     else -> {}
                 }
             }
+            close()
         }
-        client.close()
     }
 
     private suspend fun DefaultClientWebSocketSession.initConnection() {
