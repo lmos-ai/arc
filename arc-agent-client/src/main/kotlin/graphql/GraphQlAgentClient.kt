@@ -48,7 +48,7 @@ class GraphQlAgentClient(private val defaultUrl: String? = null) : AgentClient, 
             while (closing.get().not()) {
                 when (val next = nextMessage()) {
                     is NextMessage -> {
-                        if(next.id != opId) {
+                        if (next.id != opId) {
                             log.debug("Ignoring message with unexpected id: ${next.id}")
                             continue
                         }
