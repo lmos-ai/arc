@@ -11,8 +11,8 @@ import kotlinx.serialization.json.*
 /**
  * Extension functions for ParametersSchema to convert it to OpenAPI JSON format.
  */
-fun ParametersSchema.toAzureOpenAIJson(): JsonObject {
-    val properties = parameters.associate { it.name to it.toAzureOpenAIJson() as JsonElement }
+fun ParametersSchema.toAzureOpenAIObject(): JsonObject {
+    val properties = parameters.associate { it.name to it.toAzureOpenAIObject() as JsonElement }
     return buildJsonObject {
         put("type", JsonPrimitive("object"))
         put("required", JsonArray(required.map { JsonPrimitive(it) }))
@@ -20,10 +20,13 @@ fun ParametersSchema.toAzureOpenAIJson(): JsonObject {
     }
 }
 
+fun ParametersSchema.toAzureOpenAIFunctionMap() = jsonObjectToMap(toAzureOpenAIObject())
+
+
 /**
  * Extension functions for ParameterSchema to convert it to OpenAPI JSON format.
  */
-private fun ParameterSchema.toAzureOpenAIJson(): JsonObject {
+private fun ParameterSchema.toAzureOpenAIObject(): JsonObject {
     return buildJsonObject {
         put("type", JsonPrimitive(type.schemaType))
 
@@ -39,7 +42,7 @@ private fun ParameterSchema.toAzureOpenAIJson(): JsonObject {
                     val items = type.items
                     if (items?.schemaType == "object") {
                         items.properties?.let { propertiesList ->
-                            val properties = propertiesList.associate { it.name to it.toAzureOpenAIJson() }
+                            val properties = propertiesList.associate { it.name to it.toAzureOpenAIObject() }
                             put("properties", JsonObject(properties))
                         }
                     }
@@ -49,7 +52,7 @@ private fun ParameterSchema.toAzureOpenAIJson(): JsonObject {
 
             "object" -> {
                 type.properties?.let { props ->
-                    val properties = props.associate { it.name to it.toAzureOpenAIJson() }
+                    val properties = props.associate { it.name to it.toAzureOpenAIObject() }
                     put("properties", JsonObject(properties))
                 }
             }
@@ -61,7 +64,7 @@ private fun ParameterSchema.toAzureOpenAIJson(): JsonObject {
     }
 }
 
-private fun jsonObjectToMap(jsonObject: JsonObject): Map<String, Any?> {
+fun jsonObjectToMap(jsonObject: JsonObject): Map<String, Any?> {
     return jsonObject.mapValues { (_, value) ->
         when (value) {
             is JsonPrimitive -> {
