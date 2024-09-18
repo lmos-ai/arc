@@ -27,7 +27,8 @@ class AzureAIClient(
     private val config: AzureClientConfig,
     private val client: OpenAIAsyncClient,
     private val eventHandler: EventPublisher? = null,
-) : ChatCompleter, TextEmbedder {
+) : ChatCompleter,
+    TextEmbedder {
 
     private val log = LoggerFactory.getLogger(javaClass)
 

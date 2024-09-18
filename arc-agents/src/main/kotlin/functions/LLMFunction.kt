@@ -7,7 +7,6 @@ package ai.ancf.lmos.arc.agents.functions
 import ai.ancf.lmos.arc.core.Result
 import kotlinx.serialization.Serializable
 
-
 /**
  * Describes a function that can be passed to a Large Language Model.
  */
@@ -43,7 +42,6 @@ data class ParameterSchema(
     val enum: List<String>,
 )
 
-
 /**
  * A parameter type that can be used by LLM Functions.
  */
@@ -51,7 +49,6 @@ data class ParameterSchema(
 @Serializable
 class ParameterType(
     val schemaType: String,
-    val items: ParameterType? = null , // This field will be used for array types to define the items
-    val properties: List<ParameterSchema>? = null
+    val items: ParameterType? = null,
+    val properties: List<ParameterSchema>? = null,
 )
-

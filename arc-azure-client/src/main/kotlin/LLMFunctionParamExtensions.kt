@@ -22,76 +22,71 @@ fun ParametersSchema.toAzureOpenAIObject(): JsonObject {
 
 fun ParametersSchema.toAzureOpenAISchemaAsMap() = jsonObjectToMap(toAzureOpenAIObject())
 
-
 /**
  * Extension functions for ParameterSchema to convert it to OpenAPI JSON format.
  */
-private fun ParameterSchema.toAzureOpenAIObject(): JsonObject {
-    return buildJsonObject {
-        put("type", JsonPrimitive(type.schemaType))
+private fun ParameterSchema.toAzureOpenAIObject(): JsonObject = buildJsonObject {
+    put("type", JsonPrimitive(type.schemaType))
 
-        if (description.isNotEmpty()) {
-            put("description", JsonPrimitive(description))
-        }
+    if (description.isNotEmpty()) {
+        put("description", JsonPrimitive(description))
+    }
 
-        when (type.schemaType) {
-            "array" -> {
-                val itemsObject = buildJsonObject {
-                    put("type", JsonPrimitive(type.items?.schemaType ?: "unknown"))
+    when (type.schemaType) {
+        "array" -> {
+            val itemsObject = buildJsonObject {
+                put("type", JsonPrimitive(type.items?.schemaType ?: "unknown"))
 
-                    val items = type.items
-                    if (items?.schemaType == "object") {
-                        items.properties?.let { propertiesList ->
-                            val properties = propertiesList.associate { it.name to it.toAzureOpenAIObject() }
-                            put("properties", JsonObject(properties))
-                        }
+                val items = type.items
+                if (items?.schemaType == "object") {
+                    items.properties?.let { propertiesList ->
+                        val properties = propertiesList.associate { it.name to it.toAzureOpenAIObject() }
+                        put("properties", JsonObject(properties))
                     }
                 }
-                put("items", itemsObject)
             }
-
-            "object" -> {
-                type.properties?.let { props ->
-                    val properties = props.associate { it.name to it.toAzureOpenAIObject() }
-                    put("properties", JsonObject(properties))
-                }
-            }
+            put("items", itemsObject)
         }
 
-        if (enum.isNotEmpty()) {
-            put("enum", JsonArray(enum.map { JsonPrimitive(it) }))
+        "object" -> {
+            type.properties?.let { props ->
+                val properties = props.associate { it.name to it.toAzureOpenAIObject() }
+                put("properties", JsonObject(properties))
+            }
         }
+    }
+
+    if (enum.isNotEmpty()) {
+        put("enum", JsonArray(enum.map { JsonPrimitive(it) }))
     }
 }
 
-fun jsonObjectToMap(jsonObject: JsonObject): Map<String, Any?> {
-    return jsonObject.mapValues { (_, value) ->
-        when (value) {
-            is JsonPrimitive -> {
-                when {
-                    value.isString -> value.content
-                    else -> value.booleanOrNull ?: value.intOrNull ?: value.floatOrNull ?: value.doubleOrNull
-                }
+fun jsonObjectToMap(jsonObject: JsonObject): Map<String, Any?> = jsonObject.mapValues { (_, value) ->
+    when (value) {
+        is JsonPrimitive -> {
+            when {
+                value.isString -> value.content
+                else -> value.booleanOrNull ?: value.intOrNull ?: value.floatOrNull ?: value.doubleOrNull
             }
-
-            is JsonArray -> value.map { jsonElement ->
-                when (jsonElement) {
-                    is JsonObject -> jsonObjectToMap(jsonElement)
-                    is JsonPrimitive -> {
-                        when {
-                            jsonElement.isString -> jsonElement.content
-                            else -> jsonElement.booleanOrNull ?: jsonElement.intOrNull ?: jsonElement.floatOrNull
-                            ?: jsonElement.doubleOrNull
-                        }
-                    }
-
-                    else -> null
-                }
-            }
-
-            is JsonObject -> jsonObjectToMap(value)
-            else -> null
         }
+
+        is JsonArray -> value.map { jsonElement ->
+            when (jsonElement) {
+                is JsonObject -> jsonObjectToMap(jsonElement)
+                is JsonPrimitive -> {
+                    when {
+                        jsonElement.isString -> jsonElement.content
+                        else ->
+                            jsonElement.booleanOrNull ?: jsonElement.intOrNull ?: jsonElement.floatOrNull
+                                ?: jsonElement.doubleOrNull
+                    }
+                }
+
+                else -> null
+            }
+        }
+
+        is JsonObject -> jsonObjectToMap(value)
+        else -> null
     }
 }
-
