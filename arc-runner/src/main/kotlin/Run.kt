@@ -13,9 +13,7 @@ import picocli.CommandLine.Command
 import picocli.CommandLine.Parameters
 import java.awt.Desktop
 import java.io.File
-import java.io.FileInputStream
 import java.net.URI
-import java.util.*
 
 @Command(
     name = "run",
@@ -35,11 +33,7 @@ open class RunArc : Runnable {
     override fun run() {
         println("Staring Arc Runner...")
 
-        val properties = Properties()
-        val propertiesFile = File(home(), "arc.properties")
-        if (propertiesFile.exists()) {
-            properties.load(FileInputStream(propertiesFile))
-        }
+        val properties = loadProperties()
 
         val aiKey = System.getenv("ARC_AI_KEY") ?: properties.getProperty("ARC_AI_KEY")
         val aiUrl = System.getenv("ARC_AI_URL") ?: properties.getProperty("ARC_AI_URL")
