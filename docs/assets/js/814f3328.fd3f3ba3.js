@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkarc=self.webpackChunkarc||[]).push([[7472],{5513:e=>{e.exports=JSON.parse('{"title":"Recent posts","items":[{"title":"Sptring.ai integration using the SpringChatClient","permalink":"/arc/blog/Spring.AI-integration","unlisted":false},{"title":"Llama3 is out!","permalink":"/arc/blog/Llama3","unlisted":false}]}')}}]);
