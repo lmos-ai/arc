@@ -61,7 +61,8 @@ open class RunArc : Runnable {
         properties.put("arc.ai.clients[0].id", "GPT-4o")
         properties.put("arc.ai.clients[0].model-name", "GPT-4o")
         properties.put("arc.ai.clients[0].client", "azure")
-        properties.put("arc.ai.clients[0].url", aiUrl)
+        if(aiUrl != null) properties.put("arc.ai.clients[0].url", aiUrl)
+        if(aiKey != null) properties.put("arc.ai.clients[0].apiKey", aiKey)
 
         SpringApplicationBuilder(RunArc::class.java).properties(properties).headless(false).build().run()
     }
