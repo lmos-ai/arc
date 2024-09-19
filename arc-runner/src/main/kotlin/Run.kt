@@ -48,6 +48,17 @@ open class RunArc : Runnable {
             return
         }
 
+        val model = System.getenv("ARC_MODEL") ?: properties.getProperty("ARC_MODEL")
+        if (model == null) {
+            println("Please set ARC_MODEL. For example: 'GPT-4o'...")
+            return
+        }
+        val client = System.getenv("ARC_CLIENT") ?: properties.getProperty("ARC_CLIENT")
+        if (client == null) {
+            println("Please set ARC_CLIENT. For example: 'azure' or 'openai'...")
+            return
+        }
+
         val agentsHome = if (agentFolder == "HOME" || agentFolder == "") home() else File(agentFolder)
 
         properties.put("arc.chat.ui.enabled", "true")
@@ -58,11 +69,11 @@ open class RunArc : Runnable {
         properties.put("logging.level.ArcDSL", "DEBUG")
         properties.put("logging.level.ai.ancf.lmos.arc", "DEBUG")
 
-        properties.put("arc.ai.clients[0].id", "GPT-4o")
-        properties.put("arc.ai.clients[0].model-name", "GPT-4o")
-        properties.put("arc.ai.clients[0].client", "azure")
-        if(aiUrl != null) properties.put("arc.ai.clients[0].url", aiUrl)
-        if(aiKey != null) properties.put("arc.ai.clients[0].apiKey", aiKey)
+        properties.put("arc.ai.clients[0].id", model)
+        properties.put("arc.ai.clients[0].model-name", model)
+        properties.put("arc.ai.clients[0].client", client)
+        if (aiUrl != null) properties.put("arc.ai.clients[0].url", aiUrl)
+        if (aiKey != null) properties.put("arc.ai.clients[0].apiKey", aiKey)
 
         SpringApplicationBuilder(RunArc::class.java).properties(properties).headless(false).build().run()
     }
