@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkarc=self.webpackChunkarc||[]).push([[2219],{8586:a=>{a.exports=JSON.parse('{"tags":[{"label":"spring","permalink":"/arc/blog/tags/spring","count":1},{"label":"Spring.AI","permalink":"/arc/blog/tags/spring-ai","count":1},{"label":"feature","permalink":"/arc/blog/tags/feature","count":1}]}')}}]);
