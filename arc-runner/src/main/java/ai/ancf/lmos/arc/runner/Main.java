@@ -5,7 +5,7 @@
 //usr/bin/env jbang "$0" "$@" ; exit $?
 //JAVA 21
 
-//DEPS ai.ancf.lmos:arc-runner:0.73.0
+//DEPS ai.ancf.lmos:arc-runner:0.80.0
 
 package ai.ancf.lmos.arc.runner;
 
