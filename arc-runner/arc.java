@@ -15,10 +15,12 @@ package arc.runner;
 import ai.ancf.lmos.arc.runner.Arc;
 import picocli.CommandLine;
 
-public class Main {
+/* ktlint-disable */
+public class arc {
 
     public static void main(String[] args) {
         var exitCode = new CommandLine(new Arc()).execute(args);
         System.out.println(exitCode);
     }
 }
+/* ktlint-enable */
