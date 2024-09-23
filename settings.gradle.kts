@@ -1,3 +1,6 @@
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
+}
 // SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
 //
 // SPDX-License-Identifier: Apache-2.0
@@ -20,3 +23,4 @@ include("arc-agent-client")
 include("arc-graphql-spring-boot-starter")
 include("arc-bom")
 include("arc-runner")
+include("arc-guardrails")

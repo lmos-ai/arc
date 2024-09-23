@@ -12,7 +12,7 @@ import kotlin.reflect.KClass
  * Context for filtering messages before being processed by an Agent.
  */
 class InputFilterContext(
-    scriptingContext: DSLContext,
+    val scriptingContext: DSLContext,
     @Volatile var input: Conversation,
 ) : FilterContext(scriptingContext) {
 
@@ -39,7 +39,7 @@ class InputFilterContext(
  * Context for filtering messages after being processed by an Agent.
  */
 class OutputFilterContext(
-    scriptingContext: DSLContext,
+    val scriptingContext: DSLContext,
     val input: Conversation,
     @Volatile var output: Conversation,
     val systemPrompt: String,
