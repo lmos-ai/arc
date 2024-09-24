@@ -5,7 +5,7 @@
 //usr/bin/env jbang "$0" "$@" ; exit $?
 //JAVA 21
 
-//DEPS ai.ancf.lmos:arc-runner:0.81.0
+//DEPS ai.ancf.lmos:arc-runner:0.83.0
 //DEPS org.slf4j:slf4j-api:2.0.16
 //DEPS com.fasterxml.jackson.core:jackson-databind:2.17.2
 //DEPS io.projectreactor:reactor-core:3.6.9
