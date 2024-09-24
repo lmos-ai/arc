@@ -18,7 +18,7 @@ open class OpenView : Runnable {
     @Parameters(
         index = "0",
         description = ["The port the Agent server is running on. Defaults to 8080."],
-        defaultValue = "8080"
+        defaultValue = "8080",
     )
     private var port: String = "8080"
 
