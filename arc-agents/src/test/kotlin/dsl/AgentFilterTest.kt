@@ -102,6 +102,28 @@ class AgentFilterTest : TestBase() {
     }
 
     @Test
+    fun `test input filter - Runs filters in parallel`(): Unit = runBlocking {
+        val result = mutableListOf<String>()
+        val agent = agent {
+            name = ""
+            description = ""
+            systemPrompt = { "" }
+            filterInput {
+                runAsync {
+                    delay(100)
+                    result.add("2")
+                }
+                runAsync {
+                    result.add("1")
+                }
+                result.add("0")
+            }
+        }
+        val (_, _) = executeAgent(agent as ChatAgent, "hello", "1234")
+        assertThat(result).isEqualTo(listOf("0", "1", "2"))
+    }
+
+    @Test
     fun `test output filter - NumberFilter`(): Unit = runBlocking {
         val agent = agent {
             name = ""
