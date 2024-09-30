@@ -27,7 +27,12 @@ open class AgentGraphQLAutoConfiguration {
     fun agentQuery(agentProvider: AgentProvider) = AgentQuery(agentProvider)
 
     @Bean
-    fun agentSubscription(agentProvider: AgentProvider) = AgentSubscription(agentProvider)
+    fun agentSubscription(
+        agentProvider: AgentProvider,
+        errorHandler: ErrorHandler? = null,
+        contextHandler: ContextHandler = EmptyContextHandler(),
+        agentResolver: AgentResolver? = null,
+    ) = AgentSubscription(agentProvider, errorHandler, contextHandler, agentResolver)
 
     @Bean
     @ConditionalOnProperty("arc.chat.ui.enabled", havingValue = "true")

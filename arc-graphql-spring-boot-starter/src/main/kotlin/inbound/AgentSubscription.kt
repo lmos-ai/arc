@@ -18,6 +18,7 @@ import ai.ancf.lmos.arc.core.Success
 import ai.ancf.lmos.arc.core.getOrThrow
 import ai.ancf.lmos.arc.graphql.*
 import ai.ancf.lmos.arc.graphql.context.AnonymizationEntities
+import com.expediagroup.graphql.generator.annotations.GraphQLDescription
 import com.expediagroup.graphql.server.operations.Subscription
 import kotlinx.coroutines.flow.flow
 import org.slf4j.LoggerFactory
@@ -32,6 +33,7 @@ class AgentSubscription(
 
     private val log = LoggerFactory.getLogger(javaClass)
 
+    @GraphQLDescription("Executes an Agent and returns the results. If no agent is specified, the first agent is used.")
     fun agent(agentName: String? = null, request: AgentRequest) = flow {
         val agent = findAgent(agentName, request)
         val anonymizationEntities =
