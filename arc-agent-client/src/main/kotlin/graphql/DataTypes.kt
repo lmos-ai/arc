@@ -32,7 +32,7 @@ data class SubscribeMessage(val id: String, val payload: ClientPayload) : Client
 data class ClientPayload(val query: String, val variables: AgentRequestVariables)
 
 @Serializable
-data class AgentRequestVariables(val request: AgentRequest)
+data class AgentRequestVariables(val request: AgentRequest, val agentName: String?)
 
 /**
  * Server messages
