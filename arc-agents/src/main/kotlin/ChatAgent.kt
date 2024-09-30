@@ -13,6 +13,7 @@ import ai.ancf.lmos.arc.agents.functions.LLMFunctionProvider
 import ai.ancf.lmos.arc.agents.llm.ChatCompleterProvider
 import ai.ancf.lmos.arc.agents.llm.ChatCompletionSettings
 import ai.ancf.lmos.arc.core.*
+import kotlinx.coroutines.coroutineScope
 import org.slf4j.LoggerFactory
 import kotlin.time.measureTime
 
@@ -77,8 +78,13 @@ class ChatAgent(
             val chatCompleter = compositeBeanProvider.chatCompleter(model = model)
             val functions = functions(scriptingContext)
 
-            val filterContext = InputFilterContext(scriptingContext, conversation)
-            val filteredInput = filterInput.invoke(filterContext).let { filterContext.input }
+            val filteredInput = coroutineScope {
+                val filterContext = InputFilterContext(scriptingContext, conversation)
+                filterInput.invoke(filterContext).let {
+                    filterContext.finish()
+                    filterContext.input
+                }
+            }
 
             if (filteredInput.isEmpty()) failWith { AgentNotExecutedException("Input has been filtered") }
 
@@ -88,9 +94,14 @@ class ChatAgent(
             val completedConversation =
                 conversation + chatCompleter.complete(fullConversation, functions, settings()).getOrThrow()
 
-            val filterOutputContext =
-                OutputFilterContext(scriptingContext, conversation, completedConversation, generatedSystemPrompt)
-            filterOutput.invoke(filterOutputContext).let { filterOutputContext.output }
+            coroutineScope {
+                val filterOutputContext =
+                    OutputFilterContext(scriptingContext, conversation, completedConversation, generatedSystemPrompt)
+                filterOutput.invoke(filterOutputContext).let {
+                    filterOutputContext.finish()
+                    filterOutputContext.output
+                }
+            }
         }
 
     private suspend fun BeanProvider.chatCompleter(model: String?) =
