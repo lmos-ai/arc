@@ -39,6 +39,6 @@ class AgentClientTest {
         messages = emptyList(),
         systemContext = emptyList(),
         conversationContext = ConversationContext("1"),
-        userContext = UserContext("userId", profile = emptyList())
+        userContext = UserContext("userId", profile = emptyList()),
     )
 }

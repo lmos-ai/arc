@@ -74,13 +74,13 @@ class GraphQlAgentClient(private val defaultUrl: String? = null) : AgentClient, 
     private suspend fun DefaultClientWebSocketSession.sendSubscription(
         opId: String,
         agentRequest: AgentRequest,
-        agentName: String?
+        agentName: String?,
     ) {
         sendMessage(
             SubscribeMessage(
                 opId,
-                ClientPayload(AGENT_SUBSCRIPTION, AgentRequestVariables(agentRequest, agentName))
-            )
+                ClientPayload(AGENT_SUBSCRIPTION, AgentRequestVariables(agentRequest, agentName)),
+            ),
         )
     }
 
