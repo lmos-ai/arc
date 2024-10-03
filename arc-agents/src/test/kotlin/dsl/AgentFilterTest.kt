@@ -6,6 +6,7 @@ package ai.ancf.lmos.arc.agents.dsl
 
 import ai.ancf.lmos.arc.agents.ChatAgent
 import ai.ancf.lmos.arc.agents.TestBase
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -101,6 +102,28 @@ class AgentFilterTest : TestBase() {
     }
 
     @Test
+    fun `test input filter - Runs filters in parallel`(): Unit = runBlocking {
+        val result = mutableListOf<String>()
+        val agent = agent {
+            name = ""
+            description = ""
+            systemPrompt = { "" }
+            filterInput {
+                runAsync {
+                    delay(100)
+                    result.add("2")
+                }
+                runAsync {
+                    result.add("1")
+                }
+                result.add("0")
+            }
+        }
+        val (_, _) = executeAgent(agent as ChatAgent, "hello", "1234")
+        assertThat(result).isEqualTo(listOf("0", "1", "2"))
+    }
+
+    @Test
     fun `test output filter - NumberFilter`(): Unit = runBlocking {
         val agent = agent {
             name = ""
@@ -126,5 +149,27 @@ class AgentFilterTest : TestBase() {
         }
         val (_, output) = executeAgent(agent as ChatAgent, "hello", "1234")
         assertThat(output.transcript.last().content).isEqualTo("NUMBER")
+    }
+
+    @Test
+    fun `test output filter - Runs filters in parallel`(): Unit = runBlocking {
+        val result = mutableListOf<String>()
+        val agent = agent {
+            name = ""
+            description = ""
+            systemPrompt = { "" }
+            filterOutput {
+                runAsync {
+                    delay(100)
+                    result.add("2")
+                }
+                runAsync {
+                    result.add("1")
+                }
+                result.add("0")
+            }
+        }
+        val (_, _) = executeAgent(agent as ChatAgent, "hello", "1234")
+        assertThat(result).isEqualTo(listOf("0", "1", "2"))
     }
 }

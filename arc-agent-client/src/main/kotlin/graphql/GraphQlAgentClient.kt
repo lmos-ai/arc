@@ -7,7 +7,6 @@ package ai.ancf.lmos.arc.agent.client.graphql
 import ai.ancf.lmos.arc.agent.client.AgentClient
 import ai.ancf.lmos.arc.agent.client.AgentException
 import ai.ancf.lmos.arc.api.AgentRequest
-import ai.ancf.lmos.arc.api.Message
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.websocket.*
@@ -22,6 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Implementation of [AgentClient] that uses GraphQL over WebSockets to communicate with the agents.
+ * See https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md
  */
 class GraphQlAgentClient(private val defaultUrl: String? = null) : AgentClient, Closeable {
 
@@ -38,16 +38,20 @@ class GraphQlAgentClient(private val defaultUrl: String? = null) : AgentClient, 
         }
     }
 
-    override suspend fun callAgent(agentRequest: AgentRequest, url: String?) = flow {
+    override suspend fun callAgent(agentRequest: AgentRequest, agentName: String?, url: String?) = flow {
         if (url == null && defaultUrl == null) error("Agent Url not provided!")
         val opId = UUID.randomUUID().toString()
         client.webSocket(url ?: defaultUrl!!) {
             initConnection()
-            sendSubscription(opId, agentRequest)
+            sendSubscription(opId, agentRequest, agentName)
             while (closing.get().not()) {
                 when (val next = nextMessage()) {
-                    is NextMessage -> next.payload.data.agent.messages.forEach { message ->
-                        emit(Message(content = message.content, role = "assistant"))
+                    is NextMessage -> {
+                        if (next.id != opId) {
+                            log.debug("Ignoring message with unexpected id: ${next.id}")
+                            continue
+                        }
+                        emit(next.payload.data.agent)
                     }
 
                     is CompleteMessage -> break
@@ -55,8 +59,8 @@ class GraphQlAgentClient(private val defaultUrl: String? = null) : AgentClient, 
                     else -> {}
                 }
             }
+            close()
         }
-        client.close()
     }
 
     private suspend fun DefaultClientWebSocketSession.initConnection() {
@@ -67,20 +71,29 @@ class GraphQlAgentClient(private val defaultUrl: String? = null) : AgentClient, 
         }
     }
 
-    private suspend fun DefaultClientWebSocketSession.sendSubscription(opId: String, agentRequest: AgentRequest) {
-        sendMessage(SubscribeMessage(opId, ClientPayload(AGENT_SUBSCRIPTION, AgentRequestVariables(agentRequest))))
+    private suspend fun DefaultClientWebSocketSession.sendSubscription(
+        opId: String,
+        agentRequest: AgentRequest,
+        agentName: String?,
+    ) {
+        sendMessage(
+            SubscribeMessage(
+                opId,
+                ClientPayload(AGENT_SUBSCRIPTION, AgentRequestVariables(agentRequest, agentName)),
+            ),
+        )
     }
 
     private suspend fun DefaultClientWebSocketSession.sendMessage(message: ClientMessage) {
         val jsonCall = json.encodeToString(message)
-        log.debug("Sending $jsonCall")
+        log.trace("Sending $jsonCall")
         send(Frame.Text(jsonCall))
     }
 
     private suspend fun DefaultClientWebSocketSession.nextMessage(): ServerMessage {
         val response = incoming.receive() as Frame.Text
         return response.readText().let {
-            log.debug("Received $it")
+            log.trace("Received $it")
             json.decodeFromString(it)
         }
     }

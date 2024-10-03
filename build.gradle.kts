@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import org.gradle.crypto.checksum.Checksum
+import com.vanniktech.maven.publish.SonatypeHost
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -16,7 +16,8 @@ plugins {
     id("org.cyclonedx.bom") version "1.8.2" apply false
     id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
     id("org.jetbrains.kotlinx.kover") version "0.8.3"
-    id("org.gradle.crypto.checksum") version "1.4.0" apply false
+    id("net.researchgate.release") version "3.0.2"
+    id("com.vanniktech.maven.publish") version "0.29.0"
 }
 
 subprojects {
@@ -26,16 +27,12 @@ subprojects {
     apply(plugin = "org.jetbrains.dokka")
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "kotlinx-serialization")
-    apply(plugin = "maven-publish")
-    apply(plugin = "signing")
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
     apply(plugin = "org.jetbrains.kotlinx.kover")
-    apply(plugin = "org.gradle.crypto.checksum")
+    apply(plugin = "com.vanniktech.maven.publish")
 
     java {
         sourceCompatibility = JavaVersion.VERSION_17
-        withSourcesJar()
-        // withJavadocJar()
     }
 
     configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
@@ -60,43 +57,40 @@ subprojects {
         archiveClassifier.set("javadoc")
     }
 
-    configure<PublishingExtension> {
-        publications {
-            create("Maven", MavenPublication::class.java) {
-                from(components["java"])
-                artifact(javadocJar)
-                pom {
-                    if (project.isBOM()) packaging = "pom"
-                    description = "ARC is an AI framework."
-                    url = "https://github.com/lmos-ai/arc"
-                    scm {
-                        url = "https://github.com/lmos-ai/arc.git"
-                    }
-                    licenses {
-                        license {
-                            name = "Apache-2.0"
-                            distribution = "repo"
-                            url = "https://github.com/lmos-ai/arc/blob/main/LICENSES/Apache-2.0.txt"
-                        }
-                    }
-                    developers {
-                        developer {
-                            id = "pat"
-                            name = "Patrick Whelan"
-                            email = "opensource@telekom.de"
-                        }
-                        developer {
-                            id = "bharat_bhushan"
-                            name = "Bharat Bhushan"
-                            email = "opensource@telekom.de"
-                        }
-                        developer {
-                            id = "merrenfx"
-                            name = "Max Erren"
-                            email = "opensource@telekom.de"
-                        }
-                    }
+    mavenPublishing {
+        publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+        signAllPublications()
+
+        pom {
+            name = "ARC"
+            description = "ARC is an AI framework."
+            url = "https://github.com/lmos-ai/arc"
+            licenses {
+                license {
+                    name = "Apache-2.0"
+                    distribution = "repo"
+                    url = "https://github.com/lmos-ai/arc/blob/main/LICENSES/Apache-2.0.txt"
                 }
+            }
+            developers {
+                developer {
+                    id = "pat"
+                    name = "Patrick Whelan"
+                    email = "opensource@telekom.de"
+                }
+                developer {
+                    id = "bharat_bhushan"
+                    name = "Bharat Bhushan"
+                    email = "opensource@telekom.de"
+                }
+                developer {
+                    id = "merrenfx"
+                    name = "Max Erren"
+                    email = "opensource@telekom.de"
+                }
+            }
+            scm {
+                url = "https://github.com/lmos-ai/arc.git"
             }
         }
 
@@ -109,14 +103,6 @@ subprojects {
                     password = findProperty("GITHUB_TOKEN")?.toString() ?: getenv("GITHUB_TOKEN")
                 }
             }
-        }
-
-        configure<SigningExtension> {
-            useInMemoryPgpKeys(
-                System.getenv("PGP_SECRET_KEY"),
-                System.getenv("PGP_PASSPHRASE"),
-            )
-            sign(publications)
         }
     }
 
@@ -143,97 +129,6 @@ subprojects {
 
     tasks.named("dokkaJavadoc") {
         mustRunAfter("checksum")
-    }
-
-    tasks.register("copyPom") {
-        doLast {
-            println("${findProperty("LOCAL_MAVEN_REPO")}/ai/ancf/lmos/${project.name}/${project.version}")
-            val pomFolder =
-                File("${findProperty("LOCAL_MAVEN_REPO")}/ai/ancf/lmos/${project.name}/${project.version}")
-            pomFolder.listFiles()?.forEach { file ->
-                if (file.name.endsWith(".pom") || file.name.endsWith(".pom.asc")) {
-                    file.copyTo(
-                        File(project.layout.buildDirectory.dir("libs").get().asFile, file.name),
-                        overwrite = true,
-                    )
-                }
-            }
-        }
-    }
-
-    tasks.register("cleanChecksum") {
-        dependsOn("copyPom")
-        doFirst {
-            layout.buildDirectory.dir("libs").get().asFile.walk().forEach { file ->
-                if (file.name.endsWith(".sha1") || file.name.endsWith(".md5")) {
-                    println("Deleting ${file.name} ${file.delete()}")
-                }
-            }
-        }
-    }
-
-    tasks.register<Checksum>("checksum") {
-        dependsOn("cleanChecksum")
-        inputFiles.setFrom(project.layout.buildDirectory.dir("libs"))
-        outputDirectory.set(project.layout.buildDirectory.dir("libs"))
-        checksumAlgorithm.set(Checksum.Algorithm.MD5)
-    }
-
-    tasks.register("sha1") {
-        dependsOn("checksum")
-        doLast {
-            project.layout.buildDirectory.dir("libs").get().asFile.listFiles()?.forEach { file ->
-                if (!file.name.endsWith(".md5")) {
-                    "shasum ${file.name}".execWithCode(workingDir = file.parentFile).second.forEach {
-                        File(file.parentFile, "${file.name}.sha1").writeText(it.substringBefore(" "))
-                    }
-                }
-            }
-        }
-    }
-
-    tasks.register("setupFolders") {
-        dependsOn("sha1")
-        doLast {
-            val build = File(
-                project.layout.buildDirectory.dir("out").get().asFile,
-                "/ai/ancf/lmos/${project.name}/${project.version}",
-            )
-            build.mkdirs()
-            project.layout.buildDirectory.dir("libs").get().asFile.listFiles()?.forEach { file ->
-                file.copyTo(File(build, file.name), overwrite = true)
-            }
-        }
-    }
-
-    tasks.register<Zip>("packageSonatype") {
-        doFirst {
-            if (project.isBOM()) {
-                println("Packaging BOM")
-                project.layout.buildDirectory.dir("out").get().asFile.walk().forEach { file ->
-                    if (file.isFile && !file.name.contains(".pom")) {
-                        println("Deleting ${file.name}")
-                        file.delete()
-                    }
-                }
-            }
-        }
-        dependsOn("setupFolders")
-        archiveFileName.set("${project.name}-${project.version}.zip")
-        destinationDirectory.set(parent!!.layout.buildDirectory.dir("dist"))
-        from(layout.buildDirectory.dir("out"))
-    }
-
-    // WIP
-    tasks.register<Exec>("uploadSonatype") {
-        group = "sonatype"
-        dependsOn("packageSonatype")
-        workingDir = project.rootDir
-        commandLine(
-            "./upload.sh",
-            "build/dist/${project.name}-${project.version}.zip",
-            findProperty("SONATYPE_TOKEN"),
-        )
     }
 }
 
@@ -305,4 +200,15 @@ private fun Process.readStream() = sequence<String> {
     } finally {
         reader.close()
     }
+}
+
+release {
+    buildTasks = listOf("releaseBuild")
+    ignoredSnapshotDependencies = listOf("org.springframework.ai:spring-ai-bom")
+    newVersionCommitMessage = "New Snapshot-Version:"
+    preTagCommitMessage = "Release:"
+}
+
+tasks.register("releaseBuild") {
+    dependsOn(subprojects.mapNotNull { it.tasks.findByName("build") })
 }

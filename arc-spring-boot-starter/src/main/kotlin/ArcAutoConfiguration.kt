@@ -89,14 +89,14 @@ class ArcAutoConfiguration {
     @Bean
     @ConditionalOnProperty("arc.scripts.hotReload.enable", havingValue = "true")
     fun scriptHotReload(
-        @Value("\${arc.scripts.folder:/agents}") agentsFolder: File,
+        @Value("\${arc.scripts.folder:/agents}") agentsFolders: List<File>,
         @Value("\${arc.scripts.hotReload.delay:PT3M}") hotReloadDelay: Duration,
         agentLoader: ScriptingAgentLoader,
         functionLoader: ScriptingLLMFunctionLoader,
     ): ScriptHotReload {
-        if (!agentsFolder.exists()) error("Agents folder does not exist: $agentsFolder!")
+        agentsFolders.forEach { if (!it.exists()) error("Agents folder does not exist: $it!") }
         return ScriptHotReload(agentLoader, functionLoader, hotReloadDelay.toKotlinDuration()).also { r ->
-            agentsFolder.walk().filter { it.isDirectory }.forEach { r.start(it) }
+            agentsFolders.forEach { folder -> folder.walk().filter { it.isDirectory }.forEach { r.start(it) } }
         }
     }
 

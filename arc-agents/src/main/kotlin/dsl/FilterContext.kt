@@ -6,11 +6,17 @@ package ai.ancf.lmos.arc.agents.dsl
 
 import ai.ancf.lmos.arc.agents.conversation.Conversation
 import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import java.util.concurrent.atomic.AtomicReference
 import kotlin.reflect.KClass
 
 /**
  * Context for filtering messages before being processed by an Agent.
  */
+context(CoroutineScope)
 class InputFilterContext(
     val scriptingContext: DSLContext,
     @Volatile var input: Conversation,
@@ -26,6 +32,12 @@ class InputFilterContext(
             input = updatedConversation + message
         }
 
+    var message
+        get() = inputMessage.content
+        set(message) {
+            inputMessage = inputMessage.update(message)
+        }
+
     override suspend fun map(filter: suspend (ConversationMessage) -> ConversationMessage?) {
         input = input.map { msg -> filter(msg) }
     }
@@ -33,11 +45,22 @@ class InputFilterContext(
     override suspend fun mapLatest(filter: suspend (ConversationMessage) -> ConversationMessage?) {
         input = input.mapLatest { msg -> filter(msg) }
     }
+
+    /**
+     * Runs a block of code asynchronously.
+     */
+    fun runAsync(fn: suspend InputFilterContext.() -> Unit) {
+        val job = async {
+            fn()
+        }
+        jobs.updateAndGet { it + job }
+    }
 }
 
 /**
  * Context for filtering messages after being processed by an Agent.
  */
+context(CoroutineScope)
 class OutputFilterContext(
     val scriptingContext: DSLContext,
     val input: Conversation,
@@ -54,6 +77,12 @@ class OutputFilterContext(
             output = input + message
         }
 
+    var message
+        get() = outputMessage.content
+        set(message) {
+            outputMessage = outputMessage.update(message)
+        }
+
     override suspend fun map(filter: suspend (ConversationMessage) -> ConversationMessage?) {
         output = output.map { msg -> filter(msg) }
     }
@@ -61,9 +90,23 @@ class OutputFilterContext(
     override suspend fun mapLatest(filter: suspend (ConversationMessage) -> ConversationMessage?) {
         output = output.mapLatest { msg -> filter(msg) }
     }
+
+    /**
+     * Runs a block of code asynchronously.
+     */
+    fun runAsync(fn: suspend OutputFilterContext.() -> Unit) {
+        val job = async {
+            fn()
+        }
+        jobs.updateAndGet { it + job }
+    }
 }
 
+context(CoroutineScope)
 abstract class FilterContext(scriptingContext: DSLContext) : DSLContext by scriptingContext {
+
+    protected val jobs = AtomicReference<List<Deferred<Unit>>>(emptyList())
+
     suspend infix fun String.replaces(s: String) = this@FilterContext.mapLatest {
         it.update(it.content.replace(s, this))
     }
@@ -101,6 +144,13 @@ abstract class FilterContext(scriptingContext: DSLContext) : DSLContext by scrip
      * Maps the latest message in a Conversation transcript.
      */
     abstract suspend fun mapLatest(filter: suspend (ConversationMessage) -> ConversationMessage?)
+
+    /**
+     * Runs all pending asynchronous jobs.
+     */
+    suspend fun finish() {
+        awaitAll(*jobs.get().toTypedArray())
+    }
 }
 
 /**

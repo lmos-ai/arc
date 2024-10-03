@@ -6,22 +6,15 @@ package ai.ancf.lmos.arc.agents
 
 import ai.ancf.lmos.arc.agents.conversation.Conversation
 import ai.ancf.lmos.arc.agents.conversation.SystemMessage
-import ai.ancf.lmos.arc.agents.dsl.BasicDSLContext
-import ai.ancf.lmos.arc.agents.dsl.BeanProvider
-import ai.ancf.lmos.arc.agents.dsl.CoroutineBeanProvider
-import ai.ancf.lmos.arc.agents.dsl.DSLContext
-import ai.ancf.lmos.arc.agents.dsl.InputFilterContext
-import ai.ancf.lmos.arc.agents.dsl.OutputFilterContext
-import ai.ancf.lmos.arc.agents.dsl.provideOptional
+import ai.ancf.lmos.arc.agents.dsl.*
 import ai.ancf.lmos.arc.agents.events.EventPublisher
+import ai.ancf.lmos.arc.agents.functions.FunctionWithContext
 import ai.ancf.lmos.arc.agents.functions.LLMFunctionProvider
 import ai.ancf.lmos.arc.agents.llm.ChatCompleterProvider
 import ai.ancf.lmos.arc.agents.llm.ChatCompletionSettings
-import ai.ancf.lmos.arc.core.Result
-import ai.ancf.lmos.arc.core.failWith
-import ai.ancf.lmos.arc.core.getOrThrow
-import ai.ancf.lmos.arc.core.mapFailure
-import ai.ancf.lmos.arc.core.result
+import ai.ancf.lmos.arc.core.*
+import kotlinx.coroutines.coroutineScope
+import org.slf4j.LoggerFactory
 import kotlin.time.measureTime
 
 const val AGENT_LOG_CONTEXT_KEY = "agent"
@@ -41,6 +34,8 @@ class ChatAgent(
     private val filterInput: suspend InputFilterContext.() -> Unit,
 ) : Agent<Conversation, Conversation> {
 
+    private val log = LoggerFactory.getLogger(javaClass)
+
     override suspend fun execute(input: Conversation, context: Set<Any>): Result<Conversation, AgentFailedException> {
         return withLogContext(mapOf(AGENT_LOG_CONTEXT_KEY to name)) {
             val agentEventHandler = beanProvider.provideOptional<EventPublisher>()
@@ -49,7 +44,18 @@ class ChatAgent(
             agentEventHandler?.publish(AgentStartedEvent(this@ChatAgent))
             val result: Result<Conversation, AgentFailedException>
             val duration = measureTime {
-                result = doExecute(input, model, context).mapFailure { AgentFailedException("Agent $name failed!", it) }
+                result = doExecute(input, model, context)
+                    .recover {
+                        if (it is WithConversationResult) {
+                            log.info("Agent $name interrupted!", it)
+                            it.conversation
+                        } else {
+                            null
+                        }
+                    }.mapFailure {
+                        log.error("Agent $name failed!", it)
+                        AgentFailedException("Agent $name failed!", it)
+                    }
             }
             agentEventHandler?.publish(
                 AgentFinishedEvent(
@@ -66,34 +72,47 @@ class ChatAgent(
 
     private suspend fun doExecute(conversation: Conversation, model: String?, context: Set<Any>) =
         result<Conversation, Exception> {
-            val scriptingContext = BasicDSLContext(beanProvider)
-            val chatCompleter = chatCompleter(model = model)
-            val functions = functions()
+            val fullContext = context + setOf(conversation, conversation.user)
+            val compositeBeanProvider = CompositeBeanProvider(fullContext, beanProvider)
+            val scriptingContext = BasicDSLContext(compositeBeanProvider)
+            val chatCompleter = compositeBeanProvider.chatCompleter(model = model)
+            val functions = functions(scriptingContext)
 
-            CoroutineBeanProvider().setContext(context + setOf(conversation, conversation.user)) {
-                val generatedSystemPrompt = systemPrompt.invoke(scriptingContext)
+            val filteredInput = coroutineScope {
                 val filterContext = InputFilterContext(scriptingContext, conversation)
-                val filteredInput = filterInput.invoke(filterContext).let { filterContext.input }
+                filterInput.invoke(filterContext).let {
+                    filterContext.finish()
+                    filterContext.input
+                }
+            }
 
-                if (filteredInput.isEmpty()) failWith { AgentNotExecutedException("Input has been filtered") }
+            if (filteredInput.isEmpty()) failWith { AgentNotExecutedException("Input has been filtered") }
 
-                val fullConversation =
-                    listOf(SystemMessage(generatedSystemPrompt)) + filteredInput.transcript
-                val completedConversation =
-                    conversation + chatCompleter.complete(fullConversation, functions, settings()).getOrThrow()
+            val generatedSystemPrompt = systemPrompt.invoke(scriptingContext)
+            val fullConversation =
+                listOf(SystemMessage(generatedSystemPrompt)) + filteredInput.transcript
+            val completedConversation =
+                conversation + chatCompleter.complete(fullConversation, functions, settings()).getOrThrow()
 
+            coroutineScope {
                 val filterOutputContext =
                     OutputFilterContext(scriptingContext, conversation, completedConversation, generatedSystemPrompt)
-                filterOutput.invoke(filterOutputContext).let { filterOutputContext.output }
+                filterOutput.invoke(filterOutputContext).let {
+                    filterOutputContext.finish()
+                    filterOutputContext.output
+                }
             }
         }
 
-    private suspend fun chatCompleter(model: String?) =
-        beanProvider.provide(ChatCompleterProvider::class).provideByModel(model = model)
+    private suspend fun BeanProvider.chatCompleter(model: String?) =
+        provide(ChatCompleterProvider::class).provideByModel(model = model)
 
-    private suspend fun functions() = if (tools.isNotEmpty()) {
+    private suspend fun functions(context: DSLContext) = if (tools.isNotEmpty()) {
         val functionProvider = beanProvider.provide(LLMFunctionProvider::class)
-        tools.map { functionProvider.provide(it).getOrThrow() }
+        tools.map {
+            val fn = functionProvider.provide(it).getOrThrow()
+            if (fn is FunctionWithContext) fn.withContext(context) else fn
+        }
     } else {
         null
     }

@@ -12,4 +12,11 @@ dependencies {
     implementation("io.ktor:ktor-client-core:$ktorVersion")
 
     implementation(project(":arc-api"))
+
+    testImplementation(project(":arc-result"))
+    testImplementation(project(":arc-agents"))
+    testImplementation(project(":arc-graphql-spring-boot-starter"))
+    testImplementation(project(":arc-spring-boot-starter"))
+    testImplementation("org.springframework.boot:spring-boot-starter-test:3.3.3")
+    testImplementation("org.springframework.boot:spring-boot-starter:3.3.3")
 }

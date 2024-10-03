@@ -5,7 +5,7 @@
 package ai.ancf.lmos.arc.agent.client.graphql
 
 import ai.ancf.lmos.arc.api.AgentRequest
-import ai.ancf.lmos.arc.api.AnonymizationEntity
+import ai.ancf.lmos.arc.api.AgentResult
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -32,7 +32,7 @@ data class SubscribeMessage(val id: String, val payload: ClientPayload) : Client
 data class ClientPayload(val query: String, val variables: AgentRequestVariables)
 
 @Serializable
-data class AgentRequestVariables(val request: AgentRequest)
+data class AgentRequestVariables(val request: AgentRequest, val agentName: String?)
 
 /**
  * Server messages
@@ -52,13 +52,7 @@ data class NextMessage(val id: String, val payload: ServerPayload) : ServerMessa
 data class ServerPayload(val data: DataPayload)
 
 @Serializable
-data class DataPayload(val agent: AgentPayload)
-
-@Serializable
-data class AgentPayload(
-    val anonymizationEntities: List<AnonymizationEntity>,
-    val messages: List<AgentPayloadMessage>,
-)
+data class DataPayload(val agent: AgentResult)
 
 @Serializable
 data class AgentPayloadMessage(val content: String)

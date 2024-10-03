@@ -68,8 +68,8 @@ open class SpringChatClient(
      * Converts ChatCompletionSettings to Spring AI ChatOptions.
      */
     private fun ChatCompletionSettings?.toSpringAI() = ChatOptionsBuilder.builder().apply {
-        this@toSpringAI?.temperature?.let { withTemperature(it.toFloat()) }
-        this@toSpringAI?.topP?.let { withTopP(it.toFloat()) }
+        this@toSpringAI?.temperature?.let { withTemperature(it) }
+        this@toSpringAI?.topP?.let { withTopP(it) }
         this@toSpringAI?.topK?.let { withTopK(it) }
     }.build()
 

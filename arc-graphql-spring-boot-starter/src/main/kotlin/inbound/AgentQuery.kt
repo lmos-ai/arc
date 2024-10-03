@@ -5,6 +5,7 @@
 package ai.ancf.lmos.arc.graphql.inbound
 
 import ai.ancf.lmos.arc.agents.AgentProvider
+import com.expediagroup.graphql.generator.annotations.GraphQLDescription
 import com.expediagroup.graphql.server.operations.Query
 import kotlinx.serialization.Serializable
 
@@ -13,6 +14,7 @@ import kotlinx.serialization.Serializable
  */
 class AgentQuery(private val agentProvider: AgentProvider) : Query {
 
+    @GraphQLDescription("Returns the list of available Agents.")
     fun agent(): Agents {
         return Agents(agentProvider.getAgents().map { it.name })
     }

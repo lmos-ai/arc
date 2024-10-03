@@ -6,10 +6,7 @@ package ai.ancf.lmos.arc.scripting.functions
 
 import ai.ancf.lmos.arc.agents.dsl.FunctionDefinitionContext
 import kotlin.script.experimental.annotations.KotlinScript
-import kotlin.script.experimental.api.ScriptCompilationConfiguration
-import kotlin.script.experimental.api.compilerOptions
-import kotlin.script.experimental.api.defaultImports
-import kotlin.script.experimental.api.implicitReceivers
+import kotlin.script.experimental.api.*
 import kotlin.script.experimental.jvm.dependenciesFromCurrentContext
 import kotlin.script.experimental.jvm.jvm
 import kotlin.script.experimental.jvm.jvmTarget
@@ -32,8 +29,14 @@ object ScriptConfiguration : ScriptCompilationConfiguration(
         defaultImports(
             "ai.ancf.lmos.arc.agents.dsl.get",
             "ai.ancf.lmos.arc.agents.dsl.*",
+            "ai.ancf.lmos.arc.core.*",
             "ai.ancf.lmos.arc.agents.dsl.extensions.*",
         )
+
+        ide {
+
+            acceptedLocations(ScriptAcceptedLocation.Everywhere)
+        }
 
         jvm {
             jvmTarget("17")
