@@ -38,7 +38,18 @@ class AgentDefinition {
     var model: () -> String? = { null }
     var settings: () -> ChatCompletionSettings? = { null }
 
+    private var _toolsProvider: suspend DSLContext.() -> Unit = { tools.forEach { +it } }
+    val toolsProvider get() = _toolsProvider
+
+    @Deprecated("Use the tools function instead. For example, tools { +\"myFunctions\" }")
     var tools: List<String> = emptyList()
+
+    fun tools(fn: suspend DSLContext.() -> Unit) {
+        _toolsProvider = {
+            tools.forEach { +it }
+            fn()
+        }
+    }
 
     var systemPrompt: suspend DSLContext.() -> String = { "" }
         get() = {
@@ -49,6 +60,7 @@ class AgentDefinition {
                 result.trimIndent()
             }
         }
+
     fun prompt(fn: suspend DSLContext.() -> String) {
         systemPrompt = fn
     }

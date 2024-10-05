@@ -69,7 +69,7 @@ class AgentTest : TestBase() {
     }
 
     @Test
-    fun `test agent function reference`(): Unit = runBlocking {
+    fun `test agent tools`(): Unit = runBlocking {
         val agent = agent {
             name = "name"
             description = "description"
@@ -92,6 +92,32 @@ class AgentTest : TestBase() {
         executeAgent(agent as ChatAgent, "question")
 
         assertThat(functionGroup.captured).isEqualTo("myFunctions")
+    }
+
+    @Test
+    fun `test agent tools function`(): Unit = runBlocking {
+        val agent = agent {
+            name = "name"
+            description = "description"
+            systemPrompt = { "systemPrompt" }
+            tools { +"myDynamicFunctions" }
+        }
+        val functionGroup = slot<String>()
+        coEvery { functionProvider.provide(capture(functionGroup)) } answers {
+            Success(object : LLMFunction {
+                override val name = "MyFunction"
+                override val parameters = ParametersSchema(emptyList(), emptyList())
+                override val description = "This is a sample function"
+                override val group = "SampleGroup"
+                override val isSensitive = false
+
+                override suspend fun execute(input: Map<String, Any?>) = Success("execution result")
+            })
+        }
+
+        executeAgent(agent as ChatAgent, "question")
+
+        assertThat(functionGroup.captured).isEqualTo("myDynamicFunctions")
     }
 
     @Test
