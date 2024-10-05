@@ -31,7 +31,7 @@ class MetricsHandler(private val metrics: MeterRegistry) : EventHandler<Event> {
                         tags = mapOf(
                             "agent" to agent.name,
                             "flowBreak" to flowBreak.toString(),
-                            "model" to (model ?: "default")
+                            "model" to (model ?: "default"),
                         ),
                     )
                 } else {
