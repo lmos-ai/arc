@@ -43,12 +43,14 @@ class ChatAgent(
             val model = model()
 
             agentEventHandler?.publish(AgentStartedEvent(this@ChatAgent))
+            var flowBreak = false
             val result: Result<Conversation, AgentFailedException>
             val duration = measureTime {
                 result = doExecute(input, model, context)
                     .recover {
                         if (it is WithConversationResult) {
                             log.info("Agent $name interrupted!", it)
+                            flowBreak = true
                             it.conversation
                         } else {
                             null
@@ -65,6 +67,7 @@ class ChatAgent(
                     output = result,
                     model = model,
                     duration = duration,
+                    flowBreak = flowBreak,
                 ),
             )
             result

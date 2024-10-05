@@ -23,6 +23,7 @@ data class AgentFinishedEvent(
     val input: Conversation,
     val output: Result<Conversation, AgentFailedException>,
     val duration: Duration,
+    val flowBreak: Boolean = false,
     override val timestamp: Instant = Instant.now(),
 ) : AgentEvent()
 
