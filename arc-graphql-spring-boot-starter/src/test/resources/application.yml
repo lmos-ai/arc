@@ -4,5 +4,13 @@
 
 logging:
   level:
-    root: WARN
+    root: INFO
     ai.ancf.lmos.ai: DEBUG
+
+server:
+  port: 8080
+
+arc:
+  subscriptions:
+    events:
+      enable: true
