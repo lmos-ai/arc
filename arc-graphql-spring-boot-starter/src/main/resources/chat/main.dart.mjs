@@ -1,8 +1,4 @@
 
-// SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
-//
-// SPDX-License-Identifier: Apache-2.0
-
 // `modulePromise` is a promise to the `WebAssembly.module` object to be
 //   instantiated.
 // `importObjectPromise` is a promise to an object that contains any additional
@@ -421,6 +417,7 @@ _1657: () => new TextDecoder("utf-8", {fatal: true}),
 _1658: () => new TextDecoder("utf-8", {fatal: false}),
 _1659: v => v.toString(),
 _1660: (d, digits) => d.toFixed(digits),
+_1663: (d, precision) => d.toPrecision(precision),
 _1664: x0 => new WeakRef(x0),
 _1665: x0 => x0.deref(),
 _1671: Date.now,
@@ -562,52 +559,52 @@ _1825: (x0,x1) => x0.appendChild(x1),
 _1826: x0 => x0.click(),
 _1827: (x0,x1) => x0.querySelector(x1),
 _1828: (x0,x1) => x0.appendChild(x1),
-_1841: (x0,x1) => x0.key(x1),
-_1843: (s, m) => {
+_1829: (x0,x1) => x0.key(x1),
+_1846: (s, m) => {
           try {
             return new RegExp(s, m);
           } catch (e) {
             return String(e);
           }
         },
-_1844: (x0,x1) => x0.exec(x1),
-_1845: (x0,x1) => x0.test(x1),
-_1846: (x0,x1) => x0.exec(x1),
 _1847: (x0,x1) => x0.exec(x1),
-_1848: x0 => x0.pop(),
-_1852: (x0,x1,x2) => x0[x1] = x2,
-_1854: o => o === undefined,
-_1855: o => typeof o === 'boolean',
-_1856: o => typeof o === 'number',
-_1858: o => typeof o === 'string',
-_1861: o => o instanceof Int8Array,
-_1862: o => o instanceof Uint8Array,
-_1863: o => o instanceof Uint8ClampedArray,
-_1864: o => o instanceof Int16Array,
-_1865: o => o instanceof Uint16Array,
-_1866: o => o instanceof Int32Array,
-_1867: o => o instanceof Uint32Array,
-_1868: o => o instanceof Float32Array,
-_1869: o => o instanceof Float64Array,
-_1870: o => o instanceof ArrayBuffer,
-_1871: o => o instanceof DataView,
-_1872: o => o instanceof Array,
-_1873: o => typeof o === 'function' && o[jsWrappedDartFunctionSymbol] === true,
-_1875: o => {
+_1848: (x0,x1) => x0.test(x1),
+_1849: (x0,x1) => x0.exec(x1),
+_1850: (x0,x1) => x0.exec(x1),
+_1851: x0 => x0.pop(),
+_1855: (x0,x1,x2) => x0[x1] = x2,
+_1857: o => o === undefined,
+_1858: o => typeof o === 'boolean',
+_1859: o => typeof o === 'number',
+_1861: o => typeof o === 'string',
+_1864: o => o instanceof Int8Array,
+_1865: o => o instanceof Uint8Array,
+_1866: o => o instanceof Uint8ClampedArray,
+_1867: o => o instanceof Int16Array,
+_1868: o => o instanceof Uint16Array,
+_1869: o => o instanceof Int32Array,
+_1870: o => o instanceof Uint32Array,
+_1871: o => o instanceof Float32Array,
+_1872: o => o instanceof Float64Array,
+_1873: o => o instanceof ArrayBuffer,
+_1874: o => o instanceof DataView,
+_1875: o => o instanceof Array,
+_1876: o => typeof o === 'function' && o[jsWrappedDartFunctionSymbol] === true,
+_1878: o => {
             const proto = Object.getPrototypeOf(o);
             return proto === Object.prototype || proto === null;
           },
-_1876: o => o instanceof RegExp,
-_1877: (l, r) => l === r,
-_1878: o => o,
-_1879: o => o,
-_1880: o => o,
-_1881: b => !!b,
-_1882: o => o.length,
-_1885: (o, i) => o[i],
-_1886: f => f.dartFunction,
-_1887: l => arrayFromDartList(Int8Array, l),
-_1888: (data, length) => {
+_1879: o => o instanceof RegExp,
+_1880: (l, r) => l === r,
+_1881: o => o,
+_1882: o => o,
+_1883: o => o,
+_1884: b => !!b,
+_1885: o => o.length,
+_1888: (o, i) => o[i],
+_1889: f => f.dartFunction,
+_1890: l => arrayFromDartList(Int8Array, l),
+_1891: (data, length) => {
           const jsBytes = new Uint8Array(length);
           const getByte = dartInstance.exports.$uint8ListGet;
           for (let i = 0; i < length; i++) {
@@ -615,14 +612,14 @@ _1888: (data, length) => {
           }
           return jsBytes;
         },
-_1889: l => arrayFromDartList(Uint8ClampedArray, l),
-_1890: l => arrayFromDartList(Int16Array, l),
-_1891: l => arrayFromDartList(Uint16Array, l),
-_1892: l => arrayFromDartList(Int32Array, l),
-_1893: l => arrayFromDartList(Uint32Array, l),
-_1894: l => arrayFromDartList(Float32Array, l),
-_1895: l => arrayFromDartList(Float64Array, l),
-_1896: (data, length) => {
+_1892: l => arrayFromDartList(Uint8ClampedArray, l),
+_1893: l => arrayFromDartList(Int16Array, l),
+_1894: l => arrayFromDartList(Uint16Array, l),
+_1895: l => arrayFromDartList(Int32Array, l),
+_1896: l => arrayFromDartList(Uint32Array, l),
+_1897: l => arrayFromDartList(Float32Array, l),
+_1898: l => arrayFromDartList(Float64Array, l),
+_1899: (data, length) => {
           const read = dartInstance.exports.$byteDataGetUint8;
           const view = new DataView(new ArrayBuffer(length));
           for (let i = 0; i < length; i++) {
@@ -630,8 +627,8 @@ _1896: (data, length) => {
           }
           return view;
         },
-_1897: l => arrayFromDartList(Array, l),
-_1898:       (s, length) => {
+_1900: l => arrayFromDartList(Array, l),
+_1901:       (s, length) => {
         if (length == 0) return '';
 
         const read = dartInstance.exports.$stringRead1;
@@ -652,7 +649,7 @@ _1898:       (s, length) => {
         return result;
       }
       ,
-_1899:     (s, length) => {
+_1902:     (s, length) => {
       if (length == 0) return '';
 
       const read = dartInstance.exports.$stringRead2;
@@ -673,7 +670,7 @@ _1899:     (s, length) => {
       return result;
     }
     ,
-_1900:     (s) => {
+_1903:     (s) => {
       let length = s.length;
       let range = 0;
       for (let i = 0; i < length; i++) {
@@ -729,68 +726,68 @@ _1900:     (s) => {
       }
     }
     ,
-_1901: () => ({}),
-_1902: () => [],
-_1903: l => new Array(l),
-_1904: () => globalThis,
-_1905: (constructor, args) => {
+_1904: () => ({}),
+_1905: () => [],
+_1906: l => new Array(l),
+_1907: () => globalThis,
+_1908: (constructor, args) => {
       const factoryFunction = constructor.bind.apply(
           constructor, [null, ...args]);
       return new factoryFunction();
     },
-_1906: (o, p) => p in o,
-_1907: (o, p) => o[p],
-_1908: (o, p, v) => o[p] = v,
-_1909: (o, m, a) => o[m].apply(o, a),
-_1911: o => String(o),
-_1912: (p, s, f) => p.then(s, f),
-_1913: s => {
+_1909: (o, p) => p in o,
+_1910: (o, p) => o[p],
+_1911: (o, p, v) => o[p] = v,
+_1912: (o, m, a) => o[m].apply(o, a),
+_1914: o => String(o),
+_1915: (p, s, f) => p.then(s, f),
+_1916: s => {
       if (/[[\]{}()*+?.\\^$|]/.test(s)) {
           s = s.replace(/[[\]{}()*+?.\\^$|]/g, '\\$&');
       }
       return s;
     },
-_1916: x0 => x0.index,
-_1917: x0 => x0.groups,
-_1918: x0 => x0.length,
-_1920: (x0,x1) => x0[x1],
-_1921: (x0,x1) => x0.exec(x1),
-_1923: x0 => x0.flags,
-_1924: x0 => x0.multiline,
-_1925: x0 => x0.ignoreCase,
-_1926: x0 => x0.unicode,
-_1927: x0 => x0.dotAll,
-_1928: (x0,x1) => x0.lastIndex = x1,
-_1930: (o, p) => o[p],
-_2009: (x0,x1) => x0.withCredentials = x1,
-_2011: x0 => x0.responseURL,
-_2012: x0 => x0.status,
-_2013: x0 => x0.statusText,
-_2015: (x0,x1) => x0.responseType = x1,
-_2016: x0 => x0.response,
-_2451: (x0,x1) => x0.download = x1,
-_2476: (x0,x1) => x0.href = x1,
-_3045: (x0,x1) => x0.accept = x1,
-_3059: x0 => x0.files,
-_3085: (x0,x1) => x0.multiple = x1,
-_3103: (x0,x1) => x0.type = x1,
-_3832: () => globalThis.window,
-_3912: x0 => x0.navigator,
-_4159: x0 => x0.localStorage,
-_4218: x0 => x0.message,
-_4286: x0 => x0.vendor,
-_4504: x0 => x0.length,
-_7490: x0 => x0.type,
-_7547: x0 => x0.length,
-_7629: () => globalThis.document,
-_7720: x0 => x0.body,
-_8081: (x0,x1) => x0.id = x1,
-_8097: x0 => x0.children,
-_9774: x0 => x0.size,
-_9782: x0 => x0.name,
-_9783: x0 => x0.lastModified,
-_9789: x0 => x0.length,
-_9804: x0 => x0.result
+_1919: x0 => x0.index,
+_1920: x0 => x0.groups,
+_1921: x0 => x0.length,
+_1923: (x0,x1) => x0[x1],
+_1924: (x0,x1) => x0.exec(x1),
+_1926: x0 => x0.flags,
+_1927: x0 => x0.multiline,
+_1928: x0 => x0.ignoreCase,
+_1929: x0 => x0.unicode,
+_1930: x0 => x0.dotAll,
+_1931: (x0,x1) => x0.lastIndex = x1,
+_1933: (o, p) => o[p],
+_2029: (x0,x1) => x0.withCredentials = x1,
+_2031: x0 => x0.responseURL,
+_2032: x0 => x0.status,
+_2033: x0 => x0.statusText,
+_2035: (x0,x1) => x0.responseType = x1,
+_2036: x0 => x0.response,
+_2475: (x0,x1) => x0.download = x1,
+_2500: (x0,x1) => x0.href = x1,
+_3048: (x0,x1) => x0.accept = x1,
+_3062: x0 => x0.files,
+_3088: (x0,x1) => x0.multiple = x1,
+_3106: (x0,x1) => x0.type = x1,
+_3848: () => globalThis.window,
+_3914: x0 => x0.navigator,
+_4178: x0 => x0.localStorage,
+_4238: x0 => x0.message,
+_4306: x0 => x0.vendor,
+_4525: x0 => x0.length,
+_6509: x0 => x0.type,
+_6565: x0 => x0.length,
+_6631: () => globalThis.document,
+_6724: x0 => x0.body,
+_7075: (x0,x1) => x0.id = x1,
+_7102: x0 => x0.children,
+_8644: x0 => x0.size,
+_8652: x0 => x0.name,
+_8653: x0 => x0.lastModified,
+_8659: x0 => x0.length,
+_8670: x0 => x0.result
     };
 
     const baseImports = {
