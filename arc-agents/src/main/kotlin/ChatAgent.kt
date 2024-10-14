@@ -9,6 +9,7 @@ import ai.ancf.lmos.arc.agents.conversation.SystemMessage
 import ai.ancf.lmos.arc.agents.dsl.*
 import ai.ancf.lmos.arc.agents.events.EventPublisher
 import ai.ancf.lmos.arc.agents.functions.FunctionWithContext
+import ai.ancf.lmos.arc.agents.functions.LLMFunction
 import ai.ancf.lmos.arc.agents.functions.LLMFunctionProvider
 import ai.ancf.lmos.arc.agents.llm.ChatCompleterProvider
 import ai.ancf.lmos.arc.agents.llm.ChatCompletionSettings
@@ -29,7 +30,7 @@ class ChatAgent(
     private val settings: () -> ChatCompletionSettings?,
     private val beanProvider: BeanProvider,
     private val systemPrompt: suspend DSLContext.() -> String,
-    private val tools: List<String>,
+    private val toolsProvider: suspend DSLContext.() -> Unit,
     private val filterOutput: suspend OutputFilterContext.() -> Unit,
     private val filterInput: suspend InputFilterContext.() -> Unit,
 ) : Agent<Conversation, Conversation> {
@@ -42,12 +43,14 @@ class ChatAgent(
             val model = model()
 
             agentEventHandler?.publish(AgentStartedEvent(this@ChatAgent))
+            var flowBreak = false
             val result: Result<Conversation, AgentFailedException>
             val duration = measureTime {
                 result = doExecute(input, model, context)
                     .recover {
                         if (it is WithConversationResult) {
                             log.info("Agent $name interrupted!", it)
+                            flowBreak = true
                             it.conversation
                         } else {
                             null
@@ -64,6 +67,7 @@ class ChatAgent(
                     output = result,
                     model = model,
                     duration = duration,
+                    flowBreak = flowBreak,
                 ),
             )
             result
@@ -107,14 +111,18 @@ class ChatAgent(
     private suspend fun BeanProvider.chatCompleter(model: String?) =
         provide(ChatCompleterProvider::class).provideByModel(model = model)
 
-    private suspend fun functions(context: DSLContext) = if (tools.isNotEmpty()) {
-        val functionProvider = beanProvider.provide(LLMFunctionProvider::class)
-        tools.map {
-            val fn = functionProvider.provide(it).getOrThrow()
-            if (fn is FunctionWithContext) fn.withContext(context) else fn
+    private suspend fun functions(context: DSLContext): List<LLMFunction>? {
+        val toolsContext = ToolsDSLContext(context)
+        val tools = toolsProvider.invoke(toolsContext).let { toolsContext.tools }
+        return if (tools.isNotEmpty()) {
+            val functionProvider = beanProvider.provide(LLMFunctionProvider::class)
+            tools.map {
+                val fn = functionProvider.provide(it).getOrThrow()
+                if (fn is FunctionWithContext) fn.withContext(context) else fn
+            }
+        } else {
+            null
         }
-    } else {
-        null
     }
 
     override fun toString(): String {

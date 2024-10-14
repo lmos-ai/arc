@@ -52,3 +52,16 @@ class BasicDSLContext(private val beanProvider: BeanProvider) : DSLContext {
         return response.body()
     }
 }
+
+/**
+ * A version of the DSLContext that can be used in the tools section of the agent definition.
+ * This will override the + operator for strings to build a list of tools instead of an output string.
+ */
+class ToolsDSLContext(private val context: DSLContext) : DSLContext by context {
+
+    val tools = mutableListOf<String>()
+
+    override operator fun String.unaryPlus() {
+        tools.add(this)
+    }
+}

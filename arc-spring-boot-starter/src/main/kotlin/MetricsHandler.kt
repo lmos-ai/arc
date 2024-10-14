@@ -28,7 +28,11 @@ class MetricsHandler(private val metrics: MeterRegistry) : EventHandler<Event> {
                     timer(
                         "arc.agent.finished",
                         duration,
-                        tags = mapOf("agent" to agent.name, "model" to (model ?: "default")),
+                        tags = mapOf(
+                            "agent" to agent.name,
+                            "flowBreak" to flowBreak.toString(),
+                            "model" to (model ?: "default"),
+                        ),
                     )
                 } else {
                     timer(

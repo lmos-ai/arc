@@ -35,6 +35,7 @@ object ScriptConfiguration : ScriptCompilationConfiguration(
             "ai.ancf.lmos.arc.agents.dsl.extensions.*",
             "ai.ancf.lmos.arc.agents.llm.ChatCompletionSettings",
             "ai.ancf.lmos.arc.agents.llm.OutputFormat",
+            "ai.ancf.lmos.arc.agents.dsl.custom.extensions.*",
         )
 
         ide {

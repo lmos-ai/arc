@@ -1,30 +1,25 @@
-// SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
-//
-// SPDX-License-Identifier: Apache-2.0
-
 'use strict';
 const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 
-const RESOURCES = {"flutter_bootstrap.js": "cbbfdd344d7d22ed34c2bef4e0b87b83",
+const RESOURCES = {"flutter_bootstrap.js": "447f9ffcb2999e91367a3f96b2d4052d",
 "version.json": "345101093b11dd469d12df805f974850",
 "index.html": "9ccf7560708fed4e215283023d6517e1",
 "/": "9ccf7560708fed4e215283023d6517e1",
-"main.dart.js": "d500ae4c942c2fdd8bb84ce70ad8ca83",
+"main.dart.js": "d6d1c04d3d274e2ea4ad03bc3392353c",
 "flutter.js": "f393d3c16b631f36852323de8e583132",
 "favicon.png": "cac303fb8820c8845613ead98edf9047",
-"main.dart.mjs": "8a4f68fab222e8d423b8f3a76cd0b08a",
+"main.dart.mjs": "43ac552325974c58614328fbc638ddf9",
 "icons/Icon-192.png": "2e6d3f26571285124673949194cf64a8",
 "manifest.json": "c731c53a201f22d450dfa9d8b7e6a90f",
-"main.dart.wasm": "d820a44e6681ea09afa43353c5a52119",
-"assets/AssetManifest.json": "7d760be083b4c40a95f8062e1f24c354",
-"assets/NOTICES": "2d5ebe5feeb0fa9505d54f350e78a9a6",
-"assets/FontManifest.json": "00b743e6a2c2b521f73590d6b7216141",
-"assets/AssetManifest.bin.json": "9df7d7e7ce27eef5840e84f5974a1fb8",
-"assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "e986ebe42ef785b27164c36a9abc7818",
+"main.dart.wasm": "d619091956a924d8330037814d518dda",
+"assets/AssetManifest.json": "08254dfa491faddfc345665518eb9bbd",
+"assets/NOTICES": "8995448a48343b44a4535ad5ed83162e",
+"assets/FontManifest.json": "2159d02023db54ee76862dd340195de8",
+"assets/AssetManifest.bin.json": "5491db83d7bea8527a907e059f8114e4",
 "assets/shaders/ink_sparkle.frag": "ecc85a2e95f5e9f53123dcaf8cb9b6ce",
-"assets/AssetManifest.bin": "d937f19d97c079866912618a77b57d80",
+"assets/AssetManifest.bin": "c18deb997cf7e8e521c4469dd6b01b44",
 "assets/fonts/static/RobotoMono-Bold.ttf": "90190d91283189e340b2a44fe560f2cd",
 "assets/fonts/MaterialIcons-Regular.otf": "81408b0c65583ed11b36898541fb1ecd",
 "assets/fonts/LICENSE.txt": "d273d63619c9aeaf15cdaf76422c4f87",

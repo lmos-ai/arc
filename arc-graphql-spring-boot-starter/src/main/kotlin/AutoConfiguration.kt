@@ -12,14 +12,14 @@ import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.AutoConfigureBefore
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Import
 import org.springframework.context.annotation.PropertySource
 import org.springframework.core.io.ClassPathResource
 import org.springframework.web.reactive.function.server.RouterFunctions
 
 @AutoConfiguration
-@AutoConfigureBefore(
-    GraphQLAutoConfiguration::class,
-)
+@AutoConfigureBefore(GraphQLAutoConfiguration::class)
+@Import(EventsConfiguration::class)
 @PropertySource("classpath:arc.properties")
 open class AgentGraphQLAutoConfiguration {
 
