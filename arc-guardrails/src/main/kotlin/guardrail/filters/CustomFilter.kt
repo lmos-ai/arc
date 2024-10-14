@@ -3,6 +3,9 @@ package ai.ancf.lmos.arc.guardrail.filters
 import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
 import ai.ancf.lmos.arc.agents.dsl.AgentFilter
 
+/**
+ * A filter that replaces text in a message based on a map of replacements.
+ */
 class CustomFilter(private val replacements: Map<String, String>) : AgentFilter {
     override suspend fun filter(message: ConversationMessage): ConversationMessage {
         var content = message.content

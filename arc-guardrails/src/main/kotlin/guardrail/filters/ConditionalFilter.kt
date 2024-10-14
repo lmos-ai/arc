@@ -4,6 +4,9 @@ import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
 import ai.ancf.lmos.arc.agents.dsl.AgentFilter
 import ai.ancf.lmos.arc.agents.dsl.DSLContext
 
+/**
+ * A filter that applies a list of filters based on a condition.
+ */
 class ConditionalFilter(
     private val condition: Condition,
     private val trueFilters: List<AgentFilter>,

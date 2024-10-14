@@ -5,9 +5,14 @@ import ai.ancf.lmos.arc.agents.dsl.AgentFilter
 import ai.ancf.lmos.arc.agents.dsl.DSLContext
 import ai.ancf.lmos.arc.agents.dsl.extensions.memory
 
-class CustomReplacementContextPreFilter(private val context: DSLContext, private val patterns: List<Pair<String, String>>) : AgentFilter {
+/**
+ * A filter that replaces text in a message based on a map of replacements.
+ * This filter supports incremental replacements based on a list of patterns.
+ * The patterns are used to identify the text to be replaced, and the type is used to generate a unique placeholder.
+ */
+class CustomReplacementContextPreFilter(private val contextVariableName: String, private val context: DSLContext, private val patterns: List<Pair<String, String>>) : AgentFilter {
 
-    suspend fun filter(contextVariableName: String, message: ConversationMessage): ConversationMessage {
+    override suspend fun filter(message: ConversationMessage): ConversationMessage {
         var content = context.memory(contextVariableName) as String
         val placeholders = mutableMapOf<String, String>() // placeholder -> original value
         val counts = mutableMapOf<String, Int>() // type -> count
@@ -33,10 +38,5 @@ class CustomReplacementContextPreFilter(private val context: DSLContext, private
 
     private fun getMappingKey(message: ConversationMessage): String {
         return "placeholders_${message.turnId}"
-    }
-
-    override suspend fun filter(message: ConversationMessage): ConversationMessage? {
-        // This filter is not supposed to be used for filtering messages
-        throw UnsupportedOperationException("This filter is not supposed to be used for filtering messages")
     }
 }

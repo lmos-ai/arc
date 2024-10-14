@@ -3,6 +3,7 @@ package ai.ancf.lmos.arc.guardrail.filters
 import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
 import ai.ancf.lmos.arc.agents.dsl.AgentFilter
 import ai.ancf.lmos.arc.agents.dsl.DSLContext
+import ai.ancf.lmos.arc.agents.dsl.extensions.breakWith
 import ai.ancf.lmos.arc.agents.dsl.extensions.error
 
 class TryCatchFilter(
@@ -25,10 +26,14 @@ class TryCatchFilter(
         }
     }
 
-    private fun handleErrors(exception: Exception, context: DSLContext) {
+    private suspend fun handleErrors(exception: Exception, context: DSLContext) {
         for (handler in errorHandlers) {
             when (handler) {
                 is ErrorHandler.Log -> context.error(handler.message, exception)
+                is ErrorHandler.Break -> context.breakWith(
+                    message = "Sorry, I am currently unable to process your request.",
+                    reason = handler.message,
+                )
                 // Add more error handling logic here
             }
         }

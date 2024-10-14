@@ -5,7 +5,7 @@ import ai.ancf.lmos.arc.agents.conversation.AssistantMessage
 import ai.ancf.lmos.arc.agents.conversation.Conversation
 import ai.ancf.lmos.arc.agents.dsl.DSLContext
 import ai.ancf.lmos.arc.agents.dsl.OutputFilterContext
-import ai.ancf.lmos.arc.guardrail.extensions.applyGuardrails
+import ai.ancf.lmos.arc.guardrail.extensions.guardrails
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -39,8 +39,8 @@ class TestDSLRegexAndCustomFilters {
         )
 
         // Act
-        outputFilterContext.applyGuardrails {
-            regex("\\d{4}-\\d{2}-\\d{2}") {
+        outputFilterContext.guardrails {
+            regexReplacement("\\d{4}-\\d{2}-\\d{2}") {
                 replace("[DATE]")
             }
         }
@@ -76,7 +76,7 @@ class TestDSLRegexAndCustomFilters {
         )
 
         // Act
-        inputFilterContext.applyGuardrails {
+        inputFilterContext.guardrails {
             filter("custom") {
                 replace("\\d{3}-\\d{2}-\\d{4}", "[SSN]")
             }

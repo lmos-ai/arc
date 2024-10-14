@@ -5,7 +5,7 @@ import ai.ancf.lmos.arc.agents.conversation.AssistantMessage
 import ai.ancf.lmos.arc.agents.conversation.Conversation
 import ai.ancf.lmos.arc.agents.dsl.DSLContext
 import ai.ancf.lmos.arc.agents.dsl.OutputFilterContext
-import ai.ancf.lmos.arc.guardrail.extensions.applyGuardrails
+import ai.ancf.lmos.arc.guardrail.extensions.guardrails
 import ai.ancf.lmos.arc.guardrail.filters.Condition
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -41,7 +41,7 @@ class TestDSLConditionalGuardrails {
         )
 
         // Act
-        inputFilterContext.applyGuardrails {
+        inputFilterContext.guardrails {
             `if`(Condition.Equals("Please help me.")) {
                 then {
                     length(5)

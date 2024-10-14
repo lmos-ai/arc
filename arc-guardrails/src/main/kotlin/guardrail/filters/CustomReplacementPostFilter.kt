@@ -5,6 +5,11 @@ import ai.ancf.lmos.arc.agents.dsl.AgentFilter
 import ai.ancf.lmos.arc.agents.dsl.DSLContext
 import ai.ancf.lmos.arc.agents.dsl.extensions.memory
 
+/**
+ * A filter that replaces text in a message based on a map of replacements.
+ * This filter is used to replace placeholders in a message with their original values.
+ * The placeholders are read from the DSLContext memory using a unique key.
+ */
 class CustomReplacementPostFilter(private val context: DSLContext) : AgentFilter {
     override suspend fun filter(message: ConversationMessage): ConversationMessage {
         var content = message.content

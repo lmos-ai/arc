@@ -1,14 +1,21 @@
 package ai.ancf.lmos.arc.guardrail.filters
 
-import ai.ancf.lmos.arc.agents.AgentFailedException
 import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
 import ai.ancf.lmos.arc.agents.dsl.AgentFilter
+import ai.ancf.lmos.arc.agents.dsl.DSLContext
+import ai.ancf.lmos.arc.agents.dsl.extensions.breakWith
 
-class BlacklistFilter(private val blacklist: List<String>) : AgentFilter {
+/**
+ * A filter that checks if a message contains any blacklisted terms.
+ */
+class BlacklistFilter(private val context: DSLContext, private val blacklist: List<String>) : AgentFilter {
     override suspend fun filter(message: ConversationMessage): ConversationMessage {
         for (term in blacklist) {
             if (message.content.contains(term, ignoreCase = true)) {
-                throw AgentFailedException("Message contains blacklisted term: $term")
+                context.breakWith(
+                    message = "Sorry, I am currently unable to process your request.",
+                    reason = "Message contains blacklisted term: $term",
+                )
             }
         }
         return message

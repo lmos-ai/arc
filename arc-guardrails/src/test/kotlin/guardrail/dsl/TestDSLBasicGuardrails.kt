@@ -5,7 +5,7 @@ import ai.ancf.lmos.arc.agents.conversation.Conversation
 import ai.ancf.lmos.arc.agents.conversation.UserMessage
 import ai.ancf.lmos.arc.agents.dsl.DSLContext
 import ai.ancf.lmos.arc.agents.dsl.InputFilterContext
-import ai.ancf.lmos.arc.guardrail.extensions.applyGuardrails
+import ai.ancf.lmos.arc.guardrail.extensions.guardrails
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -30,7 +30,7 @@ class TestDSLBasicGuardrails {
         )
 
         // Act
-        inputFilterContext.applyGuardrails {
+        inputFilterContext.guardrails {
             filter("profanity") {
                 replace("badword", "***")
             }
@@ -58,7 +58,7 @@ class TestDSLBasicGuardrails {
         )
 
         // Act
-        inputFilterContext.applyGuardrails {
+        inputFilterContext.guardrails {
             length(10)
         }
 

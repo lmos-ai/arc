@@ -58,7 +58,7 @@ val agent = AgentDefinition().apply {
 
     // Apply guardrails in input filter
     filterInput {
-        applyGuardrails {
+        guardrails {
             // Profanity filter
             filter("profanity") {
                 replace("badword", "***")
@@ -119,7 +119,7 @@ val agent = AgentDefinition().apply {
 
     // Apply guardrails in output filter
     filterOutput {
-        applyGuardrails {
+      guardrails {
             // Postprocessing to restore sensitive information
             postprocess {}
 
@@ -143,7 +143,7 @@ The guardrails are applied within the `filterInput` and `filterOutput` blocks of
 #### Profanity Filter
 
 ```kotlin
-applyGuardrails {
+guardrails {
     filter("profanity") {
         replace("badword", "***")
         replace("anotherbadword", "***")
@@ -154,7 +154,7 @@ applyGuardrails {
 #### Length Filter
 
 ```kotlin
-applyGuardrails {
+guardrails {
     length(500)
 }
 ```
@@ -162,7 +162,7 @@ applyGuardrails {
 #### Custom Regex Filter
 
 ```kotlin
-applyGuardrails {
+guardrails {
     filter("custom") {
         replace("\\d{4}-\\d{2}-\\d{2}", "[DATE]")
     }
@@ -174,7 +174,7 @@ applyGuardrails {
 #### Conditional Guardrails
 
 ```kotlin
-applyGuardrails {
+guardrails {
     `if`(Condition.Equals("Please help me.")) {
         length(100)
     } elseBlock = {
@@ -186,7 +186,7 @@ applyGuardrails {
 #### Nested Guardrails with LLM
 
 ```kotlin
-applyGuardrails {
+guardrails {
     llm {
         userMessage("Analyze the message for sensitive content.")
         guardrails {
@@ -203,7 +203,7 @@ applyGuardrails {
 #### Nested Guardrails with API
 
 ```kotlin
-applyGuardrails {
+guardrails {
     api("https://api.example.com/analyze") {
         query("content", "{message.content}")
         guardrails {

@@ -10,38 +10,46 @@ import ai.ancf.lmos.arc.agents.dsl.InputFilterContext
 import ai.ancf.lmos.arc.agents.dsl.OutputFilterContext
 import ai.ancf.lmos.arc.guardrail.dsl.GuardrailBuilder
 
-suspend fun InputFilterContext.applyGuardrails(block: GuardrailBuilder.() -> Unit) {
+/**
+ * Add a group of filters to the input filter context.
+ */
+suspend fun InputFilterContext.guardrails(block: GuardrailBuilder.() -> Unit) {
     val guardrailFilters = GuardrailBuilder(this.scriptingContext).apply(block).build()
     this.mapLatest { message ->
         applyFiltersSequentially(message, guardrailFilters)
     }
 }
 
-suspend fun OutputFilterContext.applyGuardrails(block: GuardrailBuilder.() -> Unit) {
+/**
+ * Add a group of filters to the output filter context.
+ */
+suspend fun OutputFilterContext.guardrails(block: GuardrailBuilder.() -> Unit) {
     val guardrailFilters = GuardrailBuilder(this.scriptingContext).apply(block).build()
     this.mapLatest { message ->
         applyFiltersSequentially(message, guardrailFilters)
     }
 }
 
+/**
+ * Function to apply a list of filters to a message sequentially.
+ */
 private suspend fun applyFiltersSequentially(
     message: ConversationMessage,
     filters: List<AgentFilter>,
 ): ConversationMessage? {
     var currentMessage: ConversationMessage? = message
     for (filter in filters) {
-        try {
-            currentMessage = currentMessage?.let { filter.filter(it) }
-            if (currentMessage == null) {
-                break
-            }
-        } catch (e: Exception) {
-            throw e
+        currentMessage = currentMessage?.let { filter.filter(it) }
+        if (currentMessage == null) {
+            break
         }
     }
     return currentMessage
 }
 
+/**
+ * A filter group that applies a list of filters sequentially.
+ */
 class FilterGroup(private val filters: List<AgentFilter>) : AgentFilter {
     override suspend fun filter(message: ConversationMessage): ConversationMessage? {
         var currentMessage: ConversationMessage? = message

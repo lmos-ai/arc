@@ -5,14 +5,14 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class RegexFilterTest {
+class RegexReplacementFilterTest {
 
     @Test
     fun `should replace content matching regex pattern`() = runTest {
         // Arrange
         val pattern = "\\d{4}-\\d{2}-\\d{2}"
         val replacement = "[DATE]"
-        val filter = RegexFilter(pattern, replacement)
+        val filter = RegexReplacementFilter(pattern, replacement)
         val message = UserMessage(
             content = "Today's date is 2024-09-16.",
         )
@@ -30,7 +30,7 @@ class RegexFilterTest {
         // Arrange
         val pattern = "\\d{4}-\\d{2}-\\d{2}"
         val replacement = "[DATE]"
-        val filter = RegexFilter(pattern, replacement)
+        val filter = RegexReplacementFilter(pattern, replacement)
         val message = UserMessage(
             content = "No date here.",
         )

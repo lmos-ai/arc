@@ -36,14 +36,14 @@ class CustomReplacementContextPreFilterTest {
             Pair("([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})", "EMAIL"),
         )
 
-        val filter = CustomReplacementContextPreFilter(context, patterns)
+        val filter = CustomReplacementContextPreFilter("knowledge", context, patterns)
         val message = UserMessage(
             content = "Email: user@example.com",
             turnId = "test",
         )
 
         // Act
-        val result = filter.filter("knowledge", message)
+        val result = filter.filter(message)
         // Assert
         val expectedContent = "Email: user@example.com"
         val expectedContext = "Email: EMAIL-1"

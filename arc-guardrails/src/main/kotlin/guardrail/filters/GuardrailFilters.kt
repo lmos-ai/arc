@@ -41,6 +41,7 @@ sealed class Condition {
 
 sealed class ErrorHandler {
     data class Log(val message: String) : ErrorHandler()
+    data class Break(val message: String) : ErrorHandler()
 }
 
 data class Example(val input: String, val output: String)

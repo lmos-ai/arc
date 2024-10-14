@@ -5,6 +5,10 @@ import ai.ancf.lmos.arc.agents.dsl.AgentFilter
 import ai.ancf.lmos.arc.agents.dsl.DSLContext
 import ai.ancf.lmos.arc.agents.dsl.extensions.memory
 
+/**
+ * A filter that replaces text in a message based on a list of patterns and types.
+ * This filter is used to replace text in a message with placeholders.
+ */
 class CustomReplacementPreFilter(private val context: DSLContext, private val patterns: List<Pair<String, String>>) : AgentFilter {
 
     override suspend fun filter(message: ConversationMessage): ConversationMessage {
