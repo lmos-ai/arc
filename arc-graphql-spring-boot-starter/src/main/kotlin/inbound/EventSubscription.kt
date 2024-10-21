@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import org.slf4j.LoggerFactory
+import org.slf4j.MDC
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
@@ -50,6 +51,7 @@ class EventSubscriptionHolder : EventHandler<Event> {
                         AgentEvent(
                             event::class.simpleName.toString(),
                             objectMapper.writeValueAsString(event),
+                            MDC.get("conversationId"),
                         ),
                     )
                 } ?: run {
@@ -76,4 +78,4 @@ class EventSubscriptionHolder : EventHandler<Event> {
 /**
  * Wraps an Agent event for transport.
  */
-data class AgentEvent(val type: String, val payload: String)
+data class AgentEvent(val type: String, val payload: String, val conversationId: String?)
