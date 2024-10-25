@@ -44,14 +44,16 @@ class EventSubscriptionHolder : EventHandler<Event> {
     override fun onEvent(event: Event) {
         if (eventFlows.isEmpty()) return
         eventFlows.forEach { (id, channel) ->
-            log.info("Sending event: $id ${event::class.simpleName}")
+            val conversationId = MDC.get("conversationId")
+            log.info("Sending event: $id ${event::class.simpleName} ($conversationId)")
             scope.launch {
                 withTimeoutOrNull(20_000) {
                     channel.send(
                         AgentEvent(
                             event::class.simpleName.toString(),
                             objectMapper.writeValueAsString(event),
-                            MDC.get("conversationId"),
+                            conversationId,
+                            MDC.get("turnId")
                         ),
                     )
                 } ?: run {
@@ -78,4 +80,9 @@ class EventSubscriptionHolder : EventHandler<Event> {
 /**
  * Wraps an Agent event for transport.
  */
-data class AgentEvent(val type: String, val payload: String, val conversationId: String?)
+data class AgentEvent(
+    val type: String,
+    val payload: String,
+    val conversationId: String?,
+    val turnId: String?
+)

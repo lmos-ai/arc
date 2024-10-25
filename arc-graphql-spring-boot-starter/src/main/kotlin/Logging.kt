@@ -18,6 +18,7 @@ suspend fun <T> withLogContext(
     val extraContext = mapOf(
         "agent" to agent,
         "conversationId" to request.conversationContext.conversationId,
+        "turnId" to (request.conversationContext.turnId ?: "-1"),
     ) + request.systemContext.associate { it.key to it.value }
     return withContext(MDCContext(current + extraContext), block)
 }

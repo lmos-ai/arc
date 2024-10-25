@@ -27,6 +27,7 @@ data class UserContext(
 @Serializable
 data class ConversationContext(
     val conversationId: String,
+    val turnId: String? = null,
     val anonymizationEntities: List<AnonymizationEntity>? = null,
 )
 
