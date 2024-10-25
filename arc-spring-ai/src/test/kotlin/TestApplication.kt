@@ -14,7 +14,8 @@ open class TestApplication {
 
     @Bean
     open fun chatCompleterProvider(ollamaApi: OllamaApi) = SpringChatClient(
-        OllamaChatModel(ollamaApi, OllamaOptions.create().withModel("llama3:8b")),
+        OllamaChatModel.builder().withOllamaApi(ollamaApi)
+            .withDefaultOptions(OllamaOptions.create().withModel("llama3:8b")).build(),
         "llama3:8b",
     )
 
