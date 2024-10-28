@@ -53,7 +53,7 @@ class EventSubscriptionHolder : EventHandler<Event> {
                             event::class.simpleName.toString(),
                             objectMapper.writeValueAsString(event),
                             conversationId,
-                            MDC.get("turnId")
+                            MDC.get("turnId"),
                         ),
                     )
                 } ?: run {
@@ -84,5 +84,5 @@ data class AgentEvent(
     val type: String,
     val payload: String,
     val conversationId: String?,
-    val turnId: String?
+    val turnId: String?,
 )
