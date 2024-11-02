@@ -5,15 +5,15 @@
 package ai.ancf.lmos.arc.agents
 
 import ai.ancf.lmos.arc.agents.conversation.Conversation
+import ai.ancf.lmos.arc.agents.events.BaseEvent
 import ai.ancf.lmos.arc.agents.events.Event
 import ai.ancf.lmos.arc.core.Result
-import java.time.Instant
 import kotlin.time.Duration
 
 /**
  * Collection of events that can be published by Agents.
  */
-sealed class AgentEvent : Event {
+sealed class AgentEvent : Event by BaseEvent() {
     abstract val agent: Agent<*, *>
 }
 
@@ -24,10 +24,8 @@ data class AgentFinishedEvent(
     val output: Result<Conversation, AgentFailedException>,
     val duration: Duration,
     val flowBreak: Boolean = false,
-    override val timestamp: Instant = Instant.now(),
 ) : AgentEvent()
 
 data class AgentStartedEvent(
     override val agent: Agent<*, *>,
-    override val timestamp: Instant = Instant.now(),
 ) : AgentEvent()

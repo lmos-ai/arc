@@ -4,9 +4,10 @@
 
 package ai.ancf.lmos.arc.spring
 
+import ai.ancf.lmos.arc.agents.events.BaseEvent
 import ai.ancf.lmos.arc.agents.events.Event
 import java.time.Instant
 
-class TestEvent : Event {
+class TestEvent : Event by BaseEvent() {
     override val timestamp: Instant = Instant.now()
 }

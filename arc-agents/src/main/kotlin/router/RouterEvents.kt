@@ -4,6 +4,7 @@
 
 package ai.ancf.lmos.arc.agents.router
 
+import ai.ancf.lmos.arc.agents.events.BaseEvent
 import ai.ancf.lmos.arc.agents.events.Event
 import java.time.Instant
 import kotlin.time.Duration
@@ -14,11 +15,11 @@ import kotlin.time.Duration
 
 data class RouterReadyEvent(
     override val timestamp: Instant = Instant.now(),
-) : Event
+) : Event by BaseEvent()
 
 data class RouterRoutedEvent(
     val request: String,
     val destination: Destination?,
     val duration: Duration,
     override val timestamp: Instant = Instant.now(),
-) : Event
+) : Event by BaseEvent()

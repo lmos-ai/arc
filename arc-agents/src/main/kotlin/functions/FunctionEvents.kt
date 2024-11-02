@@ -5,6 +5,7 @@
 package ai.ancf.lmos.arc.agents.functions
 
 import ai.ancf.lmos.arc.agents.ArcException
+import ai.ancf.lmos.arc.agents.events.BaseEvent
 import ai.ancf.lmos.arc.agents.events.Event
 import ai.ancf.lmos.arc.core.Result
 import java.time.Instant
@@ -18,7 +19,7 @@ data class LLMFunctionStartedEvent(
     val name: String,
     val param: Map<String, Any?>,
     override val timestamp: Instant = Instant.now(),
-) : Event
+) : Event by BaseEvent()
 
 data class LLMFunctionCalledEvent(
     val name: String,
@@ -26,4 +27,4 @@ data class LLMFunctionCalledEvent(
     val result: Result<String, ArcException>,
     val duration: Duration,
     override val timestamp: Instant = Instant.now(),
-) : Event
+) : Event by BaseEvent()

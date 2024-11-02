@@ -6,10 +6,9 @@ package ai.ancf.lmos.arc.agents.dsl
 
 import ai.ancf.lmos.arc.agents.conversation.Conversation
 import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
+import ai.ancf.lmos.arc.agents.withLogContext
+import kotlinx.coroutines.*
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.reflect.KClass
 
@@ -128,11 +127,19 @@ abstract class FilterContext(scriptingContext: DSLContext) : DSLContext by scrip
     }
 
     suspend operator fun AgentFilter.unaryPlus() {
-        this@FilterContext.mapLatest { msg -> filter(msg) }
+        this@FilterContext.mapLatest { msg ->
+            withLogContext(mapOf("filter" to (this@unaryPlus::class.simpleName ?: "unknown"))) {
+                filter(msg)
+            }
+        }
     }
 
     suspend operator fun KClass<out AgentFilter>.unaryPlus() {
-        this@FilterContext.mapLatest { msg -> context(this).filter(msg) }
+        this@FilterContext.mapLatest { msg ->
+            withLogContext(mapOf("filter" to (this::class.simpleName ?: "unknown"))) {
+                context(this@unaryPlus).filter(msg)
+            }
+        }
     }
 
     /**

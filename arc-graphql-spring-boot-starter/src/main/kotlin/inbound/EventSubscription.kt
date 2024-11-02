@@ -6,6 +6,7 @@ package ai.ancf.lmos.arc.graphql.inbound
 
 import ai.ancf.lmos.arc.agents.events.Event
 import ai.ancf.lmos.arc.agents.events.EventHandler
+import ai.ancf.lmos.arc.agents.withLogContext
 import com.expediagroup.graphql.generator.annotations.GraphQLDescription
 import com.expediagroup.graphql.server.operations.Subscription
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -46,19 +47,22 @@ class EventSubscriptionHolder : EventHandler<Event> {
         eventFlows.forEach { (id, channel) ->
             val conversationId = MDC.get("conversationId")
             log.info("Sending event: $id ${event::class.simpleName} ($conversationId)")
+            val logContext = MDC.getCopyOfContextMap() ?: emptyMap()
             scope.launch {
-                withTimeoutOrNull(20_000) {
-                    channel.send(
-                        AgentEvent(
-                            event::class.simpleName.toString(),
-                            objectMapper.writeValueAsString(event),
-                            conversationId,
-                            MDC.get("turnId"),
-                        ),
-                    )
-                } ?: run {
-                    log.warn("Event flow $id is slow, closing it")
-                    channel.close()
+                withLogContext(logContext) {
+                    withTimeoutOrNull(20_000) {
+                        channel.send(
+                            AgentEvent(
+                                event::class.simpleName.toString(),
+                                objectMapper.writeValueAsString(event),
+                                conversationId,
+                                MDC.get("turnId"),
+                            ),
+                        )
+                    } ?: run {
+                        log.warn("Event flow $id is slow, closing it")
+                        channel.close()
+                    }
                 }
             }
         }

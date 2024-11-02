@@ -4,6 +4,7 @@
 
 package ai.ancf.lmos.arc.agents.events
 
+import org.slf4j.MDC
 import java.time.Instant
 
 /**
@@ -11,4 +12,15 @@ import java.time.Instant
  */
 interface Event {
     val timestamp: Instant
+    val context: Map<String, String>
 }
+
+/**
+ * Base class for events.
+ * Can be used in combination with the 'by' keyword to implement the [Event] interface.
+ * Example, class MyEvent : Event by BaseEvent()
+ */
+class BaseEvent(
+    override val timestamp: Instant = Instant.now(),
+    override val context: Map<String, String> = MDC.getCopyOfContextMap() ?: emptyMap(),
+) : Event
