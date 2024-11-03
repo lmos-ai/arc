@@ -147,6 +147,7 @@ dependencies {
     kover(project("arc-api"))
     kover(project("arc-graphql-spring-boot-starter"))
     kover(project("arc-agent-client"))
+    kover(project("arc-assistants"))
 }
 
 repositories {
