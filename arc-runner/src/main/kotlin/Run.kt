@@ -58,6 +58,7 @@ open class RunArc : Runnable {
         properties.put("arc.chat.ui.enabled", "true")
         properties.put("arc.scripts.folder", agentsHome.absolutePath)
         properties.put("arc.scripts.hotReload.enable", "true")
+        properties.put("arc.subscriptions.events.enable", "true")
         properties.put("spring.main.banner-mode", "off")
         properties.put("logging.level.root", "WARN")
         properties.put("logging.level.ArcDSL", "DEBUG")

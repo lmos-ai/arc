@@ -38,7 +38,7 @@ open class NewAgent : Runnable {
             """
             |agent {
             |  name = "$name"
-            |  prompt = {
+            |  prompt {
             |    ${"\"\"\""}
             |      ### Role and Responsibilities ###
             |      You are a helpful assistant.
