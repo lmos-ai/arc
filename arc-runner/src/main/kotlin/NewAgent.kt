@@ -19,7 +19,7 @@ open class NewAgent : Runnable {
         index = "0",
         description = ["The name of the agent to create."],
     )
-    private var name: String = "test"
+    private var name: String = ""
 
     override fun run() {
         if (name.isEmpty()) {
