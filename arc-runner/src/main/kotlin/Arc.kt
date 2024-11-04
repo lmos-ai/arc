@@ -14,7 +14,7 @@ import java.util.*
     name = "arc",
     mixinStandardHelpOptions = true,
     version = ["1.0.0"],
-    subcommands = [RunArc::class, ListAgents::class, InstallAgent::class, SetProperty::class, OpenView::class],
+    subcommands = [RunArc::class, ListAgents::class, InstallAgent::class, SetProperty::class, OpenView::class, NewAgent::class],
     description = ["The Arc CLI."],
 )
 class Arc

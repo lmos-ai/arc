@@ -48,11 +48,11 @@ open class NewAgent : Runnable {
             |    ${"\"\"\""}
             |  }
             |}
-        """.trimMargin(), Charsets.UTF_8
+            """.trimMargin(),
+            Charsets.UTF_8,
         )
     }
 }
-
 
 fun main() {
     NewAgent().run()
