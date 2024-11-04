@@ -33,7 +33,7 @@ open class NewAgent : Runnable {
             agentFolder = File(currentFolder, "agents")
             agentFolder.mkdirs()
         }
-        val agentFile = File(agentFolder, "$name.kts")
+        val agentFile = File(agentFolder, "$name.agent.kts")
         agentFile.writeText(
             """
             |agent {
