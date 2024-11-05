@@ -7,6 +7,7 @@ import ai.ancf.lmos.arc.agents.dsl.BeanProvider
 import ai.ancf.lmos.arc.agents.dsl.extensions.html
 import ai.ancf.lmos.arc.agents.dsl.extensions.htmlDocument
 import ai.ancf.lmos.arc.core.getOrThrow
+import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.io.File
@@ -15,13 +16,13 @@ import kotlin.reflect.KClass
 class HtmlReaderTest {
 
     @Test
-    fun `test reading a html file`() {
+    fun `test reading a html file`(): Unit = runBlocking {
         val result = dslContext().html(File("src/test/resources/test.html").toURI().toString()).getOrThrow()
         assertThat(result.trim()).isEqualTo("This is a test!")
     }
 
     @Test
-    fun `test reading a html document`() {
+    fun `test reading a html document`(): Unit = runBlocking {
         val result = dslContext().htmlDocument(File("src/test/resources/test.html").toURI().toString()).getOrThrow()
         assertThat(result.select("p").text()).isEqualTo("test!")
     }

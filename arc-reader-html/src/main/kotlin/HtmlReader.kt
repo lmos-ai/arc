@@ -7,27 +7,53 @@ package ai.ancf.lmos.arc.agents.dsl.extensions
 import ai.ancf.lmos.arc.agents.dsl.DSLContext
 import ai.ancf.lmos.arc.core.closeWith
 import ai.ancf.lmos.arc.core.failWith
+import ai.ancf.lmos.arc.core.getOrThrow
 import ai.ancf.lmos.arc.core.result
+import kotlinx.coroutines.future.await
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import java.net.URI
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.net.http.HttpResponse
 
 /**
  * Extensions for reading html files.
  * @param uriString The URI of the html file.
  */
-fun DSLContext.htmlDocument(uriString: String) = result<Document, ReadHtmlException> {
-    try {
-        val inputStream = URI(uriString).toURL().openStream() closeWith { it.close() }
-        Jsoup.parse(inputStream, null, uriString)
-    } catch (ex: Exception) {
-        failWith { ReadHtmlException(uriString, ex) }
+suspend fun DSLContext.htmlDocument(uriString: String, followRedirects: Boolean = true, enableCookies: Boolean = true) =
+    result<Document, ReadHtmlException> {
+        try {
+            val htmlText = readUrl(uriString, followRedirects, enableCookies).getOrThrow()
+            Jsoup.parse(htmlText)
+        } catch (ex: Exception) {
+            failWith { ReadHtmlException(uriString, ex) }
+        }
     }
-}
 
-fun DSLContext.html(uriString: String) = result<String, ReadHtmlException> {
-    val doc = htmlDocument(uriString) failWith { it }
-    doc.text()
-}
+suspend fun DSLContext.html(uriString: String, followRedirects: Boolean = true, enableCookies: Boolean = true) =
+    result<String, ReadHtmlException> {
+        val doc = htmlDocument(uriString, followRedirects, enableCookies) failWith { it }
+        doc.text()
+    }
 
 class ReadHtmlException(url: String, cause: Exception) : Exception("Failed to read html at $url", cause)
+
+private suspend fun DSLContext.readUrl(
+    uriString: String,
+    followRedirects: Boolean = true,
+    enableCookies: Boolean = true,
+) =
+    result<String, Exception> {
+        val request = HttpRequest.newBuilder()
+            .header("content-type", "text/html;charset=UTF-8")
+            .uri(URI(uriString)).GET().build()
+        val client = HttpClient.newBuilder()
+            .apply {
+                if (enableCookies) cookieHandler(java.net.CookieManager())
+                if (followRedirects) followRedirects(HttpClient.Redirect.ALWAYS)
+            }
+            .build() closeWith { it.close() }
+        val response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).await()
+        response.body()
+    }
