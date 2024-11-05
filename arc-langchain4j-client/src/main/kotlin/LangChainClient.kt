@@ -133,7 +133,7 @@ class LangChainClient(
                             fn.parameters.parameters.associate {
                                 it.name to mapOf(
                                     "description" to it.description,
-                                    "type" to it.type.schemaType, // TODO
+                                    "type" to it.type.schemaType,
                                 ) + if (it.enum.isNotEmpty()) mapOf("enum" to it.enum) else emptyMap()
                             },
                         )
