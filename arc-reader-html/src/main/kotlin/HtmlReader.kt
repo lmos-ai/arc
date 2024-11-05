@@ -19,21 +19,29 @@ import java.net.http.HttpResponse
 
 /**
  * Extensions for reading html files.
- * @param uriString The URI of the html file.
+ * @param url The url of the html file.
  */
-suspend fun DSLContext.htmlDocument(uriString: String, followRedirects: Boolean = true, enableCookies: Boolean = true) =
+suspend fun DSLContext.htmlDocument(url: String, followRedirects: Boolean = true, enableCookies: Boolean = true) =
     result<Document, ReadHtmlException> {
         try {
-            val htmlText = readUrl(uriString, followRedirects, enableCookies).getOrThrow()
+            val htmlText = readUrl(url, followRedirects, enableCookies).getOrThrow()
             Jsoup.parse(htmlText)
         } catch (ex: Exception) {
-            failWith { ReadHtmlException(uriString, ex) }
+            failWith { ReadHtmlException(url, ex) }
         }
     }
 
-suspend fun DSLContext.html(uriString: String, followRedirects: Boolean = true, enableCookies: Boolean = true) =
+fun String.htmlDocument() = result<Document, ReadHtmlException> {
+    try {
+        Jsoup.parse(this@htmlDocument)
+    } catch (ex: Exception) {
+        failWith { ReadHtmlException("unknown", ex) }
+    }
+}
+
+suspend fun DSLContext.html(url: String, followRedirects: Boolean = true, enableCookies: Boolean = true) =
     result<String, ReadHtmlException> {
-        val doc = htmlDocument(uriString, followRedirects, enableCookies) failWith { it }
+        val doc = htmlDocument(url, followRedirects, enableCookies) failWith { it }
         doc.text()
     }
 

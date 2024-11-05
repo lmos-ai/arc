@@ -4,7 +4,6 @@
 
 import ai.ancf.lmos.arc.agents.dsl.BasicDSLContext
 import ai.ancf.lmos.arc.agents.dsl.BeanProvider
-import ai.ancf.lmos.arc.agents.dsl.extensions.html
 import ai.ancf.lmos.arc.agents.dsl.extensions.htmlDocument
 import ai.ancf.lmos.arc.core.getOrThrow
 import kotlinx.coroutines.runBlocking
@@ -17,13 +16,13 @@ class HtmlReaderTest {
 
     @Test
     fun `test reading a html file`(): Unit = runBlocking {
-        val result = dslContext().html(File("src/test/resources/test.html").toURI().toString()).getOrThrow()
-        assertThat(result.trim()).isEqualTo("This is a test!")
+        val result = File("src/test/resources/test.html").readText().htmlDocument().getOrThrow()
+        assertThat(result.text().trim()).isEqualTo("This is a test!")
     }
 
     @Test
     fun `test reading a html document`(): Unit = runBlocking {
-        val result = dslContext().htmlDocument(File("src/test/resources/test.html").toURI().toString()).getOrThrow()
+        val result = File("src/test/resources/test.html").readText().htmlDocument().getOrThrow()
         assertThat(result.select("p").text()).isEqualTo("test!")
     }
 
