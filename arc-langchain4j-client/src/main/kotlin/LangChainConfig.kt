@@ -6,7 +6,8 @@ package ai.ancf.lmos.arc.client.langchain4j
 
 data class LangChainConfig(
     val modelName: String,
-    val url: String,
+    val url: String?,
+    val apiKey: String?,
     val accessKeyId: String?,
     val secretAccessKey: String?,
 ) {

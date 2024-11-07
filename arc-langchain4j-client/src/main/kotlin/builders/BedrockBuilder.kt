@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.client.langchain4j.bedrock
+package ai.ancf.lmos.arc.client.langchain4j.builders
 
 import ai.ancf.lmos.arc.agents.llm.ChatCompletionSettings
 import ai.ancf.lmos.arc.client.langchain4j.LangChainConfig

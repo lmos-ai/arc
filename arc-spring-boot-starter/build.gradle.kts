@@ -13,7 +13,10 @@ dependencies {
 
     compileOnly("io.micrometer:micrometer-registry-atlas:1.12.3")
     compileOnly("com.azure:azure-identity:1.13.1")
-    compileOnly("dev.langchain4j:langchain4j-bedrock:0.35.0")
+
+    val langchain4jVersion = "0.35.0"
+    compileOnly("dev.langchain4j:langchain4j-bedrock:$langchain4jVersion")
+    compileOnly("dev.langchain4j:langchain4j-google-ai-gemini:$langchain4jVersion")
 
     implementation("org.springframework.boot:spring-boot-autoconfigure:3.3.3")
     implementation("org.springframework.boot:spring-boot-configuration-processor:3.3.3")
