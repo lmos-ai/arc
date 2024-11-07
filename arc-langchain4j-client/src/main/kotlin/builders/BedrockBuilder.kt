@@ -11,6 +11,7 @@ import dev.langchain4j.model.chat.ChatLanguageModel
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider
+import software.amazon.awssdk.regions.Region
 import java.util.concurrent.ConcurrentHashMap
 
 private val cache = ConcurrentHashMap<Pair<LangChainConfig, ChatCompletionSettings?>, ChatLanguageModel>()
@@ -29,6 +30,7 @@ fun bedrockBuilder(
                         AwsBasicCredentials.create(model.accessKeyId, model.secretAccessKey),
                     ),
                 )
+                .region(Region.of(model.url))
                 .model(model.modelName)
                 .apply {
                     if (settings != null) {

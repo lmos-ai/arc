@@ -52,3 +52,38 @@ class ParameterType(
     val items: ParameterType? = null,
     val properties: List<ParameterSchema>? = null,
 )
+
+/**
+ * Extension functions for ParameterSchema to convert it to a JsonSchema Map.
+ */
+fun ParameterSchema.toSchemaMap(): Pair<String, Map<String, Any>> = name to buildMap {
+    put("type", type.schemaType)
+    if (description.isNotEmpty()) put("description", description)
+    if (enum.isNotEmpty()) put("enum", enum)
+
+    when (type.schemaType) {
+        "array" -> {
+            val itemsObject = buildMap {
+                put("type", type.items?.schemaType ?: "unknown")
+
+                val items = type.items
+                if (items?.schemaType == "object") {
+                    items.properties?.let { propertiesList ->
+                        val properties = propertiesList.associate { it.name to it.toSchemaMap() }
+                        put("properties", properties)
+                    }
+                }
+            }
+            put("items", itemsObject)
+        }
+
+        "object" -> {
+            type.properties?.let { props ->
+                val properties = props.associate { it.name to it.toSchemaMap() }
+                put("properties", properties)
+            }
+        }
+    }
+}
+
+fun List<ParameterSchema>.toSchemaMap(): Map<String, Map<String, Any>> = associate { it.toSchemaMap() }

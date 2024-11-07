@@ -43,7 +43,7 @@ import kotlin.reflect.KClass
 import kotlin.time.toKotlinDuration
 
 @AutoConfiguration
-@Import(MetricConfiguration::class, ClientsConfiguration::class)
+@Import(MetricConfiguration::class, ClientsConfiguration::class, Langchain4jConfiguration::class)
 class ArcAutoConfiguration {
 
     @Bean

@@ -11,6 +11,7 @@ import ai.ancf.lmos.arc.agents.conversation.SystemMessage
 import ai.ancf.lmos.arc.agents.conversation.UserMessage
 import ai.ancf.lmos.arc.agents.events.EventPublisher
 import ai.ancf.lmos.arc.agents.functions.LLMFunction
+import ai.ancf.lmos.arc.agents.functions.toSchemaMap
 import ai.ancf.lmos.arc.agents.llm.ChatCompleter
 import ai.ancf.lmos.arc.agents.llm.ChatCompletionSettings
 import ai.ancf.lmos.arc.agents.llm.LLMFinishedEvent
@@ -129,14 +130,7 @@ class LangChainClient(
             .parameters(
                 ToolParameters.builder()
                     .apply {
-                        properties(
-                            fn.parameters.parameters.associate {
-                                it.name to mapOf(
-                                    "description" to it.description,
-                                    "type" to it.type.schemaType,
-                                ) + if (it.enum.isNotEmpty()) mapOf("enum" to it.enum) else emptyMap()
-                            },
-                        )
+                        properties(fn.parameters.parameters.toSchemaMap())
                         required(fn.parameters.required)
                     }
                     .build(),
