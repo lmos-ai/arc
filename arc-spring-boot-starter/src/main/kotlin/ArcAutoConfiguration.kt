@@ -111,8 +111,9 @@ class ArcAutoConfiguration {
         agentFactory: AgentFactory<*>,
         compiledAgents: List<CompiledAgentLoader>?,
         @Value("\${arc.scripts.folder:/agents}") agentsFolder: File,
+        eventPublisher: EventPublisher,
     ): ScriptingAgentLoader {
-        return ScriptingAgentLoader(agentFactory, agentScriptEngine).also { loader ->
+        return ScriptingAgentLoader(agentFactory, agentScriptEngine, eventPublisher).also { loader ->
             compiledAgents?.forEach(loader::loadCompiledAgent)
             if (agentsFolder.exists()) agentsFolder.walk().filter { it.isFile }.forEach { loader.loadAgents(it) }
         }
@@ -127,8 +128,9 @@ class ArcAutoConfiguration {
         functionScriptEngine: FunctionScriptEngine,
         beanProvider: BeanProvider,
         @Value("\${arc.scripts.folder:/agents}") agentsFolder: File,
+        eventPublisher: EventPublisher,
     ): ScriptingLLMFunctionLoader {
-        return ScriptingLLMFunctionLoader(beanProvider, functionScriptEngine).also { loader ->
+        return ScriptingLLMFunctionLoader(beanProvider, functionScriptEngine, eventPublisher).also { loader ->
             if (agentsFolder.exists()) agentsFolder.walk().filter { it.isFile }.forEach { loader.loadFunctions(it) }
         }
     }

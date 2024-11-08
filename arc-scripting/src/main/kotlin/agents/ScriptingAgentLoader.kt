@@ -8,6 +8,8 @@ import ai.ancf.lmos.arc.agents.Agent
 import ai.ancf.lmos.arc.agents.AgentLoader
 import ai.ancf.lmos.arc.agents.dsl.AgentFactory
 import ai.ancf.lmos.arc.agents.dsl.BasicAgentDefinitionContext
+import ai.ancf.lmos.arc.agents.events.EventPublisher
+import ai.ancf.lmos.arc.core.Failure
 import ai.ancf.lmos.arc.core.Result
 import ai.ancf.lmos.arc.core.Success
 import ai.ancf.lmos.arc.core.onFailure
@@ -24,6 +26,7 @@ import kotlin.script.experimental.api.ResultValue
 class ScriptingAgentLoader(
     private val agentFactory: AgentFactory<*>,
     private val agentScriptEngine: AgentScriptEngine,
+    private val eventPublisher: EventPublisher? = null,
 ) : AgentLoader {
 
     private val log = LoggerFactory.getLogger(this.javaClass)
@@ -64,8 +67,17 @@ class ScriptingAgentLoader(
             .filter { it.name.endsWith(".agent.kts") }
             .map { it.name to it.readText() }
             .forEach { (name, script) ->
-                loadAgent(script).onFailure {
+                val result = loadAgent(script).onFailure {
                     log.warn("Failed to load agents from script: $name!", it)
+                }
+                when (result) {
+                    is Success -> eventPublisher?.publish(AgentLoadedEvent(name))
+                    is Failure -> eventPublisher?.publish(
+                        AgentLoadedEvent(
+                            name,
+                            result.reason.message ?: "Unknown error!",
+                        ),
+                    )
                 }
             }
     }

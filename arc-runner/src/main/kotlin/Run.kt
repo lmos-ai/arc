@@ -44,7 +44,7 @@ open class RunArc : Runnable {
 
         val model = System.getenv("ARC_MODEL") ?: properties.getProperty("ARC_MODEL")
         if (model == null) {
-            println("Please set ARC_MODEL. For example: 'GPT-4o'...")
+            println("Please set ARC_MODEL. For example: 'gpt-4o'...")
             return
         }
         val client = System.getenv("ARC_CLIENT") ?: properties.getProperty("ARC_CLIENT")

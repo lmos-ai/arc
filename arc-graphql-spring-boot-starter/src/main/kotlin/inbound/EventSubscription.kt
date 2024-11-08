@@ -46,7 +46,7 @@ class EventSubscriptionHolder : EventHandler<Event> {
         if (eventFlows.isEmpty()) return
         eventFlows.forEach { (id, channel) ->
             val conversationId = MDC.get("conversationId")
-            log.info("Sending event: $id ${event::class.simpleName} ($conversationId)")
+            log.debug("Sending event: $id ${event}")
             val logContext = MDC.getCopyOfContextMap() ?: emptyMap()
             scope.launch {
                 withLogContext(logContext) {

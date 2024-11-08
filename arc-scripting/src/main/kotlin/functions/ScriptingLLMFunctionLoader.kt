@@ -6,8 +6,10 @@ package ai.ancf.lmos.arc.scripting.functions
 
 import ai.ancf.lmos.arc.agents.dsl.BasicFunctionDefinitionContext
 import ai.ancf.lmos.arc.agents.dsl.BeanProvider
+import ai.ancf.lmos.arc.agents.events.EventPublisher
 import ai.ancf.lmos.arc.agents.functions.LLMFunction
 import ai.ancf.lmos.arc.agents.functions.LLMFunctionLoader
+import ai.ancf.lmos.arc.core.Failure
 import ai.ancf.lmos.arc.core.Result
 import ai.ancf.lmos.arc.core.Success
 import ai.ancf.lmos.arc.core.onFailure
@@ -20,6 +22,7 @@ import kotlin.script.experimental.api.ResultValue
 class ScriptingLLMFunctionLoader(
     private val beanProvider: BeanProvider,
     private val functionScriptEngine: FunctionScriptEngine,
+    private val eventPublisher: EventPublisher? = null,
 ) : LLMFunctionLoader {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -56,8 +59,17 @@ class ScriptingLLMFunctionLoader(
             .filter { it.name.endsWith(".functions.kts") }
             .map { it.name to it.readText() }
             .forEach { (name, script) ->
-                loadFunction(script).onFailure {
+                val result = loadFunction(script).onFailure {
                     log.warn("Failed to load functions from script: $name!", it)
+                }
+                when (result) {
+                    is Success -> eventPublisher?.publish(FunctionLoadedEvent(name))
+                    is Failure -> eventPublisher?.publish(
+                        FunctionLoadedEvent(
+                            name,
+                            result.reason.message ?: "Unknown error!",
+                        ),
+                    )
                 }
             }
     }
