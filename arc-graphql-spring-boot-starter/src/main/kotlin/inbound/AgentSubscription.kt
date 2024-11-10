@@ -49,7 +49,7 @@ class AgentSubscription(
                         user = User(request.userContext.userId),
                         conversationId = request.conversationContext.conversationId,
                         currentTurnId = request.conversationContext.turnId
-                            ?: request.messages.last().turnId
+                            ?: request.messages.lastOrNull()?.turnId
                             ?: request.messages.size.toString(),
                         transcript = request.messages.convert(),
                         anonymizationEntities = anonymizationEntities.entities,
