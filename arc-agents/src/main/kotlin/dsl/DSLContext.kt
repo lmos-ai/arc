@@ -56,7 +56,7 @@ class BasicDSLContext(private val beanProvider: BeanProvider) : DSLContext {
 /**
  * Used to run functions in a DSL context with a set of beans.
  */
-fun withDSLContext(beans: Set<Any>, block: DSLContext.() -> Unit) {
+fun withDSLContext(beans: Set<Any> = emptySet(), block: DSLContext.() -> Unit) {
     BasicDSLContext(SetBeanProvider(beans)).block()
 }
 

@@ -4,6 +4,7 @@
 
 package ai.ancf.lmos.arc.agents.dsl.extensions
 
+import ai.ancf.lmos.arc.agents.dsl.DSLContext
 import java.io.File
 
 /**
@@ -14,7 +15,7 @@ import java.io.File
  * Load a resource from the classpath or local filesystem.
  * If the resource is on the classpath, it will be loaded otherwise it will try to load it from the local filesystem.
  */
-fun local(resource: String): String? {
+fun DSLContext.local(resource: String): String? {
     return Thread.currentThread().contextClassLoader.getResourceAsStream(resource)?.use { stream ->
         stream.bufferedReader().readText()
     } ?: File(resource).takeIf { it.exists() }?.readText()
