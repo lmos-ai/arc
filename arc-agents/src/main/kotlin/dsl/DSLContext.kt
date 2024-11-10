@@ -54,6 +54,13 @@ class BasicDSLContext(private val beanProvider: BeanProvider) : DSLContext {
 }
 
 /**
+ * Used to run functions in a DSL context with a set of beans.
+ */
+fun withDSLContext(beans: Set<Any>, block: DSLContext.() -> Unit) {
+    BasicDSLContext(SetBeanProvider(beans)).block()
+}
+
+/**
  * A version of the DSLContext that can be used in the tools section of the agent definition.
  * This will override the + operator for strings to build a list of tools instead of an output string.
  */

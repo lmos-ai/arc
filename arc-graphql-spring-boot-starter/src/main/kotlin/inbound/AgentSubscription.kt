@@ -47,6 +47,10 @@ class AgentSubscription(
                 agent.execute(
                     Conversation(
                         user = User(request.userContext.userId),
+                        conversationId = request.conversationContext.conversationId,
+                        currentTurnId = request.conversationContext.turnId
+                            ?: request.messages.last().turnId
+                            ?: request.messages.size.toString(),
                         transcript = request.messages.convert(),
                         anonymizationEntities = anonymizationEntities.entities,
                     ),
