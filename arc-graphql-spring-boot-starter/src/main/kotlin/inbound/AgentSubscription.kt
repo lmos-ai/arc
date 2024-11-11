@@ -10,6 +10,7 @@ import ai.ancf.lmos.arc.agents.User
 import ai.ancf.lmos.arc.agents.conversation.AssistantMessage
 import ai.ancf.lmos.arc.agents.conversation.Conversation
 import ai.ancf.lmos.arc.agents.conversation.latest
+import ai.ancf.lmos.arc.agents.events.MessagePublisherChannel
 import ai.ancf.lmos.arc.agents.getAgentByName
 import ai.ancf.lmos.arc.api.AgentRequest
 import ai.ancf.lmos.arc.api.AgentResult
@@ -20,7 +21,13 @@ import ai.ancf.lmos.arc.graphql.*
 import ai.ancf.lmos.arc.graphql.context.AnonymizationEntities
 import com.expediagroup.graphql.generator.annotations.GraphQLDescription
 import com.expediagroup.graphql.server.operations.Subscription
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ProducerScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.channelFlow
 import org.slf4j.LoggerFactory
 import java.time.Duration
 
@@ -32,54 +39,63 @@ class AgentSubscription(
 ) : Subscription {
 
     private val log = LoggerFactory.getLogger(javaClass)
+    private val scope = CoroutineScope(SupervisorJob())
 
     @GraphQLDescription("Executes an Agent and returns the results. If no agent is specified, the first agent is used.")
-    fun agent(agentName: String? = null, request: AgentRequest) = flow {
-        val agent = findAgent(agentName, request)
-        val anonymizationEntities =
-            AnonymizationEntities(request.conversationContext.anonymizationEntities.convertConversationEntities())
-        val start = System.nanoTime()
+    fun agent(agentName: String? = null, request: AgentRequest) = channelFlow {
+        coroutineScope {
+            val agent = findAgent(agentName, request)
+            val anonymizationEntities =
+                AnonymizationEntities(request.conversationContext.anonymizationEntities.convertConversationEntities())
+            val start = System.nanoTime()
+            val messageChannel = Channel<AssistantMessage>()
 
-        log.info("Received request: ${request.systemContext}")
+            log.info("Received request: ${request.systemContext}")
 
-        val result = contextHandler.inject(request) {
-            withLogContext(agent.name, request) {
-                agent.execute(
-                    Conversation(
-                        user = User(request.userContext.userId),
-                        conversationId = request.conversationContext.conversationId,
-                        currentTurnId = request.conversationContext.turnId
-                            ?: request.messages.lastOrNull()?.turnId
-                            ?: request.messages.size.toString(),
-                        transcript = request.messages.convert(),
-                        anonymizationEntities = anonymizationEntities.entities,
-                    ),
-                    setOf(request, anonymizationEntities),
-                )
+            async {
+                sendIntermediateMessage(messageChannel, start, anonymizationEntities)
             }
-        }
 
-        val responseTime = Duration.ofNanos(System.nanoTime() - start).toMillis() / 1000.0
-        when (result) {
-            is Success -> emit(
-                AgentResult(
-                    status = result.value.classification.toString(),
-                    responseTime = responseTime,
-                    messages = listOf(result.value.latest<AssistantMessage>().toMessage()),
-                    anonymizationEntities = anonymizationEntities.entities.convertAPIEntities(),
-                ),
-            )
+            val result = contextHandler.inject(request) {
+                withLogContext(agent.name, request) {
+                    agent.execute(
+                        Conversation(
+                            user = User(request.userContext.userId),
+                            conversationId = request.conversationContext.conversationId,
+                            currentTurnId = request.conversationContext.turnId
+                                ?: request.messages.lastOrNull()?.turnId
+                                ?: request.messages.size.toString(),
+                            transcript = request.messages.convert(),
+                            anonymizationEntities = anonymizationEntities.entities,
+                        ),
+                        setOf(request, anonymizationEntities, MessagePublisherChannel(messageChannel)),
+                    )
+                }
+            }
 
-            is Failure -> {
-                val handledResult = (errorHandler?.handleError(result.reason) ?: result).getOrThrow()
-                emit(
+            val responseTime = Duration.ofNanos(System.nanoTime() - start).toMillis() / 1000.0
+            when (result) {
+                is Success -> send(
                     AgentResult(
+                        status = result.value.classification.toString(),
                         responseTime = responseTime,
-                        messages = listOf(handledResult.toMessage()),
-                        anonymizationEntities = emptyList(),
+                        messages = listOf(result.value.latest<AssistantMessage>().toMessage()),
+                        anonymizationEntities = anonymizationEntities.entities.convertAPIEntities(),
                     ),
                 )
+
+                is Failure -> {
+                    val handledResult = (errorHandler?.handleError(result.reason) ?: result).getOrThrow()
+                    send(
+                        AgentResult(
+                            responseTime = responseTime,
+                            messages = listOf(handledResult.toMessage()),
+                            anonymizationEntities = emptyList(),
+                        ),
+                    )
+                }
             }
+            messageChannel.close()
         }
     }
 
@@ -88,4 +104,22 @@ class AgentSubscription(
             ?: agentResolver?.resolveAgent(agentName, request) as ChatAgent?
             ?: agentProvider.getAgents().firstOrNull() as ChatAgent?
             ?: error("No Agent defined!")
+
+    private suspend fun ProducerScope<AgentResult>.sendIntermediateMessage(
+        messageChannel: Channel<AssistantMessage>,
+        startTime: Long,
+        anonymizationEntities: AnonymizationEntities
+    ) {
+        for (message in messageChannel) {
+            log.debug("Sending intermediate message: $message")
+            val responseTime = Duration.ofNanos(System.nanoTime() - startTime).toMillis() / 1000.0
+            trySend(
+                AgentResult(
+                    responseTime = responseTime,
+                    messages = listOf(message.toMessage()),
+                    anonymizationEntities = anonymizationEntities.entities.convertAPIEntities(),
+                )
+            )
+        }
+    }
 }
