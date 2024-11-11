@@ -108,7 +108,7 @@ class AgentSubscription(
     private suspend fun ProducerScope<AgentResult>.sendIntermediateMessage(
         messageChannel: Channel<AssistantMessage>,
         startTime: Long,
-        anonymizationEntities: AnonymizationEntities
+        anonymizationEntities: AnonymizationEntities,
     ) {
         for (message in messageChannel) {
             log.debug("Sending intermediate message: $message")
@@ -118,7 +118,7 @@ class AgentSubscription(
                     responseTime = responseTime,
                     messages = listOf(message.toMessage()),
                     anonymizationEntities = anonymizationEntities.entities.convertAPIEntities(),
-                )
+                ),
             )
         }
     }
