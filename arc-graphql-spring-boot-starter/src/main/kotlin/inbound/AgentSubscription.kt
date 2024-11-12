@@ -21,8 +21,6 @@ import ai.ancf.lmos.arc.graphql.*
 import ai.ancf.lmos.arc.graphql.context.AnonymizationEntities
 import com.expediagroup.graphql.generator.annotations.GraphQLDescription
 import com.expediagroup.graphql.server.operations.Subscription
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ProducerScope

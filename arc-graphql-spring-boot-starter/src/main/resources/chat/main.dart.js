@@ -43486,7 +43486,7 @@ o=this.b.lz(0,A.aL3(n,n,s,n,n,n,n,n,r,p),p)
 return new A.jh(new A.alP(this),o,o.$ti.h("jh<aP.T,+(f,D?)>"))},
 ass(){var s,r,q,p=null
 this.c.B8(B.hn,"Subscribing to events...",p,p)
-s=A.aIf(A.Ve("   subscription events {\n    events {\n      type\n      payload\n    }\n}\n  ",p))
+s=A.aIf(A.Ve("   subscription events {\n    events {\n      type\n      payload\n      conversationId\n    }\n}\n  ",p))
 r=t.X
 q=this.b.lz(0,A.aL3(p,p,new A.AN(A.a([new A.rr()],t.TP)).mv(s),p,p,p,p,p,B.cq,r),r)
 return new A.jh(new A.alL(this),q,q.$ti.h("jh<aP.T,em?>"))},
@@ -44448,7 +44448,7 @@ A.a3_.prototype={
 F(a){return A.wA(new A.aDx(this))}}
 A.aDx.prototype={
 $3(a,b,c){var s=null,r=b.c1(0,$.rn(),t.fs),q=A.rz(s,s,!0,s,s,1,s,s,s,!1,s,!1,s,s,s,s,!0,s,s,s,s,s,A.br("Settings",s,s,s,s,s,s),s,s,s,1,s),p=this.a,o=A.wA(new A.aDq(p)),n=t.p
-n=A.aQg(A.a([A.dK(A.a([new A.bt(new A.aw(8,8,8,8),A.lJ(s,A.jF(B.GJ,A.X(a).ax.k3,s,16),new A.aDr(b),s,s),s),new A.bt(new A.aw(8,8,8,8),A.br("1.6.0",s,s,s,s,s,s),s),new A.bt(new A.aw(8,8,8,8),A.b5f("Licenses",new A.aDs(a)),s)],n),B.w,B.hz,B.I),A.WD(new A.wC("User Context",A.JB(r.gwt().bw(),s,"  "),new A.aDt(b),new A.aDu(b),s),16),B.An,A.WD(new A.wC("System Context",A.JB(r.gtg().bw(),s,"  "),new A.aDv(b),new A.aDw(b),s),16)],n),s,s)
+n=A.aQg(A.a([A.dK(A.a([new A.bt(new A.aw(8,8,8,8),A.lJ(s,A.jF(B.GJ,A.X(a).ax.k3,s,16),new A.aDr(b),s,s),s),new A.bt(new A.aw(8,8,8,8),A.br("1.7.0",s,s,s,s,s,s),s),new A.bt(new A.aw(8,8,8,8),A.b5f("Licenses",new A.aDs(a)),s)],n),B.w,B.hz,B.I),A.WD(new A.wC("User Context",A.JB(r.gwt().bw(),s,"  "),new A.aDt(b),new A.aDu(b),s),16),B.An,A.WD(new A.wC("System Context",A.JB(r.gtg().bw(),s,"  "),new A.aDv(b),new A.aDw(b),s),16)],n),s,s)
 return A.uF(q,new A.DA(n,B.m_,p.d),o,s,s)},
 $C:"$3",
 $R:3,
