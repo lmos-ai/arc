@@ -39,7 +39,6 @@ class AgentSubscription(
 ) : Subscription {
 
     private val log = LoggerFactory.getLogger(javaClass)
-    private val scope = CoroutineScope(SupervisorJob())
 
     @GraphQLDescription("Executes an Agent and returns the results. If no agent is specified, the first agent is used.")
     fun agent(agentName: String? = null, request: AgentRequest) = channelFlow {
