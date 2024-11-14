@@ -8,7 +8,7 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-autoconfigure:3.3.2")
     implementation("org.springframework.boot:spring-boot-configuration-processor:3.3.2")
-    implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive:3.3.2")
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive:3.3.5")
 
     testImplementation("org.springframework.boot:spring-boot-testcontainers:3.3.2")
     testImplementation("org.springframework.boot:spring-boot-starter-test:3.3.2")
