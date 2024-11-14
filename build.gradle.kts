@@ -11,7 +11,7 @@ import java.net.URI
 
 plugins {
     kotlin("jvm") version "2.0.10" apply false
-    kotlin("plugin.serialization") version "2.0.10" apply false
+    kotlin("plugin.serialization") version "2.0.21" apply false
     id("org.jetbrains.dokka") version "1.9.20"
     id("org.cyclonedx.bom") version "1.8.2" apply false
     id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
