@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package ai.ancf.lmos.arc.guardrail.filters
 
 import ai.ancf.lmos.arc.agents.User
