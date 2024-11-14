@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.7
-      - uses: gradle/actions/wrapper-validation@v4.1.0
+      - uses: gradle/actions/wrapper-validation@v4.2.0
   build:
 
     runs-on: ubuntu-latest
@@ -34,7 +34,7 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@0d30c9111cf47a838eb69c06d13f3f51ab2ed76f
+        uses: gradle/actions/setup-gradle@19ff74e0a62647d101c513c30e9f2e3f17b42510
       - name: Build with Gradle Wrapper
         run: ./gradlew build
 
@@ -53,4 +53,4 @@ jobs:
       # Generates and submits a dependency graph, enabling Dependabot Alerts for all project dependencies.
       # See: https://github.com/gradle/actions/blob/main/dependency-submission/README.md
       - name: Generate and submit dependency graph
-        uses: gradle/actions/dependency-submission@0d30c9111cf47a838eb69c06d13f3f51ab2ed76f
+        uses: gradle/actions/dependency-submission@19ff74e0a62647d101c513c30e9f2e3f17b42510
