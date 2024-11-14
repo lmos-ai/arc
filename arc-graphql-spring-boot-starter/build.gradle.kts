@@ -9,7 +9,7 @@ dependencies {
     implementation(project(":arc-api"))
 
     // Graphql
-    implementation("com.expediagroup:graphql-kotlin-spring-server:7.1.4") {
+    implementation("com.expediagroup:graphql-kotlin-spring-server:8.2.1") {
         exclude(group = "com.graphql-java", module = "graphql-java")
     }
     implementation("com.graphql-java:graphql-java:21.5")
