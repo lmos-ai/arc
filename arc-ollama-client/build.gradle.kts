@@ -8,10 +8,10 @@ dependencies {
 
     // Logging
     implementation("org.slf4j:slf4j-api:1.7.25")
-    implementation("io.ktor:ktor-client-cio-jvm:2.3.10")
+    implementation("io.ktor:ktor-client-cio-jvm:3.0.1")
 
     // ktor
-    val ktorVersion = "2.3.10"
+    val ktorVersion = "3.0.1"
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
