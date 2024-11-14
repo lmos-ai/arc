@@ -108,7 +108,7 @@ subprojects {
 
     if (!project.name.endsWith("-bom")) {
         dependencies {
-            val kotlinXVersion = "1.8.1"
+            val kotlinXVersion = "1.9.0"
             "implementation"("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:$kotlinXVersion")
             "implementation"("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$kotlinXVersion")
             "implementation"("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:$kotlinXVersion")
