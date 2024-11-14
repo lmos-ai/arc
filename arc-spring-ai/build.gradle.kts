@@ -20,7 +20,7 @@ dependencies {
 
     // Ktor Server for tests
     testImplementation("io.ktor:ktor-server-core-jvm:2.3.11")
-    testImplementation("io.ktor:ktor-server-netty-jvm:2.3.11")
+    testImplementation("io.ktor:ktor-server-netty-jvm:3.0.1")
 }
 
 repositories {
