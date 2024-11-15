@@ -34,3 +34,13 @@ precedence = "override"
 SPDX-FileCopyrightText = "2024 Deutsche Telekom AG"
 SPDX-License-Identifier = "Apache-2.0"
 
+[[annotations]]
+path = ["docs/docs/**",
+    "docs/src/**",
+    "docs/*.json",
+    "docs/blog/**",
+    "docs/static/**",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "The original author or authors."
+SPDX-License-Identifier = "Apache-2.0"
