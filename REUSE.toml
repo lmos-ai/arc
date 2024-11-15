@@ -40,6 +40,7 @@ path = ["docs/docs/**",
     "docs/*.json",
     "docs/blog/**",
     "docs/static/**",
+    "docs/public/**",
 ]
 precedence = "override"
 SPDX-FileCopyrightText = "The original author or authors."
