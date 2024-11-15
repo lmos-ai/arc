@@ -53,3 +53,4 @@ bin/
 .kotlin
 /docs/node_modules/
 /docs/.docusaurus/
+/docs-src/node_modules/
