@@ -10,7 +10,7 @@ import java.util.*
 
 @Serializable
 data class Conversation(
-    val user: User,
+    val user: User? = null,
     val conversationId: String = UUID.randomUUID().toString(),
     val classification: ConversationClassification? = null,
     val currentTurnId: String = UUID.randomUUID().toString(),

@@ -76,7 +76,7 @@ class ChatAgent(
 
     private suspend fun doExecute(conversation: Conversation, model: String?, context: Set<Any>) =
         result<Conversation, Exception> {
-            val fullContext = context + setOf(conversation, conversation.user)
+            val fullContext = context + setOf(conversation, conversation.user).filterNotNull()
             val compositeBeanProvider = CompositeBeanProvider(fullContext, beanProvider)
             val scriptingContext = BasicDSLContext(compositeBeanProvider)
             val chatCompleter = compositeBeanProvider.chatCompleter(model = model)

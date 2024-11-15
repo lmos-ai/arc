@@ -19,7 +19,7 @@ data class AgentRequest(
 
 @Serializable
 data class UserContext(
-    val userId: String,
+    val userId: String? = null,
     val userToken: String? = null,
     val profile: List<ProfileEntry>,
 )

@@ -22,13 +22,21 @@ enum class MemoryScope {
 suspend fun DSLContext.memory(key: String, value: Any?, scope: MemoryScope = SHORT_TERM) {
     val conversation = get<Conversation>()
     val memory = get<Memory>()
+    val userId = conversation.user?.id
+
+    if (LONG_TERM == scope && userId == null) {
+        kotlin.error("LONG_TERM is only available when a user id is present!")
+    }
+
     when (scope) {
-        SHORT_TERM -> memory.storeShortTerm(conversation.user.id, key, value, conversation.conversationId)
-        LONG_TERM -> memory.storeLongTerm(conversation.user.id, key, value)
+        SHORT_TERM -> memory.storeShortTerm(userId ?: "unknown", key, value, conversation.conversationId)
+        LONG_TERM -> memory.storeLongTerm(userId!!, key, value)
     }
 }
 
 suspend fun DSLContext.memory(key: String): Any? {
     val conversation = get<Conversation>()
-    return get<Memory>().fetch(conversation.user.id, key, conversation.conversationId)
+    val memory = get<Memory>()
+    val userId = conversation.user?.id
+    return memory.fetch(userId ?: "unknown", key, conversation.conversationId)
 }
