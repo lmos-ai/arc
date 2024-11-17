@@ -38,6 +38,7 @@ open class NewAgent : Runnable {
             """
             |agent {
             |  name = "$name"
+            |  tools = AllTools
             |  prompt {
             |    ${"\"\"\""}
             |      ### Role and Responsibilities ###
@@ -52,8 +53,4 @@ open class NewAgent : Runnable {
             Charsets.UTF_8,
         )
     }
-}
-
-fun main() {
-    NewAgent().run()
 }

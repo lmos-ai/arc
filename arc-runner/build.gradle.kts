@@ -9,6 +9,7 @@ dependencies {
     implementation(project(":arc-azure-client"))
     implementation(project(":arc-spring-boot-starter"))
     implementation(project(":arc-graphql-spring-boot-starter"))
+    implementation(project(":arc-reader-html"))
 
     implementation("com.graphql-java:graphql-java:21.5")
     implementation("com.azure:azure-identity:1.13.1")
