@@ -8,15 +8,14 @@ import ai.ancf.lmos.arc.agents.conversation.AssistantMessage
 import ai.ancf.lmos.arc.agents.conversation.Conversation
 import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
 import ai.ancf.lmos.arc.agents.conversation.toConversation
-import ai.ancf.lmos.arc.agents.dsl.AgentDefinition
-import ai.ancf.lmos.arc.agents.dsl.BasicAgentDefinitionContext
-import ai.ancf.lmos.arc.agents.dsl.ChatAgentFactory
-import ai.ancf.lmos.arc.agents.dsl.CoroutineBeanProvider
-import ai.ancf.lmos.arc.agents.dsl.DateFilter
-import ai.ancf.lmos.arc.agents.dsl.NumberFilter
+import ai.ancf.lmos.arc.agents.dsl.*
+import ai.ancf.lmos.arc.agents.functions.LLMFunction
+import ai.ancf.lmos.arc.agents.functions.LLMFunctionException
 import ai.ancf.lmos.arc.agents.functions.LLMFunctionProvider
+import ai.ancf.lmos.arc.agents.functions.ParametersSchema
 import ai.ancf.lmos.arc.agents.llm.ChatCompleter
 import ai.ancf.lmos.arc.agents.llm.ChatCompleterProvider
+import ai.ancf.lmos.arc.core.Result
 import ai.ancf.lmos.arc.core.Success
 import ai.ancf.lmos.arc.core.getOrThrow
 import io.mockk.clearMocks
@@ -62,5 +61,15 @@ open class TestBase {
     @BeforeEach
     fun cleanMocks() {
         clearMocks(chatCompleter, functionProvider)
+    }
+}
+
+class TestFunction(override val name: String = "test") : LLMFunction {
+    override val parameters = ParametersSchema(emptyList(), emptyList())
+    override val description: String = "test"
+    override val group: String? = null
+    override val isSensitive: Boolean = false
+    override suspend fun execute(input: Map<String, Any?>): Result<String, LLMFunctionException> {
+        return Success("test")
     }
 }

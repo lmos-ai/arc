@@ -45,7 +45,8 @@ open class NewFunction : Runnable {
             |) { (url) ->
             |   httpGet(url.toString())
             |}
-            """.trimMargin(), Charsets.UTF_8)
+            """.trimMargin(),
+            Charsets.UTF_8,
+        )
     }
 }
-
