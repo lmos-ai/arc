@@ -16,6 +16,8 @@ import ai.ancf.lmos.arc.core.Success
 interface LLMFunctionProvider {
 
     fun provide(functionName: String): Result<LLMFunction, FunctionNotFoundException>
+
+    fun provideAll(): List<LLMFunction>
 }
 
 /**
@@ -47,6 +49,8 @@ class CompositeLLMFunctionProvider(
     override fun provide(functionName: String): Result<LLMFunction, FunctionNotFoundException> =
         functions().firstOrNull { it.name == functionName }?.let { Success(it) }
             ?: Failure(FunctionNotFoundException("No matching LLMFunction found for name: $functionName"))
+
+    override fun provideAll(): List<LLMFunction> = functions()
 
     private fun functions() = loaders.flatMap { it.load() } + functions
 }

@@ -35,15 +35,21 @@ class BasicAgentDefinitionContext(
 class AgentDefinition {
     lateinit var name: String
     var description: String = ""
+
     var model: () -> String? = { null }
+    fun model(fn: () -> String) {
+        model = fn
+    }
+
     var settings: () -> ChatCompletionSettings? = { null }
+    fun settings(fn: () -> ChatCompletionSettings) {
+        settings = fn
+    }
 
     private var _toolsProvider: suspend DSLContext.() -> Unit = { tools.forEach { +it } }
     val toolsProvider get() = _toolsProvider
 
-    @Deprecated("Use the tools function instead. For example, tools { +\"myFunctions\" }")
     var tools: List<String> = emptyList()
-
     fun tools(fn: suspend DSLContext.() -> Unit) {
         _toolsProvider = {
             tools.forEach { +it }

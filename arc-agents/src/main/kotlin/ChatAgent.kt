@@ -115,13 +115,20 @@ class ChatAgent(
         val toolsContext = ToolsDSLContext(context)
         val tools = toolsProvider.invoke(toolsContext).let { toolsContext.tools }
         return if (tools.isNotEmpty()) {
-            val functionProvider = beanProvider.provide(LLMFunctionProvider::class)
-            tools.map {
-                val fn = functionProvider.provide(it).getOrThrow()
+            getFunctions(tools).map { fn ->
                 if (fn is FunctionWithContext) fn.withContext(context) else fn
             }
         } else {
             null
+        }
+    }
+
+    private suspend fun getFunctions(tools: List<String>): List<LLMFunction> {
+        val functionProvider = beanProvider.provide(LLMFunctionProvider::class)
+        return if (tools.contains(AllTools.symbol)) {
+            functionProvider.provideAll()
+        } else {
+            tools.map { functionProvider.provide(it).getOrThrow() }
         }
     }
 
