@@ -1,0 +1,25 @@
+{
+  "id": "dsl/index",
+  "title": "Agent DSL",
+  "description": "At the heart of the Arc Agents framework is the Agent DSL.",
+  "source": "@site/docs/01-dsl/index.md",
+  "sourceDirName": "01-dsl",
+  "slug": "/dsl/",
+  "permalink": "/arc/docs/dsl/",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Agent DSL"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Arc Agents",
+    "permalink": "/arc/docs/index"
+  },
+  "next": {
+    "title": "Defining Agents",
+    "permalink": "/arc/docs/dsl/defining_agents"
+  }
+}

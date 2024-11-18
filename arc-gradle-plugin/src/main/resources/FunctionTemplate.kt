@@ -15,4 +15,6 @@ class Functions {
     fun build() {
     //@@CODE@@
     }
+
+    //@@FUNCTIONS@@
 }

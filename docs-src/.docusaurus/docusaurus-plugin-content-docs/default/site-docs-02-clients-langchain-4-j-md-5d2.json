@@ -1,0 +1,25 @@
+{
+  "id": "clients/langchain4j",
+  "title": "LangChain4J",
+  "description": "LangChain4J is a Java library that provides a uniform interface to multiple language models.",
+  "source": "@site/docs/02-clients/langchain4j.md",
+  "sourceDirName": "02-clients",
+  "slug": "/clients/langchain4j",
+  "permalink": "/arc/docs/clients/langchain4j",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "LangChain4J"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Google Gemini",
+    "permalink": "/arc/docs/clients/gemini"
+  },
+  "next": {
+    "title": "Ollama Client",
+    "permalink": "/arc/docs/clients/ollama"
+  }
+}

@@ -1,0 +1,198 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "path": "/arc/docs",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": true,
+          "path": "/arc/docs",
+          "mainDocId": "index",
+          "docs": [
+            {
+              "id": "api",
+              "path": "/arc/docs/api",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "cli",
+              "path": "/arc/docs/cli",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "clients/azure",
+              "path": "/arc/docs/clients/azure",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "clients/gemini",
+              "path": "/arc/docs/clients/gemini",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "clients/index",
+              "path": "/arc/docs/clients/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "clients/langchain4j",
+              "path": "/arc/docs/clients/langchain4j",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "clients/ollama",
+              "path": "/arc/docs/clients/ollama",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "clients/springai",
+              "path": "/arc/docs/clients/springai",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "cookbook/index",
+              "path": "/arc/docs/cookbook/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "cookbook/summarizer",
+              "path": "/arc/docs/cookbook/summarizer",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "cookbook/weather",
+              "path": "/arc/docs/cookbook/weather",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "dsl/accessing_beans",
+              "path": "/arc/docs/dsl/accessing_beans",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "dsl/defining_agents",
+              "path": "/arc/docs/dsl/defining_agents",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "dsl/defining_functions",
+              "path": "/arc/docs/dsl/defining_functions",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "dsl/extensions",
+              "path": "/arc/docs/dsl/extensions",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "dsl/filters",
+              "path": "/arc/docs/dsl/filters",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "dsl/index",
+              "path": "/arc/docs/dsl/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "eventing/index",
+              "path": "/arc/docs/eventing/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "graphql",
+              "path": "/arc/docs/graphql",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "index",
+              "path": "/arc/docs/index",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "langchain",
+              "path": "/arc/docs/langchain",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "manual_setup",
+              "path": "/arc/docs/manual_setup",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "memory/index",
+              "path": "/arc/docs/memory/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "packages",
+              "path": "/arc/docs/packages",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "quickstart",
+              "path": "/arc/docs/quickstart",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "readers/html",
+              "path": "/arc/docs/readers/html",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "readers/index",
+              "path": "/arc/docs/readers/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "readers/pdf",
+              "path": "/arc/docs/readers/pdf",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "semantic_router",
+              "path": "/arc/docs/semantic_router",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "spring/agent-beans",
+              "path": "/arc/docs/spring/agent-beans",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "spring/index",
+              "path": "/arc/docs/spring/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "spring/integration",
+              "path": "/arc/docs/spring/integration",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "spring/metrics",
+              "path": "/arc/docs/spring/metrics",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "view",
+              "path": "/arc/docs/view",
+              "sidebar": "tutorialSidebar"
+            }
+          ],
+          "draftIds": [],
+          "sidebars": {
+            "tutorialSidebar": {
+              "link": {
+                "path": "/arc/docs/index",
+                "label": "index"
+              }
+            }
+          }
+        }
+      ],
+      "breadcrumbs": true
+    }
+  }
+}

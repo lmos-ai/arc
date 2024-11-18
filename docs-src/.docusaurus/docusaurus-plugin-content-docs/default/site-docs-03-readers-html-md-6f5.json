@@ -1,0 +1,25 @@
+{
+  "id": "readers/html",
+  "title": "Html Reader",
+  "description": "Powered by https://jsoup.org/",
+  "source": "@site/docs/03-readers/html.md",
+  "sourceDirName": "03-readers",
+  "slug": "/readers/html",
+  "permalink": "/arc/docs/readers/html",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Html Reader"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Readers",
+    "permalink": "/arc/docs/readers/"
+  },
+  "next": {
+    "title": "PDF Reader",
+    "permalink": "/arc/docs/readers/pdf"
+  }
+}

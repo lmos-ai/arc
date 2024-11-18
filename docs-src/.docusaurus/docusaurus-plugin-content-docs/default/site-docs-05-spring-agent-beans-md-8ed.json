@@ -1,0 +1,25 @@
+{
+  "id": "spring/agent-beans",
+  "title": "Agent Beans",
+  "description": "The Arc Agent Framework has first-class support for Spring Boot applications.",
+  "source": "@site/docs/05-spring/agent-beans.md",
+  "sourceDirName": "05-spring",
+  "slug": "/spring/agent-beans",
+  "permalink": "/arc/docs/spring/agent-beans",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Agent Beans"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Spring Boot Integration",
+    "permalink": "/arc/docs/spring/integration"
+  },
+  "next": {
+    "title": "Metrics",
+    "permalink": "/arc/docs/spring/metrics"
+  }
+}
