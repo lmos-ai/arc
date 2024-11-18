@@ -55,7 +55,7 @@ class LangChainClient(
         }
 
         var response: Response<AiMessage>? = null
-        finally { publishEvent(it, messages, functions, response, duration, settings) }
+        finally { publishEvent(it, messages, functions, response, duration, settings, functionCallHandler) }
         response = result failWith { ArcException("Failed to call LLM!", it) }
         AssistantMessage(response.content().text(), sensitive = false)
     }
@@ -67,6 +67,7 @@ class LangChainClient(
         response: Response<AiMessage>?,
         duration: Duration,
         settings: ChatCompletionSettings?,
+        functionCallHandler: FunctionCallHandler,
     ) {
         eventHandler?.publish(
             LLMFinishedEvent(
@@ -77,7 +78,7 @@ class LangChainClient(
                 totalTokens = response?.tokenUsage()?.totalTokenCount() ?: -1,
                 promptTokens = response?.tokenUsage()?.inputTokenCount() ?: -1,
                 completionTokens = response?.tokenUsage()?.outputTokenCount() ?: -1,
-                0,
+                functionCallHandler.calledFunctions.size,
                 duration,
                 settings = settings,
             ),
