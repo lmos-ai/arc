@@ -1,0 +1,25 @@
+{
+  "id": "clients/springai",
+  "title": "SpringChatClient",
+  "description": "Allows for easy reuse of Spring.AI ChatModels.",
+  "source": "@site/docs/02-clients/springai.md",
+  "sourceDirName": "02-clients",
+  "slug": "/clients/springai",
+  "permalink": "/arc/docs/clients/springai",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "SpringChatClient"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Ollama Client",
+    "permalink": "/arc/docs/clients/ollama"
+  },
+  "next": {
+    "title": "Readers",
+    "permalink": "/arc/docs/readers/"
+  }
+}

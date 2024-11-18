@@ -1,0 +1,300 @@
+{
+  "/arc/__docusaurus/debug-cae": {
+    "__comp": "__comp---theme-debug-config-23-a-2ff",
+    "__context": {
+      "plugin": "plugin---arc-docusaurus-debugb-38-08c"
+    }
+  },
+  "/arc/__docusaurus/debug/config-832": {
+    "__comp": "__comp---theme-debug-config-23-a-2ff",
+    "__context": {
+      "plugin": "plugin---arc-docusaurus-debugb-38-08c"
+    }
+  },
+  "/arc/__docusaurus/debug/content-bb6": {
+    "__comp": "__comp---theme-debug-contentba-8-ce7",
+    "__context": {
+      "plugin": "plugin---arc-docusaurus-debugb-38-08c"
+    },
+    "__props": "__props---arc-docusaurus-debug-contenta-97-7bc"
+  },
+  "/arc/__docusaurus/debug/globalData-5f2": {
+    "__comp": "__comp---theme-debug-global-dataede-0fa",
+    "__context": {
+      "plugin": "plugin---arc-docusaurus-debugb-38-08c"
+    }
+  },
+  "/arc/__docusaurus/debug/metadata-b4d": {
+    "__comp": "__comp---theme-debug-site-metadata-68-e-3d4",
+    "__context": {
+      "plugin": "plugin---arc-docusaurus-debugb-38-08c"
+    }
+  },
+  "/arc/__docusaurus/debug/registry-fe3": {
+    "__comp": "__comp---theme-debug-registry-679-501",
+    "__context": {
+      "plugin": "plugin---arc-docusaurus-debugb-38-08c"
+    }
+  },
+  "/arc/__docusaurus/debug/routes-07f": {
+    "__comp": "__comp---theme-debug-routes-946-699",
+    "__context": {
+      "plugin": "plugin---arc-docusaurus-debugb-38-08c"
+    }
+  },
+  "/arc/blog-3a6": {
+    "__comp": "__comp---theme-blog-list-pagea-6-a-7ba",
+    "__context": {
+      "plugin": "plugin---arc-blog-369-f7a"
+    },
+    "sidebar": "sidebar---arc-blog-814-4e4",
+    "items": [
+      {
+        "content": "content---arc-blog-4-b-9-a96"
+      },
+      {
+        "content": "content---arc-blog-1-fe-3ee"
+      }
+    ],
+    "__props": "__props---arc-blog-5-b-5-b49"
+  },
+  "/arc/blog/archive-b45": {
+    "__comp": "__comp---theme-blog-archive-page-9-e-4-1d8",
+    "__context": {
+      "plugin": "plugin---arc-blog-369-f7a"
+    },
+    "__props": "__props---arc-blog-archive-621-da6"
+  },
+  "/arc/blog/Llama3-895": {
+    "__comp": "__comp---theme-blog-post-pageccc-cab",
+    "__context": {
+      "data": {
+        "blogMetadata": "blogMetadata---arc-blog-llama-3-ace-fd3"
+      },
+      "plugin": "plugin---arc-blog-369-f7a"
+    },
+    "sidebar": "sidebar---arc-blog-814-4e4",
+    "content": "content---arc-blog-llama-34-ca-120"
+  },
+  "/arc/blog/Spring.AI-integration-bad": {
+    "__comp": "__comp---theme-blog-post-pageccc-cab",
+    "__context": {
+      "data": {
+        "blogMetadata": "blogMetadata---arc-blog-llama-3-ace-fd3"
+      },
+      "plugin": "plugin---arc-blog-369-f7a"
+    },
+    "sidebar": "sidebar---arc-blog-814-4e4",
+    "content": "content---arc-blog-spring-ai-integration-004-5d8"
+  },
+  "/arc/blog/tags-006": {
+    "__comp": "__comp---theme-blog-tags-list-page-01-a-d0b",
+    "__context": {
+      "plugin": "plugin---arc-blog-369-f7a"
+    },
+    "sidebar": "sidebar---arc-blog-814-4e4",
+    "__props": "__props---arc-blog-tags-564-050"
+  },
+  "/arc/blog/tags/feature-ce5": {
+    "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
+    "__context": {
+      "plugin": "plugin---arc-blog-369-f7a"
+    },
+    "sidebar": "sidebar---arc-blog-814-4e4",
+    "items": [
+      {
+        "content": "content---arc-blog-1-fe-3ee"
+      }
+    ],
+    "__props": "__props---arc-blog-tags-feature-1-d-9-01b"
+  },
+  "/arc/blog/tags/spring-335": {
+    "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
+    "__context": {
+      "plugin": "plugin---arc-blog-369-f7a"
+    },
+    "sidebar": "sidebar---arc-blog-814-4e4",
+    "items": [
+      {
+        "content": "content---arc-blog-1-fe-3ee"
+      }
+    ],
+    "__props": "__props---arc-blog-tags-springc-9-d-dd5"
+  },
+  "/arc/blog/tags/spring-ai-a62": {
+    "__comp": "__comp---theme-blog-tags-posts-page-687-b6c",
+    "__context": {
+      "plugin": "plugin---arc-blog-369-f7a"
+    },
+    "sidebar": "sidebar---arc-blog-814-4e4",
+    "items": [
+      {
+        "content": "content---arc-blog-1-fe-3ee"
+      }
+    ],
+    "__props": "__props---arc-blog-tags-spring-aie-5-d-9b4"
+  },
+  "/arc/markdown-page-a54": {
+    "__comp": "__comp---theme-mdx-page-1-f-3-b90",
+    "__context": {
+      "plugin": "plugin---arc-markdown-pagea-74-8ae"
+    },
+    "content": "content---arc-markdown-page-393-fdc"
+  },
+  "/arc/docs-07c": {
+    "__comp": "__comp---theme-docs-root-5-e-9-0b6",
+    "__context": {
+      "plugin": "plugin---arc-docsaba-3e6"
+    }
+  },
+  "/arc/docs-775": {
+    "__comp": "__comp---theme-doc-version-roota-7-b-5de",
+    "__props": "__props---arc-docsc-49-ac0"
+  },
+  "/arc/docs-ea0": {
+    "__comp": "__comp---theme-doc-roota-94-67a"
+  },
+  "/arc/docs/api-14d": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-api-9-c-8-8d2"
+  },
+  "/arc/docs/cli-b42": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-cli-760-3b9"
+  },
+  "/arc/docs/clients/-e30": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-clients-672-0bd"
+  },
+  "/arc/docs/clients/azure-365": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-clients-azuree-35-dc3"
+  },
+  "/arc/docs/clients/gemini-fea": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-clients-geminif-9-e-cb3"
+  },
+  "/arc/docs/clients/langchain4j-727": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-clients-langchain-4-j-5-d-2-a57"
+  },
+  "/arc/docs/clients/ollama-70b": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-clients-ollamadfc-993"
+  },
+  "/arc/docs/clients/springai-821": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-clients-springai-550-11c"
+  },
+  "/arc/docs/cookbook/-803": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-cookbook-bdc-793"
+  },
+  "/arc/docs/cookbook/summarizer-df8": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-cookbook-summarizerb-67-587"
+  },
+  "/arc/docs/cookbook/weather-9de": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-cookbook-weathercd-2-4c6"
+  },
+  "/arc/docs/dsl/-9c4": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-dsl-a-2-e-944"
+  },
+  "/arc/docs/dsl/accessing_beans-b4b": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-dsl-accessing-beans-61-c-f91"
+  },
+  "/arc/docs/dsl/defining_agents-760": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-dsl-defining-agents-187-e57"
+  },
+  "/arc/docs/dsl/defining_functions-a15": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-dsl-defining-functions-181-f6f"
+  },
+  "/arc/docs/dsl/extensions-793": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-dsl-extensions-82-c-f18"
+  },
+  "/arc/docs/dsl/filters-d38": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-dsl-filters-5-c-9-dbd"
+  },
+  "/arc/docs/eventing/-b40": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-eventing-d-0-e-430"
+  },
+  "/arc/docs/graphql-1f3": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-graphqla-7-a-a66"
+  },
+  "/arc/docs/index-b80": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-indexace-588"
+  },
+  "/arc/docs/langchain-4bd": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-langchainea-9-649"
+  },
+  "/arc/docs/manual_setup-1bd": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-manual-setup-145-82d"
+  },
+  "/arc/docs/memory/-29f": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-memory-652-296"
+  },
+  "/arc/docs/packages-290": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-packages-260-6dd"
+  },
+  "/arc/docs/quickstart-f30": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-quickstart-5-a-5-8e9"
+  },
+  "/arc/docs/readers/-762": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-readers-b-83-c8f"
+  },
+  "/arc/docs/readers/html-5c3": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-readers-html-6-f-5-11f"
+  },
+  "/arc/docs/readers/pdf-f15": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-readers-pdfeb-0-f2b"
+  },
+  "/arc/docs/semantic_router-e4d": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-semantic-router-3-e-0-8f5"
+  },
+  "/arc/docs/spring/-00a": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-spring-d-93-de9"
+  },
+  "/arc/docs/spring/agent-beans-da2": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-spring-agent-beans-8-ed-b92"
+  },
+  "/arc/docs/spring/integration-89f": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-spring-integrationc-81-d05"
+  },
+  "/arc/docs/spring/metrics-c17": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-spring-metricse-55-ab4"
+  },
+  "/arc/docs/view-d04": {
+    "__comp": "__comp---theme-doc-item-178-a40",
+    "content": "content---arc-docs-viewafd-6d0"
+  },
+  "/arc/-953": {
+    "__comp": "__comp---site-src-pages-index-tsx-1-df-d3e",
+    "__context": {
+      "plugin": "plugin---arc-markdown-pagea-74-8ae"
+    },
+    "config": "config---arc-5-e-9-818"
+  }
+}

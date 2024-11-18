@@ -1,0 +1,19 @@
+{
+  "permalink": "/arc/blog/Llama3",
+  "source": "@site/blog/Llama3.md",
+  "title": "Llama3 is out!",
+  "description": "Meta have released a new version of their large language model, Llama3, https://ai.meta.com/blog/meta-llama-3/.",
+  "date": "2024-11-15T08:57:22.000Z",
+  "tags": [],
+  "readingTime": 0.35,
+  "hasTruncateMarker": false,
+  "authors": [],
+  "frontMatter": {
+    "title": "Llama3 is out!"
+  },
+  "unlisted": false,
+  "nextItem": {
+    "title": "Sptring.ai integration using the SpringChatClient",
+    "permalink": "/arc/blog/Spring.AI-integration"
+  }
+}

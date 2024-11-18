@@ -1,0 +1,25 @@
+{
+  "id": "eventing/index",
+  "title": "Eventing",
+  "description": "Evening is at the core of the Arc Agents framework.",
+  "source": "@site/docs/06-eventing/index.md",
+  "sourceDirName": "06-eventing",
+  "slug": "/eventing/",
+  "permalink": "/arc/docs/eventing/",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Eventing"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Metrics",
+    "permalink": "/arc/docs/spring/metrics"
+  },
+  "next": {
+    "title": "Memory",
+    "permalink": "/arc/docs/memory/"
+  }
+}

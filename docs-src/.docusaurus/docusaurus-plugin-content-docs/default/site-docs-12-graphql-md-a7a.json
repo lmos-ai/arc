@@ -1,0 +1,24 @@
+{
+  "id": "graphql",
+  "title": "Arc GraphQL",
+  "description": "The Arc GraphQL Spring Boot Starter provides a GraphQL API for interacting with Arc Agents.",
+  "source": "@site/docs/12-graphql.md",
+  "sourceDirName": ".",
+  "slug": "/graphql",
+  "permalink": "/arc/docs/graphql",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 12,
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Arc API",
+    "permalink": "/arc/docs/api"
+  },
+  "next": {
+    "title": "Arc View",
+    "permalink": "/arc/docs/view"
+  }
+}

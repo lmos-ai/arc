@@ -1,0 +1,25 @@
+{
+  "id": "readers/index",
+  "title": "Readers",
+  "description": "Readers are handy functions that can be called within the Agent DSL to read",
+  "source": "@site/docs/03-readers/index.md",
+  "sourceDirName": "03-readers",
+  "slug": "/readers/",
+  "permalink": "/arc/docs/readers/",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Readers"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "SpringChatClient",
+    "permalink": "/arc/docs/clients/springai"
+  },
+  "next": {
+    "title": "Html Reader",
+    "permalink": "/arc/docs/readers/html"
+  }
+}

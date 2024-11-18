@@ -1,0 +1,20 @@
+{
+  "id": "cli",
+  "title": "Arc CLI",
+  "description": "The Arc CLI provide a collection of commands that simplify creating and running Arc Agents.",
+  "source": "@site/docs/17-cli.md",
+  "sourceDirName": ".",
+  "slug": "/cli",
+  "permalink": "/arc/docs/cli",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 17,
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Integrating LangChain4j",
+    "permalink": "/arc/docs/langchain"
+  }
+}

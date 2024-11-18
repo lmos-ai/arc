@@ -1,0 +1,25 @@
+{
+  "id": "clients/ollama",
+  "title": "Ollama Client",
+  "description": "The Ollama Client connects to the Completion API of a running Ollama server.",
+  "source": "@site/docs/02-clients/ollama.md",
+  "sourceDirName": "02-clients",
+  "slug": "/clients/ollama",
+  "permalink": "/arc/docs/clients/ollama",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Ollama Client"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "LangChain4J",
+    "permalink": "/arc/docs/clients/langchain4j"
+  },
+  "next": {
+    "title": "SpringChatClient",
+    "permalink": "/arc/docs/clients/springai"
+  }
+}

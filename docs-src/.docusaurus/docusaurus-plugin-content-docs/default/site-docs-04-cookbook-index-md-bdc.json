@@ -1,0 +1,25 @@
+{
+  "id": "cookbook/index",
+  "title": "Cookbook",
+  "description": "Check out some of the recipes for building superpowered Arc Agents.",
+  "source": "@site/docs/04-cookbook/index.md",
+  "sourceDirName": "04-cookbook",
+  "slug": "/cookbook/",
+  "permalink": "/arc/docs/cookbook/",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "Cookbook"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "PDF Reader",
+    "permalink": "/arc/docs/readers/pdf"
+  },
+  "next": {
+    "title": "Summarizer Agent",
+    "permalink": "/arc/docs/cookbook/summarizer"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "id": "readers/pdf",
+  "title": "PDF Reader",
+  "description": "Powered by https://pdfbox.apache.org/",
+  "source": "@site/docs/03-readers/pdf.md",
+  "sourceDirName": "03-readers",
+  "slug": "/readers/pdf",
+  "permalink": "/arc/docs/readers/pdf",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "frontMatter": {
+    "title": "PDF Reader"
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Html Reader",
+    "permalink": "/arc/docs/readers/html"
+  },
+  "next": {
+    "title": "Cookbook",
+    "permalink": "/arc/docs/cookbook/"
+  }
+}

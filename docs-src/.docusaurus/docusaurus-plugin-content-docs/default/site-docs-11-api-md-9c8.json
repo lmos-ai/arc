@@ -1,0 +1,24 @@
+{
+  "id": "api",
+  "title": "Arc API",
+  "description": "The Arc API defines the interfaces and data models that are used to interact with Arc Agents.",
+  "source": "@site/docs/11-api.md",
+  "sourceDirName": ".",
+  "slug": "/api",
+  "permalink": "/arc/docs/api",
+  "draft": false,
+  "unlisted": false,
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 11,
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Semantic Router",
+    "permalink": "/arc/docs/semantic_router"
+  },
+  "next": {
+    "title": "Arc GraphQL",
+    "permalink": "/arc/docs/graphql"
+  }
+}
