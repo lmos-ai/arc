@@ -11,5 +11,5 @@ dependencies {
 
     // Azure
     api("com.azure:azure-ai-openai:1.0.0-beta.7")
-    api("com.azure:azure-core-tracing-opentelemetry:1.0.0-beta.44")
+    api("com.azure:azure-core-tracing-opentelemetry:1.0.0-beta.52")
 }
