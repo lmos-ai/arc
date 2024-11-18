@@ -71,10 +71,10 @@ const config: Config = {
                     label: 'Docs',
                 },
                 {to: '/docs/cookbook', label: 'Cookbook', position: 'left'},
-                {to: '/blog', label: 'Blog', position: 'left'},
+                // {to: '/blog', label: 'Blog', position: 'left'},
                 {
                     href: 'https://github.com/lmos-ai/arc/releases',
-                    label: '0.102.0',
+                    label: '0.104.0',
                     position: 'right',
                 },  {
                     href: 'https://github.com/lmos-ai/arc',

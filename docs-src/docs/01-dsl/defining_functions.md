@@ -20,7 +20,10 @@ agent {
     name = "weather"
     description = "Agent that provides weather data."
     prompt { """ Some system prompt """ }
-    tools = listOf("get_weather", "get_time")
+    tools {
+        +"get_weather"
+        +"get_time"
+    }
 }
 ```
 
@@ -41,3 +44,41 @@ function(
 
 Functions always return a string. This string can contain natural language text, JSON, or any other format
 or a combination of them.
+
+### Assigning Functions conditionally
+
+Functions can be assigned conditionally based on the Agent's state or the user's input.
+Within the `tools` block, you can use the `get` function 
+to access the current request or any other bean contained within the context of the Agent.
+
+Here is an example:
+```kts
+agent {
+    name = "weather"
+    description = "Agent that provides weather data."
+    prompt { """ Some system prompt """ }
+    tools {
+        val isBeta = get<SomeCustomBean>().isBeta()
+        if(isBeta) +"get_weather_forecast"
+        +"get_weather"
+        +"get_time"
+    }
+}
+```
+(`SomeCustomBean` is a custom bean, not provided by the framework)
+
+### Automatic assign all available functions
+
+If you want to assign all available functions to an Agent, you can use the `AllTools` constant.
+
+Example:
+```kts
+agent {
+    name = "weather"
+    description = "Agent that provides weather data."
+    prompt { """ Some system prompt """ }
+    tools = AllTools
+}
+```
+
+This will supply all functions that are available in the application to the Agent.
