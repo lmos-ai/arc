@@ -6,6 +6,7 @@ package ai.ancf.lmos.arc.agents.gen
 
 //@@IMPORTS@@
 import ai.ancf.lmos.arc.agents.dsl.*
+import ai.ancf.lmos.arc.agents.dsl.custom.extensions.*
 import ai.ancf.lmos.arc.agents.dsl.extensions.*
 import ai.ancf.lmos.arc.core.*
 
@@ -13,6 +14,6 @@ class Agents {
 
     context(AgentDefinitionContext)
     fun build() {
-    //@@AGENTS@@
+    //@@CODE@@
     }
 }
