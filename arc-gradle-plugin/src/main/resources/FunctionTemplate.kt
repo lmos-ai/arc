@@ -13,6 +13,6 @@ class Functions {
 
     context(FunctionDefinitionContext)
     fun build() {
-    //@@FUNCTIONS@@
+    //@@CODE@@
     }
 }

@@ -10,9 +10,10 @@ import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import java.io.File
+import kotlin.text.Charsets.UTF_8
 
 /**
- *
+ * Converts agent and function scripts into Kotlin code.
  */
 open class GenerateAgentCodeTask : DefaultTask() {
 
@@ -25,58 +26,47 @@ open class GenerateAgentCodeTask : DefaultTask() {
     @TaskAction
     fun deploy() {
         println("Generating Agent code...")
-        input.asFileTree.forEach {
-            when {
-                it.name.endsWith(".agent.kt") -> writeAgentsCode(it)
-                it.name.endsWith(".functions.kt") -> writeFunctionsCode(it)
-            }
-            writeFunctionsCode(it)
-        }
+
+        val agentCode = Code(setOf(), "")
+        input.asFileTree.filter {
+            it.name.endsWith(".agent.kts")
+        }.forEach { writeCode(it, agentCode, "agent") }
+        write("Agents.kt", agentCode, "AgentTemplate.kt")
+
+        val functionCode = Code(setOf(), "")
+        input.asFileTree.filter {
+            it.name.endsWith(".functions.kts")
+        }.forEach { writeCode(it, functionCode, "function") }
+        write("Functions.kt", functionCode, "FunctionTemplate.kt")
     }
 
-    private fun writeAgentsCode(file: File) {
-        val template = readTemplate("AgentTemplate.kt")
-        var imports = ""
-        var agents = ""
-        var readingAgents = false
-        file.readLines(charset = Charsets.UTF_8).forEach { line ->
-            if (readingAgents) {
-                agents += line + "\n"
-            } else if (line.trim().startsWith("import ")) {
-                imports += line + "\n"
-            } else if (line.trim().startsWith("agent")) {
-                readingAgents = true
-                agents += line + "\n"
-            }
-        }
-        File(output.asFile, ("Agents.kt")).writeText(
-            template.replace("//@@IMPORTS@@", imports).replace("//@@AGENTS@@", agents)
+    private fun write(name: String, code: Code, template: String) {
+        File(output.asFile, name).writeText(
+            readTemplate(template)
+                .replace("//@@IMPORTS@@", code.imports.joinToString(""))
+                .replace("//@@CODE@@", code.code)
         )
     }
 
-    private fun writeFunctionsCode(file: File) {
-        val template = readTemplate("FunctionTemplate.kt")
-        var imports = ""
-        var agents = ""
-        var readingAgents = false
-        file.readLines(charset = Charsets.UTF_8).forEach { line ->
-            if (readingAgents) {
-                agents += line + "\n"
+    private fun writeCode(file: File, code: Code, codeStart: String) {
+        var readingCode = false
+        file.readLines(charset = UTF_8).forEach { line ->
+            if (readingCode) {
+                code.code += line + "\n"
             } else if (line.trim().startsWith("import ")) {
-                imports += line + "\n"
-            } else if (line.trim().startsWith("agent")) {
-                readingAgents = true
-                agents += line + "\n"
+                code.imports += line + "\n"
+            } else if (line.trim().startsWith(codeStart)) {
+                readingCode = true
+                code.code += line + "\n"
             }
         }
-        File(output.asFile, ("Functions.kt")).writeText(
-            template.replace("//@@IMPORTS@@", imports).replace("//@@FUNCTIONS@@", agents)
-        )
     }
 
     private fun readTemplate(name: String): String {
         return Thread.currentThread().contextClassLoader.getResource(name)?.readText()!!
     }
 }
+
+data class Code(var imports: Set<String>, var code: String)
 
 
