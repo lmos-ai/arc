@@ -31,13 +31,13 @@ open class GenerateAgentCodeTask : DefaultTask() {
         input.asFileTree.filter {
             it.name.endsWith(".agent.kts")
         }.forEach { writeCode(it, agentCode, "agent\\s*\\{.*") }
-        write("Agents.kt", agentCode, "AgentTemplate.kt")
+        write("Agents.kt", agentCode, "AgentTemplate.kt.txt")
 
         val functionCode = Code()
         input.asFileTree.filter {
             it.name.endsWith(".functions.kts")
         }.forEach { writeCode(it, functionCode, "function\\s*\\(.*") }
-        write("Functions.kt", functionCode, "FunctionTemplate.kt")
+        write("Functions.kt", functionCode, "FunctionTemplate.kt.txt")
     }
 
     private fun write(name: String, code: Code, template: String) {
