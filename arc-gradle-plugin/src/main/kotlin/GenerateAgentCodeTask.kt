@@ -27,16 +27,16 @@ open class GenerateAgentCodeTask : DefaultTask() {
     fun deploy() {
         println("Generating Agent code...")
 
-        val agentCode = Code(setOf(), "")
+        val agentCode = Code()
         input.asFileTree.filter {
             it.name.endsWith(".agent.kts")
-        }.forEach { writeCode(it, agentCode, "agent") }
+        }.forEach { writeCode(it, agentCode, "agent\\s*\\{.*") }
         write("Agents.kt", agentCode, "AgentTemplate.kt")
 
-        val functionCode = Code(setOf(), "")
+        val functionCode = Code()
         input.asFileTree.filter {
             it.name.endsWith(".functions.kts")
-        }.forEach { writeCode(it, functionCode, "function") }
+        }.forEach { writeCode(it, functionCode, "function\\s*\\(.*") }
         write("Functions.kt", functionCode, "FunctionTemplate.kt")
     }
 
@@ -45,19 +45,26 @@ open class GenerateAgentCodeTask : DefaultTask() {
             readTemplate(template)
                 .replace("//@@IMPORTS@@", code.imports.joinToString(""))
                 .replace("//@@CODE@@", code.code)
+                .replace("//@@FUNCTIONS@@", code.functions)
         )
     }
 
     private fun writeCode(file: File, code: Code, codeStart: String) {
-        var readingCode = false
+        var reading: String? = null
         file.readLines(charset = UTF_8).forEach { line ->
-            if (readingCode) {
+            if (line.trim().startsWith("fun ")) {
+                code.functions += line + "\n"
+                reading = "fun"
+            } else if (line.trim().matches(codeStart.toRegex())) {
                 code.code += line + "\n"
+                reading = "code"
+            } else if (reading != null) {
+                when (reading) {
+                    "fun" -> code.functions += line + "\n"
+                    "code" -> code.code += line + "\n"
+                }
             } else if (line.trim().startsWith("import ")) {
                 code.imports += line + "\n"
-            } else if (line.trim().startsWith(codeStart)) {
-                readingCode = true
-                code.code += line + "\n"
             }
         }
     }
@@ -67,6 +74,10 @@ open class GenerateAgentCodeTask : DefaultTask() {
     }
 }
 
-data class Code(var imports: Set<String>, var code: String)
+data class Code(
+    var imports: Set<String> = emptySet(),
+    var code: String = "",
+    var functions: String = ""
+)
 
 
