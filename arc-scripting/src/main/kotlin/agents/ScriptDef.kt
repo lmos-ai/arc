@@ -43,7 +43,7 @@ object ScriptConfiguration : ScriptCompilationConfiguration(
         }
 
         jvm {
-            jvmTarget("17")
+            jvmTarget("21")
             dependenciesFromCurrentContext(wholeClasspath = true)
         }
     },
