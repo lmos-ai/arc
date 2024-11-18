@@ -56,10 +56,10 @@ jobs:
         next-version-increment-minor: true
 
     - name: Validate Gradle
-      uses: gradle/actions/wrapper-validation@v4.2.0
+      uses: gradle/actions/wrapper-validation@v4.2.1
 
     - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4.2.0
+      uses: gradle/actions/setup-gradle@v4.2.1
 
     - name: Git init
       run: git config --global user.email "cicd@ancf.ai" && git config --global user.name "CICD"
