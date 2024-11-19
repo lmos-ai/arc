@@ -45,22 +45,22 @@ open class GenerateAgentCodeTask : DefaultTask() {
             readTemplate(template)
                 .replace("//@@IMPORTS@@", code.imports.joinToString(""))
                 .replace("//@@CODE@@", code.code)
-                .replace("//@@FUNCTIONS@@", code.functions)
+                .replace("//@@OUTER_CODE@@", code.outerCode)
         )
     }
 
     private fun writeCode(file: File, code: Code, codeStart: String) {
         var reading: String? = null
         file.readLines(charset = UTF_8).forEach { line ->
-            if (line.trim().startsWith("fun ")) {
-                code.functions += line + "\n"
-                reading = "fun"
+            if (line.trim().startsWith("// Code")) {
+                code.outerCode += line + "\n"
+                reading = "outerCode"
             } else if (line.trim().matches(codeStart.toRegex())) {
                 code.code += line + "\n"
                 reading = "code"
             } else if (reading != null) {
                 when (reading) {
-                    "fun" -> code.functions += line + "\n"
+                    "outerCode" -> code.outerCode += line + "\n"
                     "code" -> code.code += line + "\n"
                 }
             } else if (line.trim().startsWith("import ")) {
@@ -77,7 +77,7 @@ open class GenerateAgentCodeTask : DefaultTask() {
 data class Code(
     var imports: Set<String> = emptySet(),
     var code: String = "",
-    var functions: String = ""
+    var outerCode: String = ""
 )
 
 

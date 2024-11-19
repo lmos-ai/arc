@@ -16,5 +16,5 @@ class Functions {
     //@@CODE@@
     }
 
-    //@@FUNCTIONS@@
+    //@@OUTER_CODE@@
 }
