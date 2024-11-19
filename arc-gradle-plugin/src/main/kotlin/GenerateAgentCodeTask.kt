@@ -45,7 +45,7 @@ open class GenerateAgentCodeTask : DefaultTask() {
             readTemplate(template)
                 .replace("//@@IMPORTS@@", code.imports.joinToString(""))
                 .replace("//@@CODE@@", code.code)
-                .replace("//@@OUTER_CODE@@", code.outerCode)
+                .replace("//@@OUTER_CODE@@", code.outerCode),
         )
     }
 
@@ -77,7 +77,5 @@ open class GenerateAgentCodeTask : DefaultTask() {
 data class Code(
     var imports: Set<String> = emptySet(),
     var code: String = "",
-    var outerCode: String = ""
+    var outerCode: String = "",
 )
-
-

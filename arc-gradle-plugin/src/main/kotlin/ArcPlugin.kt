@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
+//
+// SPDX-License-Identifier: Apache-2.0
 package ai.ancf.lmos.arc.gradle.plugin
 
 import org.gradle.api.Action
@@ -5,7 +8,6 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.tasks.SourceSetContainer
-
 
 class ArcPlugin : Plugin<Project> {
 
