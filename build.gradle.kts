@@ -57,50 +57,52 @@ subprojects {
         archiveClassifier.set("javadoc")
     }
 
-    mavenPublishing {
-        publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
-        signAllPublications()
+    if (project.name != "arc-gradle-plugin") {
+        mavenPublishing {
+            publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+            signAllPublications()
 
-        pom {
-            name = "ARC"
-            description = "ARC is an AI framework."
-            url = "https://github.com/lmos-ai/arc"
-            licenses {
-                license {
-                    name = "Apache-2.0"
-                    distribution = "repo"
-                    url = "https://github.com/lmos-ai/arc/blob/main/LICENSES/Apache-2.0.txt"
+            pom {
+                name = "ARC"
+                description = "ARC is an AI framework."
+                url = "https://github.com/lmos-ai/arc"
+                licenses {
+                    license {
+                        name = "Apache-2.0"
+                        distribution = "repo"
+                        url = "https://github.com/lmos-ai/arc/blob/main/LICENSES/Apache-2.0.txt"
+                    }
+                }
+                developers {
+                    developer {
+                        id = "pat"
+                        name = "Patrick Whelan"
+                        email = "opensource@telekom.de"
+                    }
+                    developer {
+                        id = "bharat_bhushan"
+                        name = "Bharat Bhushan"
+                        email = "opensource@telekom.de"
+                    }
+                    developer {
+                        id = "merrenfx"
+                        name = "Max Erren"
+                        email = "opensource@telekom.de"
+                    }
+                }
+                scm {
+                    url = "https://github.com/lmos-ai/arc.git"
                 }
             }
-            developers {
-                developer {
-                    id = "pat"
-                    name = "Patrick Whelan"
-                    email = "opensource@telekom.de"
-                }
-                developer {
-                    id = "bharat_bhushan"
-                    name = "Bharat Bhushan"
-                    email = "opensource@telekom.de"
-                }
-                developer {
-                    id = "merrenfx"
-                    name = "Max Erren"
-                    email = "opensource@telekom.de"
-                }
-            }
-            scm {
-                url = "https://github.com/lmos-ai/arc.git"
-            }
-        }
 
-        repositories {
-            maven {
-                name = "GitHubPackages"
-                url = URI("https://maven.pkg.github.com/lmos-ai/arc")
-                credentials {
-                    username = findProperty("GITHUB_USER")?.toString() ?: getenv("GITHUB_USER")
-                    password = findProperty("GITHUB_TOKEN")?.toString() ?: getenv("GITHUB_TOKEN")
+            repositories {
+                maven {
+                    name = "GitHubPackages"
+                    url = URI("https://maven.pkg.github.com/lmos-ai/arc")
+                    credentials {
+                        username = findProperty("GITHUB_USER")?.toString() ?: getenv("GITHUB_USER")
+                        password = findProperty("GITHUB_TOKEN")?.toString() ?: getenv("GITHUB_TOKEN")
+                    }
                 }
             }
         }
