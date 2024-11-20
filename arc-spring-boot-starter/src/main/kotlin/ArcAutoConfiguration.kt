@@ -39,7 +39,7 @@ import kotlin.reflect.KClass
     ScriptingConfiguration::class,
     CompiledScriptsConfiguration::class,
 )
-class ArcAutoConfiguration {
+open class ArcAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(BeanProvider::class)

@@ -14,13 +14,11 @@ import dev.langchain4j.model.googleai.GoogleAiGeminiChatModel
 import dev.langchain4j.model.ollama.OllamaChatModel
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider
 
 /**
  * Configuration for Langchain4j based LLM clients.
  */
-@Configuration
 @ConditionalOnClass(dev.langchain4j.model.chat.ChatLanguageModel::class)
 class Langchain4jConfiguration {
 

@@ -13,9 +13,7 @@ import ai.ancf.lmos.arc.agents.functions.LLMFunctionLoader
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
 
-@Configuration
 @ConditionalOnProperty("arc.scripts.enabled", havingValue = "false")
 class CompiledScriptsConfiguration {
 

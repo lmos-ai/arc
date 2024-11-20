@@ -18,13 +18,11 @@ import ai.ancf.lmos.arc.scripting.functions.ScriptingLLMFunctionLoader
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
 import java.io.File
 import java.time.Duration
 import kotlin.time.toKotlinDuration
 
-@Configuration
-@ConditionalOnProperty("arc.scripts.enabled", havingValue = "true")
+@ConditionalOnProperty("arc.scripts.enabled", havingValue = "true", matchIfMissing = true)
 class ScriptingConfiguration {
 
     @Bean
