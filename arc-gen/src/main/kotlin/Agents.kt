@@ -5,10 +5,7 @@
 
 package ai.ancf.lmos.arc.agents.gen
 
-import ai.ancf.lmos.arc.agents.dsl.*
-import ai.ancf.lmos.arc.agents.dsl.extensions.*
-import ai.ancf.lmos.arc.assistants.support.filters.*
-import ai.ancf.lmos.arc.core.*
+import ai.ancf.lmos.arc.agents.dsl.AgentDefinitionContext
 
 class Agents {
 

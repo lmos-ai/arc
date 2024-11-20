@@ -5,12 +5,7 @@
 
 package ai.ancf.lmos.arc.agents.gen
 
-import ai.ancf.lmos.arc.agents.dsl.*
-import ai.ancf.lmos.arc.agents.dsl.extensions.*
-import ai.ancf.lmos.arc.core.*
-import ai.ancf.lmos.arc.graphql.context.*
-import com.telekom.ia.platform.agent.*
-import com.telekom.ia.platform.agent.mapi.*
+import ai.ancf.lmos.arc.agents.dsl.FunctionDefinitionContext
 
 class Functions {
 
