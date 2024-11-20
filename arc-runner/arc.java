@@ -20,7 +20,7 @@ public class arc {
 
     public static void main(String[] args) {
         var exitCode = new CommandLine(new Arc()).execute(args);
-        System.out.println(exitCode);
+        System.exit(exitCode);
     }
 }
 /* ktlint-enable */
