@@ -62,7 +62,9 @@ subprojects {
     mavenPublishing {
         publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
         signAllPublications()
-        configure(GradlePlugin(JavadocJar.Dokka("dokkaHtml"), true))
+        if (project.name == "arc-gradle-plugin") {
+            configure(GradlePlugin(JavadocJar.Dokka("dokkaHtml"), true))
+        }
 
         pom {
             name = "ARC"
