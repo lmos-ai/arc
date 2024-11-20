@@ -2,8 +2,6 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import com.vanniktech.maven.publish.GradlePlugin
-import com.vanniktech.maven.publish.JavadocJar
 import com.vanniktech.maven.publish.SonatypeHost
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.BufferedReader
@@ -62,9 +60,6 @@ subprojects {
     mavenPublishing {
         publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
         signAllPublications()
-        if (project.name == "arc-gradle-plugin") {
-            configure(GradlePlugin(JavadocJar.Dokka("dokkaHtml"), true))
-        }
 
         pom {
             name = "ARC"
