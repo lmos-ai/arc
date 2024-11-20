@@ -9,7 +9,7 @@ plugins {
 gradlePlugin {
     plugins {
         create("ArcGradlePlugin") {
-            id = "lmos-arc-gradle-plugin"
+            id = "ai.ancf.lmos.arc.gradle.plugin"
             implementationClass = "ai.ancf.lmos.arc.gradle.plugin.ArcPlugin"
             version = version
         }
