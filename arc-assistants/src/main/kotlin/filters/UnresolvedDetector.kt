@@ -16,7 +16,7 @@ class UnresolvedDetector(
 ) : AgentFilter {
 
     override suspend fun filter(message: ConversationMessage): ConversationMessage {
-        if (message.content.contains("NO_ANSWER")) {
+        if (message.content.contains("NO_ANSWER") || message.content.trim().isEmpty()) {
             breakWith(fallbackReply.invoke(this@DSLContext), classification = Unresolved)
         }
         if (message.content.contains(Unresolved.toString())) {
