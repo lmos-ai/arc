@@ -22,6 +22,7 @@ import java.util.*
         OpenView::class,
         NewAgent::class,
         NewFunction::class,
+        Spring::class,
     ],
     description = ["The Arc CLI."],
 )
