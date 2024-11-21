@@ -41,7 +41,9 @@ open class GenerateAgentCodeTask : DefaultTask() {
     }
 
     private fun write(name: String, code: Code, template: String) {
-        File(output.asFile, name).writeText(
+        val outputFile = File(output.asFile, name)
+        outputFile.parentFile.mkdirs()
+        outputFile.writeText(
             readTemplate(template)
                 .replace("//@@IMPORTS@@", code.imports.joinToString(""))
                 .replace("//@@CODE@@", code.code)
