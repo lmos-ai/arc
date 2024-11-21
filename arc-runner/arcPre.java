@@ -20,7 +20,7 @@ public class arcPre {
 
     public static void main(String[] args) {
         var exitCode = new CommandLine(new Arc()).execute(args);
-        System.exit(exitCode);
+        // System.exit(exitCode); kills the server
     }
 }
 /* ktlint-enable */
