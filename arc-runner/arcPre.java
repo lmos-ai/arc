@@ -16,7 +16,7 @@ import ai.ancf.lmos.arc.runner.Arc;
 import picocli.CommandLine;
 
 /* ktlint-disable */
-public class arc {
+public class arcPre {
 
     public static void main(String[] args) {
         var exitCode = new CommandLine(new Arc()).execute(args);
