@@ -4,6 +4,7 @@
 package ai.ancf.lmos.arc.assistants.support
 
 import ai.ancf.lmos.arc.agents.dsl.AgentDefinitionContext
+import ai.ancf.lmos.arc.agents.dsl.AllTools
 import ai.ancf.lmos.arc.agents.dsl.DSLContext
 import ai.ancf.lmos.arc.agents.llm.ChatCompletionSettings
 import ai.ancf.lmos.arc.assistants.support.filters.LLMHackingDetector
@@ -23,6 +24,7 @@ fun AgentDefinitionContext.customerSupportAgent(builder: Builder.() -> Unit) {
         settings = {
             ChatCompletionSettings(temperature = 0.0, seed = 42)
         }
+        tools = AllTools
         filterInput {
             +LLMHackingDetector()
         }
