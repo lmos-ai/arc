@@ -18,7 +18,7 @@ interface AgentClient {
      * If an url is not provided, the client will use the default url.
      * If an agent name is not provided, the server will use the default agent.
      */
-    suspend fun callAgent(agentRequest: AgentRequest, agentName: String? = null, url: String? = null): Flow<AgentResult>
+    suspend fun callAgent(agentRequest: AgentRequest, agentName: String? = null, url: String? = null, requestHeaders: Map<String, Any> = emptyMap()): Flow<AgentResult>
 }
 
 /**
