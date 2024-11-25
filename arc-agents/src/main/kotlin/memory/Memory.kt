@@ -54,6 +54,7 @@ class InMemoryMemory : Memory {
     private val longTermMemory = ConcurrentHashMap<String, Any>()
 
     override suspend fun storeLongTerm(owner: String, key: String, value: Any?) {
+        validate(owner, key)
         if (value == null) {
             log.debug("Removing $key for $owner from LONG_TERM memory.")
             longTermMemory.remove("$owner $key")
@@ -65,6 +66,7 @@ class InMemoryMemory : Memory {
     }
 
     override suspend fun storeShortTerm(owner: String, key: String, value: Any?, sessionId: String) {
+        validate(owner, key)
         if (value == null) {
             log.debug("Removing $key for $owner from SHORT_TERM memory.")
             shortTermMemory.remove("$sessionId $owner $key")
@@ -73,6 +75,13 @@ class InMemoryMemory : Memory {
         log.debug("Storing $value with $key for $owner in SHORT_TERM memory with session id $sessionId.")
         shortTermMemory["$sessionId $owner $key"] = MemoryShortTermEntry(value)
         cleanShortTermMemory()
+    }
+
+    private fun validate(owner: String, key: String) {
+        if (owner.isEmpty() || key.isEmpty()) {
+            log.error("Owner and key must not be empty.")
+            error("Owner and key must not be empty!")
+        }
     }
 
     private fun cleanShortTermMemory() {
