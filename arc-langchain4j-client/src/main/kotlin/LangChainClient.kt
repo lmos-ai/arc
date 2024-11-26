@@ -132,8 +132,8 @@ class LangChainClient(
                 is UserMessage -> {
                     if (it.binaryData.isNotEmpty()) {
                         dev.langchain4j.data.message.UserMessage.from(
-                            listOf(TextContent.from(it.content))
-                                    + it.binaryData.map { data -> data.toContent() }
+                            listOf(TextContent.from(it.content)) +
+                                it.binaryData.map { data -> data.toContent() },
                         )
                     } else {
                         dev.langchain4j.data.message.UserMessage(it.content)
