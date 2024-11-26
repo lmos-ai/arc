@@ -15,7 +15,7 @@ dependencies {
     compileOnly("io.micrometer:micrometer-registry-atlas:1.12.3")
     compileOnly("com.azure:azure-identity:1.13.1")
 
-    val langchain4jVersion = "0.35.0"
+    val langchain4jVersion = "0.36.2"
     compileOnly("dev.langchain4j:langchain4j-bedrock:$langchain4jVersion")
     compileOnly("dev.langchain4j:langchain4j-google-ai-gemini:$langchain4jVersion")
     compileOnly("dev.langchain4j:langchain4j-ollama:$langchain4jVersion")

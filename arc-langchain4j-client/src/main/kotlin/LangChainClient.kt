@@ -6,6 +6,7 @@ package ai.ancf.lmos.arc.client.langchain4j
 
 import ai.ancf.lmos.arc.agents.ArcException
 import ai.ancf.lmos.arc.agents.conversation.AssistantMessage
+import ai.ancf.lmos.arc.agents.conversation.BinaryData
 import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
 import ai.ancf.lmos.arc.agents.conversation.SystemMessage
 import ai.ancf.lmos.arc.agents.conversation.UserMessage
@@ -16,14 +17,27 @@ import ai.ancf.lmos.arc.agents.llm.ChatCompleter
 import ai.ancf.lmos.arc.agents.llm.ChatCompletionSettings
 import ai.ancf.lmos.arc.agents.llm.LLMFinishedEvent
 import ai.ancf.lmos.arc.agents.llm.LLMStartedEvent
-import ai.ancf.lmos.arc.core.*
+import ai.ancf.lmos.arc.core.Failure
+import ai.ancf.lmos.arc.core.Result
+import ai.ancf.lmos.arc.core.Success
+import ai.ancf.lmos.arc.core.failWith
+import ai.ancf.lmos.arc.core.finally
+import ai.ancf.lmos.arc.core.getOrThrow
+import ai.ancf.lmos.arc.core.result
 import dev.langchain4j.agent.tool.ToolParameters
 import dev.langchain4j.agent.tool.ToolSpecification
 import dev.langchain4j.data.message.AiMessage
+import dev.langchain4j.data.message.AudioContent
 import dev.langchain4j.data.message.ChatMessage
+import dev.langchain4j.data.message.Content
+import dev.langchain4j.data.message.ImageContent
+import dev.langchain4j.data.message.TextContent
+import dev.langchain4j.data.message.VideoContent
 import dev.langchain4j.model.chat.ChatLanguageModel
 import dev.langchain4j.model.output.Response
 import org.slf4j.LoggerFactory
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 import kotlin.time.Duration
 import kotlin.time.measureTime
 
@@ -115,11 +129,31 @@ class LangChainClient(
     private fun toLangChainMessages(messages: List<ConversationMessage>) =
         messages.map {
             when (it) {
-                is UserMessage -> dev.langchain4j.data.message.UserMessage(it.content)
+                is UserMessage -> {
+                    if (it.binaryData.isNotEmpty()) {
+                        dev.langchain4j.data.message.UserMessage.from(
+                            listOf(TextContent.from(it.content))
+                                    + it.binaryData.map { data -> data.toContent() }
+                        )
+                    } else {
+                        dev.langchain4j.data.message.UserMessage(it.content)
+                    }
+                }
+
                 is AssistantMessage -> dev.langchain4j.data.message.AiMessage(it.content)
                 is SystemMessage -> dev.langchain4j.data.message.SystemMessage(it.content)
             }
         }
+
+    @OptIn(ExperimentalEncodingApi::class)
+    private fun BinaryData.toContent(): Content {
+        return when {
+            mimeType.startsWith("audio/") -> AudioContent.from(Base64.encode(data), mimeType)
+            mimeType.startsWith("video/") -> VideoContent.from(Base64.encode(data), mimeType)
+            mimeType.startsWith("image/") -> ImageContent.from(Base64.encode(data), mimeType)
+            else -> error("Unsupported binary data type: $mimeType!")
+        }
+    }
 
     /**
      * Converts functions to openai functions.
