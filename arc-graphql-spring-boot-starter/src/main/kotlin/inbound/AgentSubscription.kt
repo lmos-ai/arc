@@ -17,8 +17,13 @@ import ai.ancf.lmos.arc.api.AgentResult
 import ai.ancf.lmos.arc.core.Failure
 import ai.ancf.lmos.arc.core.Success
 import ai.ancf.lmos.arc.core.getOrThrow
-import ai.ancf.lmos.arc.graphql.*
+import ai.ancf.lmos.arc.graphql.AgentResolver
+import ai.ancf.lmos.arc.graphql.ContextHandler
+import ai.ancf.lmos.arc.graphql.EmptyContextHandler
+import ai.ancf.lmos.arc.graphql.ErrorHandler
 import ai.ancf.lmos.arc.graphql.context.AnonymizationEntities
+import ai.ancf.lmos.arc.graphql.context.ContextProvider
+import ai.ancf.lmos.arc.graphql.withLogContext
 import com.expediagroup.graphql.generator.annotations.GraphQLDescription
 import com.expediagroup.graphql.server.operations.Subscription
 import kotlinx.coroutines.async
@@ -65,7 +70,12 @@ class AgentSubscription(
                             transcript = request.messages.convert(),
                             anonymizationEntities = anonymizationEntities.entities,
                         ),
-                        setOf(request, anonymizationEntities, MessagePublisherChannel(messageChannel)),
+                        setOf(
+                            request,
+                            anonymizationEntities,
+                            MessagePublisherChannel(messageChannel),
+                            ContextProvider(request),
+                        ),
                     )
                 }
             }
