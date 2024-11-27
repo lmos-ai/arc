@@ -6,6 +6,8 @@ package ai.ancf.lmos.arc.runner
 
 import picocli.CommandLine.Command
 import picocli.CommandLine.Parameters
+import java.io.File
+import kotlin.text.Charsets.UTF_8
 
 @Command(
     name = "spring",
@@ -13,6 +15,14 @@ import picocli.CommandLine.Parameters
     description = ["Creates a new, empty spring boot host project."],
 )
 open class Spring : Runnable {
+
+    private val toDelete = listOf(
+        ".reuse",
+        ".github",
+        "LICENSES",
+        "CODE_OF_CONDUCT.md",
+        "README.md",
+    )
 
     @Parameters(
         index = "0",
@@ -32,6 +42,11 @@ open class Spring : Runnable {
                 }
             }
             .waitFor()
-        println("Run '$name/gradlew bootRun' to start the server.")
+        println(File(name))
+        println("Run './gradlew bootRun' to start the server.")
+        File(name, "settings.gradle.kts").let {
+            it.writeText(it.readText(UTF_8).replace("arc-spring-init", name))
+        }
+        toDelete.forEach { File(name, it).deleteRecursively() }
     }
 }
