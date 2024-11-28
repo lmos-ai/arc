@@ -13,14 +13,14 @@ The following shows how to load Scripted Arc Agents manually:
 
 ```kotlin
 val chatCompleterProvider = ChatCompleterProvider { modelId ->
-  // Return a ChatCompleter for the given model id
+    // Return a ChatCompleter/AIClient for the given model id.
 }
 
 val beanProvider = SetBeanProvider(setOf(chatCompleterProvider))
-val agentFactory = ChatAgentFactory(beanProvider)
-val agentScriptEngine = KtsAgentScriptEngine()
+val functionLoader = ScriptingLLMFunctionLoader(beanProvider, KtsFunctionScriptEngine())
+val agentFactory = ChatAgentFactory(CompositeBeanProvider(setOf(functionLoader), beanProvider))
+val agentLoader = ScriptingAgentLoader(agentFactory, KtsAgentScriptEngine())
 
-val agentLoader = ScriptingAgentLoader(agentFactory, agentScriptEngine)
 agentLoader.loadAgent("""
   agent {
      name = "simple-agent"
@@ -40,27 +40,50 @@ The model id comes from the `model` field of an agent.
 
 A `ChatCompleter` is the interface implemented by LLM clients. See the [Clients](/docs/clients) section for more details.
 
+Also checkout the [LangChain4J](/docs/clients/langchain4j) client for an example of a `ChatCompleterProvider`.
+
 #### BeanProvider
 The `BeanProvider` interface provides the beans that are used within the Arc Agents.
-These beans can be accessed using the `get<BeanClass>()` method.
+These beans can be accessed from anywhere within the Agent DSL using the `get<BeanClass>()` method.
 
 At least a `ChatCompleterProvider` must be provided to the `BeanProvider`.
+It is required by the `ChatAgent` to complete the conversation.
+
+Also an instance of `LLMFunctionLoader`, in this example `ScriptingLLMFunctionLoader`, 
+should also be provided so that the Agents have access to the functions defined in the DSL.
+
+#### ScriptingLLMFunctionLoader
+The `ScriptingLLMFunctionLoader` is an instance of `LLMFunctionLoader`.
+`LLMFunctionLoader`s are responsible for loading Agent functions. 
+
+The `ScriptingLLMFunctionLoader` loads functions from kotlin script files.
 
 #### ChatAgentFactory
 The `ChatAgentFactory` is responsible for creating `ChatAgent` instances from the agent DSL. 
 
 #### ScriptingAgentLoader
-The `ScriptingAgentLoader` is responsible for loading agents from script files.
+The `ScriptingAgentLoader` is an instance of `AgentLoader`.
+`AgentLoader`s are responsible for loading Agents. 
+
+The `ScriptingAgentLoader` loads agents from kotlin script files.
+
+#### Hot Reloading Scripts
 A powerful and flexible way of crafting Arc Agents is to use Kotlin Scripting.
 In this case, the Arc Agent DSL is placed in Kotlin script files that can be loaded and executed dynamically
 at runtime without restarting the application, i.e. "Hot Reloaded".
 
-#### Hot Reloading Scripts
 Scripts can be loaded from any source and passed to the `loadAgent` method as a string.
 Alternatively, Agents can be loaded from a folder and reload automatically when the files are modified.
 
 ```kotlin
-agentLoader.startHotReload(agentsFolder, hotReloadDelay)
+  
+val scriptHotReload = ScriptHotReload(
+    ScriptingAgentLoader(agentFactory, agentScriptEngine),
+    ScriptingLLMFunctionLoader(beanProvider, functionScriptEngine),
+    3.seconds, // fallback polling interval if file watcher is not supported on the platform
+)
+scriptHotReload.start(File("./agents"))
+
 ```
 
 > Note: In order for Agents Scripts to be correctly identified, their files must end with `.agent.kts` when containing Agents and

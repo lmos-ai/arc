@@ -25,7 +25,9 @@ implementation("io.micrometer:micrometer-registry-prometheus")
 ```
 
 The `arc-spring-boot-starter` library will set up the necessary beans and configurations
-to run the Arc Agents within the Spring Boot application. 
+to run the Arc Agents within the Spring Boot application.
+
+To better understand what Arc Agents Components that loaded see [Manual Setup](/docs/manual_setup).
 
 
 ### Agent Scripting
@@ -56,13 +58,7 @@ Now any Agent and Agent Functions defined in the `./agents` folder will be loade
 Agents can also be defined as Spring Beans, see the [Spring Beans](/docs/spring/agent-beans) documentation for more information.
 
 
-### Adding AIClients
-
-The Arc Framework is designed to be able to connect to different AI Models running on different platforms.
-
-See the [AI Clients](/docs/clients) for a list of supported clients.
-
-#### Adding the Azure OpenAI Client
+### Adding the Azure OpenAI Client
 
 To automatically add an `AzureAIClient` instance in your Spring Container, 
 simply add the `arc-azure-client` dependency to your project.
@@ -104,6 +100,47 @@ arc:
         client: azure
 ```
 
+
+### Adding LangChain4J Clients
+
+The Arc Framework can also use LangChain4J clients to connect to different language models.
+Simply add the `langchain4j` libraries that are required for your project.
+
+Check [LangChain4J](/docs/clients/langchain4j) for the list of available clients.
+
+For example:
+```kts
+  implementation("dev.langchain4j:langchain4j-bedrock:$langchain4jVersion")
+  implementation("dev.langchain4j:langchain4j-google-ai-gemini:$langchain4jVersion") 
+  implementation("dev.langchain4j:langchain4j-ollama:$langchain4jVersion")
+```
+
+Then configure the client in the `application.yml` file. For example:
+
+```yaml
+arc:
+  ai:
+    clients:
+      # Ollama (models running locally)
+      - id: llama3:8b
+        modelName: llama3:8b
+        client: ollama      
+      
+      # Models hosted on Amazon Bedrock
+      - id: anthropic
+        url: eu-central-1
+        accessKey: $ACCESS_KEY
+        accessSecret: $ACCESS_SECRET
+        modelName: anthropic.claude-3-5-sonnet-20240620-v1:0
+        client: bedrock 
+        
+      # Gemini 
+      - id: gemini
+        modelName: gemini-1.5-flash
+        url: $GEMINI_URL
+        apiKey: $GEMINI_API_KEY
+        client: gemini
+```
 
 ### Interacting with Agents
 
