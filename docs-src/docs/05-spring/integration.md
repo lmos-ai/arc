@@ -27,7 +27,7 @@ implementation("io.micrometer:micrometer-registry-prometheus")
 The `arc-spring-boot-starter` library will set up the necessary beans and configurations
 to run the Arc Agents within the Spring Boot application.
 
-To better understand what Arc Agents Components that loaded see [Manual Setup](/docs/manual_setup).
+To better understand what Arc Agents components are loaded see [Manual Setup](/docs/manual_setup).
 
 
 ### Agent Scripting

@@ -7,6 +7,15 @@ LangChain4J is a Java library that provides a uniform interface to multiple lang
 The Arc Framework provides a wrapper for the LangChain4J ChatLanguageModel interface, 
 which allows us to use any LangChain4J client within our Arc Agents.
 
+Supported LangChain4J clients:
+
+| Model          | Package                                      | Supported Version |  
+|----------------|----------------------------------------------|-------------------|
+| Amazon Bedrock | dev.langchain4j:langchain4j-bedrock          | 0.36.2            | 
+| Google Gemini  | dev.langchain4j:langchain4j-google-ai-gemini | 0.36.2            |   
+| Google Gemini  | dev.langchain4j:langchain4j-ollama           | 0.36.2            |   
+
+
 Example:
 ```kotlin
 // Gemini
