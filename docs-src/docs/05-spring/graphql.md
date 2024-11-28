@@ -1,5 +1,5 @@
 
-# Arc GraphQL
+# Agent GraphQL
 
 The Arc GraphQL Spring Boot Starter provides a GraphQL API for interacting with Arc Agents.
 

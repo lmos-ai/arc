@@ -4,7 +4,7 @@
 
 The Arc API defines the interfaces and data models that are used to interact with Arc Agents.
 
-The Arc GraphQL Spring Boot Starter is the first implementation of this API. See [Arc Graphql](/docs/12-graphql.md).
+The Arc GraphQL Spring Boot Starter is the first implementation of this API. See [Arc Graphql](/docs/spring/graphql).
 
 
 ### Agent Request
