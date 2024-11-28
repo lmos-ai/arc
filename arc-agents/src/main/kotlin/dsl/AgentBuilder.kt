@@ -5,6 +5,7 @@
 package ai.ancf.lmos.arc.agents.dsl
 
 import ai.ancf.lmos.arc.agents.Agent
+import ai.ancf.lmos.arc.agents.functions.LLMFunction
 
 /**
  * Handy function to builds agents using the given [agentFactory] and [builder].
@@ -16,4 +17,16 @@ fun buildAgents(agentFactory: AgentFactory<*>, builder: AgentDefinitionContext.(
         builder()
     }
     return context.agents.toList()
+}
+
+/**
+ * Handy function to builds agent functions.
+ * @return the list of functions created.
+ */
+fun buildFunctions(beanProvider: BeanProvider, builder: BasicFunctionDefinitionContext.() -> Unit): List<LLMFunction> {
+    val context = BasicFunctionDefinitionContext(beanProvider)
+    with(context) {
+        builder()
+    }
+    return context.functions.toList()
 }

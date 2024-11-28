@@ -12,3 +12,15 @@ fun interface ChatCompleterProvider {
 
     fun provideByModel(model: String?): ChatCompleter
 }
+
+/**
+ * Provides an implementation of ChatCompleterProvider that is backed by a map of ChatCompleters.
+ */
+class MapChatCompleterProvider(private val map: Map<String, ChatCompleter>) : ChatCompleterProvider {
+
+    override fun provideByModel(model: String?): ChatCompleter {
+        return map[model] ?: map.values.first()
+    }
+}
+
+fun Map<String, ChatCompleter>.toChatCompleterProvider() = MapChatCompleterProvider(this)
