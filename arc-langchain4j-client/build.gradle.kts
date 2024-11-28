@@ -14,4 +14,5 @@ dependencies {
     compileOnly("dev.langchain4j:langchain4j-bedrock:$langchain4jVersion")
     compileOnly("dev.langchain4j:langchain4j-google-ai-gemini:$langchain4jVersion")
     compileOnly("dev.langchain4j:langchain4j-ollama:$langchain4jVersion")
+    compileOnly("dev.langchain4j:langchain4j-open-ai:$langchain4jVersion")
 }

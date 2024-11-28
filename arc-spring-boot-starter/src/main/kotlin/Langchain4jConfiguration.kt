@@ -8,10 +8,12 @@ import ai.ancf.lmos.arc.client.langchain4j.LangChainClient
 import ai.ancf.lmos.arc.client.langchain4j.LangChainConfig
 import ai.ancf.lmos.arc.client.langchain4j.builders.bedrockBuilder
 import ai.ancf.lmos.arc.client.langchain4j.builders.geminiBuilder
+import ai.ancf.lmos.arc.client.langchain4j.builders.groqBuilder
 import ai.ancf.lmos.arc.client.langchain4j.builders.ollamaBuilder
 import dev.langchain4j.model.bedrock.BedrockAnthropicMessageChatModel
 import dev.langchain4j.model.googleai.GoogleAiGeminiChatModel
 import dev.langchain4j.model.ollama.OllamaChatModel
+import dev.langchain4j.model.openai.OpenAiChatModel
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.context.annotation.Bean
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider
@@ -70,6 +72,23 @@ class Langchain4jConfiguration {
                 apiKey = null,
             ),
             ollamaBuilder(),
+            eventPublisher,
+        )
+    }
+
+    @Bean
+    @ConditionalOnClass(OpenAiChatModel::class)
+    fun groqClient() = ClientBuilder { config, eventPublisher ->
+        if (config.client != "groq") return@ClientBuilder null
+        LangChainClient(
+            LangChainConfig(
+                modelName = config.modelName,
+                url = config.url,
+                accessKeyId = null,
+                secretAccessKey = null,
+                apiKey = config.apiKey,
+            ),
+            groqBuilder(),
             eventPublisher,
         )
     }

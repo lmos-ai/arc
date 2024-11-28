@@ -1,11 +1,11 @@
 ---
-title: LangChain4J
+title: LangChain4j
 ---
 
-LangChain4J is a Java library that provides a uniform interface to multiple language models.
+LangChain4j is a Java library that provides a uniform interface to multiple language models.
 
-The Arc Framework provides a wrapper for the LangChain4J ChatLanguageModel interface, 
-which allows us to use any LangChain4J clint within our Arc Agents.
+The Arc Framework provides a wrapper for the LangChain4j ChatLanguageModel interface, 
+which allows us to use any LangChain4j client within our Arc Agents.
 
 Example:
 ```kotlin
@@ -35,11 +35,25 @@ val bedrockClient = LangChainClient(
     eventPublisher,
 )
 
+// Groq
+val groqClient = LangChainClient(
+    LangChainConfig(
+        modelName = config.modelName,
+        url = config.url,
+        accessKeyId = null,
+        secretAccessKey = null,
+        apiKey = config.apiKey,
+    ),
+    groqBuilder(),
+    eventPublisher,
+)
+
 // The clients can then be used in a ChatCompleterProvider
 val chatCompleterProvider = ChatCompleterProvider { clientId ->
     when (clientId) {
         "gemini" -> geminiClient
         "bedrock" -> bedrockClient
+        "groq" -> groqClient
         else -> throw IllegalArgumentException("Unknown client id: $clientId")
     }
 }
