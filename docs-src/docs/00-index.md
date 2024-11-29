@@ -90,80 +90,11 @@ There are 2 types of memory:
 
 Each information stored in memory is associated with an owner, usually the user defined in the conversation.
 
-The Arc Agent Framework declares the following interface for memory:
-
-```kotlin
-interface Memory {
-
-    /**
-     * Store a value in LONG_TERM memory.
-     * @param owner The owner of the memory. For example, the user id.
-     * @param key The key to store the value under.
-     * @param value The value to store. If null, the value is removed from memory.
-     */
-    fun storeLongTerm(owner: String, key: String, value: Any?)
-
-    /**
-     * Store a value in SHORT_TERM memory.
-     * @param owner The owner of the memory. For example, the user id.
-     * @param key The key to store the value under.
-     * @param value The value to store. If null, the value is removed from memory.
-     * @param sessionId The session id to store the value under.
-     */
-    fun storeShortTerm(owner: String, key: String, value: Any?, sessionId: String)
-
-    /**
-     * Fetch a value from memory.
-     * @param owner The owner of the memory. For example, the user id.
-     * @param key The key to fetch the value for.
-     * @param sessionId The session id to fetch the value for. Only used if the value was stored under SHORT_TERM memory.
-     * @return The value stored under the key, or null if no value is stored.
-     */
-    fun fetch(owner: String, key: String, sessionId: String? = null): Any?
-}
-```
-
-Each application wanting to use memory must provide an implementation of the `Memory` interface.
 See the chapter on [Memory](memory) for available implementations.
 
 ## Eventing
 
-Eventing is a great way to decouple communication between different parts of an application.
-
-The Arc Agent Framework provides the following interfaces for enabling eventing
-between your application and components of the Arc Agent Framework:
-
-```kotlin
-  /**
- * EventPublisher interface.
- */
-fun interface EventPublisher {
-    fun publish(event: Event)
-}
-
-/**
- * Add EventHandlers to the implementation of this event to receive events.
- */
-fun interface EventListeners {
-    fun add(handler: EventHandler<out Event>)
-}
-```
-
-Out of the box, components of the Arc Framework will publish various events.
-The events are useful for monitoring the system.
-
-Custom events can be easily published throughout the Arc Agent DSL using the
-`emit` function.
-
-```kotlin
-  agent {
-    name = "..."
-    description = "..."
-    prompt { "..." }
-    filterInput {
-        emit(MyCustomEvent())
-    }
-}
-```
+Eventing is a great way to decouple communication between different parts of an application. 
+Agents can emit multiple events during the precessing of a request.
 
 See the [Eventing](/docs/eventing) for more details.
