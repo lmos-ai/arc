@@ -4,15 +4,25 @@ title: Packages
 
 ## Basic Packages
 ```kts
-val arcVersion = "0.102.0"
+val arcVersion = "0.112.0"
+implementation("ai.ancf.lmos:arc-agents:$arcVersion")
+```
+
+## DSL Scripting
+```kts
 implementation("ai.ancf.lmos:arc-scripting:$arcVersion")
 ```
 
 ## AI Clients
 ```kts
+// Add the Azure OpenAI client library for Java
 implementation("ai.ancf.lmos:arc-azure-client:$arcVersion")
-implementation("ai.ancf.lmos:arc-ollama-client:$arcVersion")
-implementation("ai.ancf.lmos:arc-gemini-client:$arcVersion")
+
+// Add the langchain4j dependencies for the AIClient that should be used.
+val langchain4jVersion = "0.36.2"
+implementation("dev.langchain4j:langchain4j-bedrock:$langchain4jVersion")
+implementation("dev.langchain4j:langchain4j-google-ai-gemini:$langchain4jVersion")
+implementation("dev.langchain4j:langchain4j-ollama:$langchain4jVersion")
 ```
 
 ## Spring Boot Packages

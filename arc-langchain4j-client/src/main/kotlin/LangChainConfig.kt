@@ -13,6 +13,6 @@ data class LangChainConfig(
 ) {
 
     override fun toString(): String {
-        return if (secretAccessKey != "***") copy(secretAccessKey = "***").toString() else super.toString()
+        return "LangChainConfig(modelName=$modelName, url=$url, apiKey=${apiKey?.let { "***" }}, accessKeyId=$accessKeyId, secretAccessKey=${secretAccessKey?.let { "***" }})"
     }
 }

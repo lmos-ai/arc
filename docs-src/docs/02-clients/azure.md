@@ -15,7 +15,7 @@ See https://learn.microsoft.com/en-us/java/api/overview/azure/ai-openai-readme?v
 
 Example:
 ```kotlin
-val config = AzureClientSettings(
+val config = AzureClientConfig(
     modelName = "gpt-3.5-turbo",
     apiKey = "YOUR_API_KEY",
     url = "https://api.openai.com/v1/engines/gpt-3.5-turbo/completions"
@@ -25,5 +25,5 @@ val azureOpenAIClient = OpenAIClientBuilder()
     .credential(AzureKeyCredential(config.apiKey))
     .buildAsyncClient()
 
-val agentClient = AzureAIClient(config, azureClient, eventPublisher)
+val agentClient = AzureAIClient(config, azureOpenAIClient)
 ```

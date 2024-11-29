@@ -11,6 +11,6 @@ data class AzureClientConfig(
 ) {
 
     override fun toString(): String {
-        return if (apiKey != "***") copy(apiKey = "***").toString() else super.toString()
+        return "AzureClientConfig(modelName=$modelName, url=$url, apiKey=***)"
     }
 }
