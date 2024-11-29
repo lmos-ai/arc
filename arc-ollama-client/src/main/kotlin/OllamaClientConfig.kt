@@ -7,4 +7,9 @@ package ai.ancf.lmos.arc.client.ollama
 data class OllamaClientConfig(
     val modelName: String,
     val url: String?,
-)
+) {
+
+    override fun toString(): String {
+        return "OllamaClientConfig(modelName=$modelName, url=$url)"
+    }
+}
