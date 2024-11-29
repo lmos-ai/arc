@@ -19,21 +19,23 @@ class CompiledScriptsConfiguration {
 
     @Bean
     @ConditionalOnClass(ai.ancf.lmos.arc.agents.gen.Agents::class)
-    fun agents(agentFactory: ChatAgentFactory) = AgentLoader {
+    fun agents(agentFactory: ChatAgentFactory): AgentLoader {
         val context = BasicAgentDefinitionContext(agentFactory)
         with(context) {
             ai.ancf.lmos.arc.agents.gen.Agents().build()
         }
-        context.agents.toList()
+        val agents = context.agents.toList()
+        return AgentLoader { agents }
     }
 
     @Bean
     @ConditionalOnClass(ai.ancf.lmos.arc.agents.gen.Functions::class)
-    fun functions(beanProvider: BeanProvider) = LLMFunctionLoader {
+    fun functions(beanProvider: BeanProvider): LLMFunctionLoader {
         val context = BasicFunctionDefinitionContext(beanProvider)
         with(context) {
             ai.ancf.lmos.arc.agents.gen.Functions().build()
         }
-        context.functions.toList()
+        val functions = context.functions.toList()
+        return LLMFunctionLoader { functions }
     }
 }
