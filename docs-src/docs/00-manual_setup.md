@@ -124,30 +124,37 @@ However, the Agent DSL can also be used to create Agents programmatically.
 Example:
 
 ```kotlin
- val context = BasicAgentDefinitionContext(agentFactory)
- with(context) {
-    agent {
-        name = "simple-agent"
-        model { "modelId" }
-        prompt {
-            "You are a helpful agent."
+import ai.ancf.lmos.arc.agents.dsl.buildAgents
+import ai.ancf.lmos.arc.agents.dsl.buildFunctions
+
+   val loadedAgents = buildAgents(agentFactory) {
+        agent {
+            name = "MyAgent"
+            description = "My agent"
+            tools {
+                +"get_content"
+            }
+            prompt {
+                """
+                 Always answer with 'Hello, World!'. 
+                """
+            }
         }
     }
 
-    agent {
-        name = "simple-agent-2"
-        model { "modelId" }
-        prompt {
-            "You are a helpful agent."
+    val functions = buildFunctions(beanProvider) {
+        function(
+            name = "get_content",
+            description = "Returns content from the web.",
+            params = types(
+                string("url", "The URL of the content to fetch.")
+            )
+        ) { (url) ->
+            httpGet(url.toString())
         }
     }
- }
-
- val loadedAgents = context.agents.toList()
 
 ```
-
-The same principle can also be used to define Agent Functions.
 
 
 ### Conversations

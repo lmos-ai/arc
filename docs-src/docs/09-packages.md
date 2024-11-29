@@ -4,7 +4,7 @@ title: Packages
 
 ## Basic Packages
 ```kts
-val arcVersion = "0.111.0"
+val arcVersion = "0.112.0"
 implementation("ai.ancf.lmos:arc-scripting:$arcVersion")
 ```
 
