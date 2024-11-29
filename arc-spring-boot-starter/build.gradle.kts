@@ -19,6 +19,7 @@ dependencies {
     compileOnly("dev.langchain4j:langchain4j-bedrock:$langchain4jVersion")
     compileOnly("dev.langchain4j:langchain4j-google-ai-gemini:$langchain4jVersion")
     compileOnly("dev.langchain4j:langchain4j-ollama:$langchain4jVersion")
+    compileOnly("dev.langchain4j:langchain4j-open-ai:$langchain4jVersion")
 
     implementation("org.springframework.boot:spring-boot-autoconfigure:3.3.3")
     implementation("org.springframework.boot:spring-boot-configuration-processor:3.3.3")
