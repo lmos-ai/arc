@@ -15,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest(
     properties = [
         "arc.scripts.enabled=false",
-    ]
+    ],
 )
 class GenAgentTest {
 
