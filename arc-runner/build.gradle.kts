@@ -13,6 +13,6 @@ dependencies {
 
     implementation("com.graphql-java:graphql-java:21.5")
     implementation("com.azure:azure-identity:1.13.1")
-    implementation("org.springframework.boot:spring-boot-starter-actuator:3.3.3")
+    implementation("org.springframework.boot:spring-boot-starter-actuator:3.4.0")
     implementation("info.picocli:picocli:4.7.6")
 }
