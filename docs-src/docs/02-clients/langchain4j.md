@@ -2,7 +2,9 @@
 title: LangChain4j
 ---
 
-LangChain4j is a Java library that provides a uniform interface to multiple language models.
+LangChain4j is s Java library that provides a uniform interface to multiple language models.
+
+See https://docs.langchain4j.dev/
 
 The Arc Framework provides a wrapper for the LangChain4j ChatLanguageModel interface, 
 which allows us to use any LangChain4j client within our Arc Agents.
