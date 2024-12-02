@@ -19,6 +19,6 @@ suspend fun <T> withLogContext(
         "agent" to agent,
         "conversationId" to request.conversationContext.conversationId,
         "turnId" to (request.conversationContext.turnId ?: "-1"),
-    ) + request.systemContext.associate { it.key to it.value }
+    ) + (request.systemContext?.associate { it.key to it.value } ?: emptyMap())
     return withContext(MDCContext(current + extraContext), block)
 }

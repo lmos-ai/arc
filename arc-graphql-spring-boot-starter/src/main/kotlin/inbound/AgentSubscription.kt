@@ -62,7 +62,7 @@ class AgentSubscription(
                 withLogContext(agent.name, request) {
                     agent.execute(
                         Conversation(
-                            user = request.userContext.userId?.let { User(it) },
+                            user = request.userContext?.userId?.let { User(it) },
                             conversationId = request.conversationContext.conversationId,
                             currentTurnId = request.conversationContext.turnId
                                 ?: request.messages.lastOrNull()?.turnId

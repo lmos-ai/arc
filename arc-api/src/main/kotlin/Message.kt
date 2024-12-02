@@ -12,4 +12,8 @@ data class Message(
     val content: String,
     val format: String = "text",
     val turnId: String? = null,
+    val binaryData: List<BinaryData>? = null,
 )
+
+@Serializable
+class BinaryData(val mimeType: String, val dataAsBase64: String)
