@@ -16,10 +16,10 @@ import ai.ancf.lmos.arc.api.AgentRequest
 data class ContextProvider(val request: AgentRequest) : SystemContextProvider, UserProfileProvider {
 
     override fun provideSystem(): SystemContext {
-        return SystemContext(request.systemContext.associate { it.key to it.value })
+        return SystemContext(request.systemContext?.associate { it.key to it.value } ?: emptyMap())
     }
 
     override fun provideProfile(): UserProfile {
-        return UserProfile(request.userContext.profile.associate { it.key to it.value })
+        return UserProfile(request.userContext?.profile?.associate { it.key to it.value } ?: emptyMap())
     }
 }
