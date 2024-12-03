@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 dependencies {
-    val ktorVersion = "2.3.12"
+    val ktorVersion = "3.0.2"
 
     // Ktor
     implementation("io.ktor:ktor-client-websockets:$ktorVersion")
