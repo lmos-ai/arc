@@ -21,7 +21,7 @@ import kotlin.script.experimental.api.ResultValue
 
 class ScriptingLLMFunctionLoader(
     private val beanProvider: BeanProvider,
-    private val functionScriptEngine: FunctionScriptEngine,
+    private val functionScriptEngine: FunctionScriptEngine = KtsFunctionScriptEngine(),
     private val eventPublisher: EventPublisher? = null,
 ) : LLMFunctionLoader {
 

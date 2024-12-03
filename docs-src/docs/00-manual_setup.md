@@ -3,29 +3,28 @@ title: Manual Setup
 sidebar_position: 2
 ---
 
-The Arc Framework can easily be setup with a few lines of code.
+The Arc Framework can easily be setup with a few lines of code to run in any JVM application.
 
 > Note: When using Spring Boot, it is recommended to use the [Arc Spring Boot Starter](/docs/spring) 
 > so that all the following steps are done automatically.
 
 > Also: read the [Component Overview](/docs/component_overview) page for a better understanding of core components of the Framework.
 
+The best way to understand how to set up the Arc Framework is to look at the following example:
+
+- https://github.com/lmos-ai/arc/tree/main/arc-runner/src/main/kotlin/server/ArcSetup.kt
+
 
 ### Loading Scripted Agents
-The following shows how to load Scripted Arc Agents.
 
-(See [Defining Agents (without scripting)](#defining-agents-without-scripting) 
-for an example of defining Agents programmatically.)
+Arc Agent DSL scripts can also be loaded from a file, folder, or string.
 
 ```kotlin
-val chatCompleterProvider = ChatCompleterProvider { modelId ->
-    // Return a ChatCompleter/AIClient for the given model id.
-}
+val agentLoader: ScriptingAgentLoader
 
-val beanProvider = SetBeanProvider(setOf(chatCompleterProvider))
-val functionLoader = ScriptingLLMFunctionLoader(beanProvider, KtsFunctionScriptEngine())
-val agentFactory = ChatAgentFactory(CompositeBeanProvider(setOf(functionLoader), beanProvider))
-val agentLoader = ScriptingAgentLoader(agentFactory, KtsAgentScriptEngine())
+agentLoader.loadAgents(File("my-agent.agent.kts"))
+
+agentLoader.loadAgentsFromFolder("agents")
 
 agentLoader.loadAgent("""
   agent {
@@ -37,32 +36,16 @@ agentLoader.loadAgent("""
   }
 """) 
 
-val loadedAgents = agentLoader.getAgents()
 ```
 
-It is **important** that a `ChatCompleterProvider` is added to the `BeanProvider`.
-It is required by the `ChatAgent` to complete the conversation.
-
-Also an instance of `LLMFunctionLoader`, in this example `ScriptingLLMFunctionLoader`, 
-should also be provided if the Agents require LLM functions.
-
-See the [cookbook](/docs/cookbook/) for examples of Agent Scripts.
 
 #### Hot Reloading Scripts
-A powerful and flexible way of crafting Arc Agents is to use Kotlin Scripting.
-In this case, the Arc Agent DSL is placed in Kotlin script files that can be loaded and executed dynamically
-at runtime without restarting the application, i.e. "Hot Reloaded".
 
-Scripts can be loaded from any source and passed to the `loadAgent` method as a string.
-Alternatively, Agents can be loaded from a folder and reload automatically when the files are modified.
+Arc Agent DSL script files can be hot-loaded when modified.
 
 ```kotlin
-  
-val scriptHotReload = ScriptHotReload(
-    ScriptingAgentLoader(agentFactory, agentScriptEngine),
-    ScriptingLLMFunctionLoader(beanProvider, functionScriptEngine),
-    3.seconds, // fallback polling interval if file watcher is not supported on the platform
-)
+
+val scriptHotReload = ScriptHotReload(agentLoader, functionLoader, 3.seconds)
 scriptHotReload.start(File("./agents"))
 
 ```

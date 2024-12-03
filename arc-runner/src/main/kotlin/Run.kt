@@ -4,24 +4,19 @@
 
 package ai.ancf.lmos.arc.runner
 
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.builder.SpringApplicationBuilder
-import org.springframework.context.ApplicationListener
-import org.springframework.context.event.ContextRefreshedEvent
-import org.springframework.stereotype.Component
+import ai.ancf.lmos.arc.runner.server.AIClientConfig
+import ai.ancf.lmos.arc.runner.server.AppConfig
+import ai.ancf.lmos.arc.runner.server.runApp
 import picocli.CommandLine.Command
 import picocli.CommandLine.Parameters
-import java.awt.Desktop
 import java.io.File
-import java.net.URI
 
 @Command(
     name = "run",
     mixinStandardHelpOptions = true,
     description = ["Starts the Arc Runner."],
 )
-@SpringBootApplication
-open class RunArc : Runnable {
+class RunArc : Runnable {
 
     @Parameters(
         index = "0",
@@ -34,6 +29,9 @@ open class RunArc : Runnable {
         println("Staring Arc Runner...")
 
         val properties = loadProperties()
+
+        val accessKey = System.getenv("ARC_AI_ACCESS_KEY") ?: properties.getProperty("ARC_AI_ACCESS_KEY")
+        val accessSecret = System.getenv("ARC_AI_ACCESS_SECRET") ?: properties.getProperty("ARC_AI_ACCESS_SECRET")
 
         val aiKey = System.getenv("ARC_AI_KEY") ?: properties.getProperty("ARC_AI_KEY")
         val aiUrl = System.getenv("ARC_AI_URL") ?: properties.getProperty("ARC_AI_URL")
@@ -49,44 +47,25 @@ open class RunArc : Runnable {
         }
         val client = System.getenv("ARC_CLIENT") ?: properties.getProperty("ARC_CLIENT")
         if (client == null) {
-            println("Please set ARC_CLIENT. For example: 'azure' or 'openai'...")
+            println("Please set ARC_CLIENT. For example: 'azure', 'openai', 'gemini' or 'ollma'...")
             return
         }
 
         val agentsHome = if (agentFolder == "HOME" || agentFolder == "") home() else File(agentFolder)
 
-        properties.put("arc.chat.ui.enabled", "true")
-        properties.put("arc.scripts.folder", agentsHome.absolutePath)
-        properties.put("arc.scripts.hotReload.enable", "true")
-        properties.put("arc.subscriptions.events.enable", "true")
-        properties.put("spring.main.banner-mode", "off")
-        properties.put("logging.level.root", "WARN")
-        properties.put("logging.level.ArcDSL", "DEBUG")
-        properties.put("logging.level.ai.ancf.lmos.arc", "DEBUG")
-
-        properties.put("arc.ai.clients[0].id", model)
-        properties.put("arc.ai.clients[0].model-name", model)
-        properties.put("arc.ai.clients[0].client", client)
-        if (aiUrl != null) properties.put("arc.ai.clients[0].url", aiUrl)
-        if (aiKey != null) properties.put("arc.ai.clients[0].apiKey", aiKey)
-
-        SpringApplicationBuilder(RunArc::class.java).properties(properties).headless(false).build().run()
-    }
-}
-
-@Component
-class StartupApplicationListenerExample : ApplicationListener<ContextRefreshedEvent?> {
-
-    override fun onApplicationEvent(event: ContextRefreshedEvent) {
-        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-            println("Opening Arc View...")
-            try {
-                Desktop.getDesktop().browse(URI("http://localhost:8080/chat/index.html"))
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        } else {
-            println("Open http://localhost:8080/chat/index.html in a browser to chat to Arc...")
-        }
+        runApp(
+            AppConfig(
+                scriptFolder = agentsHome,
+                clientConfig = AIClientConfig(
+                    id = model,
+                    modelName = model,
+                    client = client,
+                    url = aiUrl,
+                    apiKey = aiKey,
+                    accessSecret = accessSecret,
+                    accessKey = accessKey,
+                ),
+            ),
+        )
     }
 }

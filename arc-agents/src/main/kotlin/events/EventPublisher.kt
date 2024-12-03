@@ -30,10 +30,14 @@ fun EventListeners.addAll(newHandlers: List<EventHandler<out Event>>) {
 /**
  * Basic EventPublisher.
  */
-class BasicEventPublisher : EventPublisher, EventListeners {
+class BasicEventPublisher(vararg handlers: EventHandler<out Event>) : EventPublisher, EventListeners {
 
     private val handlers = ConcurrentHashMap<Type, List<EventHandler<out Event>>>()
     private val log = LoggerFactory.getLogger(javaClass)
+
+    init {
+        handlers.forEach { add(it) }
+    }
 
     override fun publish(event: Event) {
         handlers.forEach { (key, value) ->

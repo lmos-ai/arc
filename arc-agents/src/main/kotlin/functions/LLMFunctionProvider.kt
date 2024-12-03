@@ -35,7 +35,7 @@ fun interface LLMFunctionLoader {
  */
 class CompositeLLMFunctionProvider(
     private val loaders: List<LLMFunctionLoader>,
-    private val functions: List<LLMFunction>,
+    private val functions: List<LLMFunction> = emptyList(),
 ) : LLMFunctionProvider {
 
     /**
