@@ -117,7 +117,7 @@ subprojects {
             "implementation"("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 
             // Testing
-            "testImplementation"("org.junit.jupiter:junit-jupiter:5.10.2")
+            "testImplementation"("org.junit.jupiter:junit-jupiter:5.11.3")
             "testImplementation"("org.assertj:assertj-core:3.26.3")
             "testImplementation"("io.mockk:mockk:1.13.10")
         }
