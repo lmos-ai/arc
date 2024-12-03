@@ -11,7 +11,7 @@ Simply add the following to your `build.gradle.kts` file to enable the plugin:
 
 ```kotlin
 plugins {
-    id("ai.ancf.lmos.arc.gradle.plugin") version "0.114.0"
+    id("ai.ancf.lmos.arc.gradle.plugin") version "0.115.0"
 }
 ```
 

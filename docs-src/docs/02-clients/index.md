@@ -19,6 +19,6 @@ interface ChatCompleter {
 }
 ```
 
-Check out the following example on how to setup clients:
+Check out the following example on how to set up clients:
 
 - https://github.com/lmos-ai/arc/tree/main/arc-runner/src/main/kotlin/server/ChatCompleterProvider.kt

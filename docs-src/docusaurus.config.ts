@@ -74,7 +74,7 @@ const config: Config = {
                 // {to: '/blog', label: 'Blog', position: 'left'},
                 {
                     href: 'https://github.com/lmos-ai/arc/releases',
-                    label: '0.114.0',
+                    label: '0.115.0',
                     position: 'right',
                 },  {
                     href: 'https://github.com/lmos-ai/arc',
