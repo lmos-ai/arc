@@ -6,14 +6,27 @@ package ai.ancf.lmos.arc.agents
 
 import ai.ancf.lmos.arc.agents.conversation.Conversation
 import ai.ancf.lmos.arc.agents.conversation.SystemMessage
-import ai.ancf.lmos.arc.agents.dsl.*
+import ai.ancf.lmos.arc.agents.dsl.AllTools
+import ai.ancf.lmos.arc.agents.dsl.BasicDSLContext
+import ai.ancf.lmos.arc.agents.dsl.BeanProvider
+import ai.ancf.lmos.arc.agents.dsl.CompositeBeanProvider
+import ai.ancf.lmos.arc.agents.dsl.DSLContext
+import ai.ancf.lmos.arc.agents.dsl.InputFilterContext
+import ai.ancf.lmos.arc.agents.dsl.OutputFilterContext
+import ai.ancf.lmos.arc.agents.dsl.ToolsDSLContext
+import ai.ancf.lmos.arc.agents.dsl.provideOptional
 import ai.ancf.lmos.arc.agents.events.EventPublisher
 import ai.ancf.lmos.arc.agents.functions.FunctionWithContext
 import ai.ancf.lmos.arc.agents.functions.LLMFunction
 import ai.ancf.lmos.arc.agents.functions.LLMFunctionProvider
 import ai.ancf.lmos.arc.agents.llm.ChatCompleterProvider
 import ai.ancf.lmos.arc.agents.llm.ChatCompletionSettings
-import ai.ancf.lmos.arc.core.*
+import ai.ancf.lmos.arc.core.Result
+import ai.ancf.lmos.arc.core.failWith
+import ai.ancf.lmos.arc.core.getOrThrow
+import ai.ancf.lmos.arc.core.mapFailure
+import ai.ancf.lmos.arc.core.recover
+import ai.ancf.lmos.arc.core.result
 import kotlinx.coroutines.coroutineScope
 import org.slf4j.LoggerFactory
 import kotlin.time.measureTime
@@ -136,3 +149,10 @@ class ChatAgent(
         return "ChatAgent(name='$name', description='$description')"
     }
 }
+
+// TODO: Make the dependencies of the ChatAgent more explicit
+data class ChatAgentDependencies(
+    val functionProvider: LLMFunctionProvider,
+    val chatCompleterProvider: ChatCompleterProvider,
+    val eventPublisher: EventPublisher? = null,
+)

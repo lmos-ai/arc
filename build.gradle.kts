@@ -10,7 +10,7 @@ import java.lang.System.getenv
 import java.net.URI
 
 plugins {
-    kotlin("jvm") version "2.0.10" apply false
+    kotlin("jvm") version "2.1.0" apply false
     kotlin("plugin.serialization") version "2.0.21" apply false
     id("org.jetbrains.dokka") version "1.9.20"
     id("org.cyclonedx.bom") version "1.8.2" apply false
@@ -32,7 +32,7 @@ subprojects {
     apply(plugin = "com.vanniktech.maven.publish")
 
     java {
-        sourceCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
     }
 
     configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
@@ -43,7 +43,7 @@ subprojects {
         kotlinOptions {
             freeCompilerArgs += "-Xjsr305=strict"
             freeCompilerArgs += "-Xcontext-receivers"
-            jvmTarget = "17"
+            jvmTarget = "21"
         }
     }
 
@@ -151,6 +151,7 @@ dependencies {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
