@@ -19,3 +19,6 @@ Supported LangChain4j clients:
 | Groq           | dev.langchain4j:langchain4j-open-ai          | 0.36.2            |   
 
 
+Check out the following example on how to set up clients:
+
+- https://github.com/lmos-ai/arc/tree/main/arc-runner/src/main/kotlin/server/ChatCompleterProvider.kt
