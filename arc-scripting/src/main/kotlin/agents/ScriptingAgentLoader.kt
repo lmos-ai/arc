@@ -25,7 +25,7 @@ import kotlin.script.experimental.api.ResultValue
  */
 class ScriptingAgentLoader(
     private val agentFactory: AgentFactory<*>,
-    private val agentScriptEngine: AgentScriptEngine,
+    private val agentScriptEngine: AgentScriptEngine = KtsAgentScriptEngine(),
     private val eventPublisher: EventPublisher? = null,
 ) : AgentLoader {
 
@@ -80,5 +80,12 @@ class ScriptingAgentLoader(
                     )
                 }
             }
+    }
+
+    /**
+     * Loads the agents located in the given folder.
+     */
+    fun loadAgentsFromFolder(folder: File) {
+        folder.walk().filter { it.isFile }.forEach { loadAgents(it) }
     }
 }

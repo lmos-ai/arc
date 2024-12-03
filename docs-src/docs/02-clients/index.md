@@ -18,3 +18,7 @@ interface ChatCompleter {
     ): Result<AssistantMessage, AIException>
 }
 ```
+
+Check out the following example on how to setup clients:
+
+- https://github.com/lmos-ai/arc/tree/main/arc-runner/src/main/kotlin/server/ChatCompleterProvider.kt
