@@ -3,13 +3,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 dependencies {
-    val ktorVersion = "2.3.12"
-
-    // Ktor
-    implementation("io.ktor:ktor-client-websockets:$ktorVersion")
-    implementation("io.ktor:ktor-client-cio-jvm:$ktorVersion")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation(libs.ktor.client.websockets)
+    implementation(libs.ktor.client.cio.jvm)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.client.core)
 
     implementation(project(":arc-api"))
 
@@ -17,6 +14,6 @@ dependencies {
     testImplementation(project(":arc-agents"))
     testImplementation(project(":arc-graphql-spring-boot-starter"))
     testImplementation(project(":arc-spring-boot-starter"))
-    testImplementation("org.springframework.boot:spring-boot-starter-test:3.4.0")
-    testImplementation("org.springframework.boot:spring-boot-starter:3.4.0")
+    testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.spring.boot.starter)
 }
