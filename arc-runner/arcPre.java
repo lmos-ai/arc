@@ -11,6 +11,7 @@
 //DEPS org.slf4j:slf4j-api:2.0.16
 //DEPS com.azure:azure-core-tracing-opentelemetry:1.0.0-beta.52
 //DEPS com.fasterxml.jackson.core:jackson-databind:2.17.2
+//DEPS io.projectreactor:reactor-core:3.4.41
 
 package arc.runner;
 
