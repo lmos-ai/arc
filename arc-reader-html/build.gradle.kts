@@ -10,5 +10,5 @@ dependencies {
     implementation("org.slf4j:slf4j-api:1.7.25")
 
     // jsoup
-    implementation("org.jsoup:jsoup:1.17.2")
+    implementation("org.jsoup:jsoup:1.18.3")
 }
