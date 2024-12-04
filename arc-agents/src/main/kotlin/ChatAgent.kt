@@ -84,7 +84,7 @@ class ChatAgent(
                     model = model,
                     duration = duration,
                     flowBreak = flowBreak,
-                    tools = usedFunctions.get()?.map { it.name }?.toSet() ?: emptySet()
+                    tools = usedFunctions.get()?.map { it.name }?.toSet() ?: emptySet(),
                 ),
             )
             result
@@ -95,7 +95,7 @@ class ChatAgent(
         conversation: Conversation,
         model: String?,
         context: Set<Any>,
-        usedFunctions: AtomicReference<List<LLMFunction>?>
+        usedFunctions: AtomicReference<List<LLMFunction>?>,
     ) =
         result<Conversation, Exception> {
             val fullContext = context + setOf(conversation, conversation.user).filterNotNull()
