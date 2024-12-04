@@ -110,12 +110,11 @@ subprojects {
 
     if (!project.name.endsWith("-bom")) {
         dependencies {
-            val kotlinXVersion = "1.9.0"
-            "implementation"("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:$kotlinXVersion")
-            "implementation"("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:$kotlinXVersion")
-            "implementation"("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:$kotlinXVersion")
-            "implementation"("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
-
+            "implementation"(libs.kotlinx.coroutines.slf4j)
+            "implementation"(libs.kotlinx.coroutines.jdk8)
+            "implementation"(libs.kotlinx.coroutines.reactor)
+            "implementation"(libs.kotlinx.serialization.json)
+        
             // Testing
             "testImplementation"("org.junit.jupiter:junit-jupiter:5.11.3")
             "testImplementation"("org.assertj:assertj-core:3.26.3")
