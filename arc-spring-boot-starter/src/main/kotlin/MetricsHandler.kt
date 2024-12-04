@@ -24,6 +24,9 @@ class MetricsHandler(private val metrics: MeterRegistry) : EventHandler<Event> {
     override fun onEvent(event: Event) {
         when (event) {
             is AgentFinishedEvent -> with(event) {
+                if (event.flowBreak) {
+                    metrics.counter("arc.agent.flowBreak", "agent", agent.name).increment()
+                }
                 if (event.output is Success) {
                     timer(
                         "arc.agent.finished",
