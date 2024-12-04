@@ -24,6 +24,7 @@ data class AgentFinishedEvent(
     val output: Result<Conversation, AgentFailedException>,
     val duration: Duration,
     val flowBreak: Boolean = false,
+    val tools: Set<String> = emptySet(),
 ) : AgentEvent()
 
 data class AgentStartedEvent(
