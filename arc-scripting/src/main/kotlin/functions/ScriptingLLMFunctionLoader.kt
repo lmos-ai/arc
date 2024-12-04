@@ -73,4 +73,11 @@ class ScriptingLLMFunctionLoader(
                 }
             }
     }
+
+    /**
+     * Loads the agent functions located in the given folder.
+     */
+    fun loadAgentsFromFolder(folder: File) {
+        folder.walk().filter { it.isFile }.forEach { loadFunctions(it) }
+    }
 }

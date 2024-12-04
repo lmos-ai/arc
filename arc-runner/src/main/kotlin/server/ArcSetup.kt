@@ -8,7 +8,7 @@ import ai.ancf.lmos.arc.agents.AgentProvider
 import ai.ancf.lmos.arc.agents.CompositeAgentProvider
 import ai.ancf.lmos.arc.agents.dsl.ChatAgentFactory
 import ai.ancf.lmos.arc.agents.dsl.CompositeBeanProvider
-import ai.ancf.lmos.arc.agents.dsl.SetBeanProvider
+import ai.ancf.lmos.arc.agents.dsl.beans
 import ai.ancf.lmos.arc.agents.events.BasicEventPublisher
 import ai.ancf.lmos.arc.agents.events.LoggingEventHandler
 import ai.ancf.lmos.arc.agents.functions.CompositeLLMFunctionProvider
@@ -32,12 +32,13 @@ fun setupArc(appConfig: AppConfig): Pair<AgentProvider, EventSubscriptionHolder>
      * Set up the chat completer and the bean provider.
      */
     val chatCompleterProvider = chatCompleterProvider(appConfig.clientConfig, eventPublisher)
-    val beanProvider = SetBeanProvider(setOf(chatCompleterProvider, eventPublisher))
+    val beanProvider = beans(chatCompleterProvider, eventPublisher)
 
     /**
      * Set up the loading of agent functions from scripts.
      */
     val functionLoader = ScriptingLLMFunctionLoader(beanProvider, eventPublisher = eventPublisher)
+    functionLoader.loadAgentsFromFolder(appConfig.scriptFolder)
     val functionProvider = CompositeLLMFunctionProvider(listOf(functionLoader))
 
     /**
@@ -46,6 +47,7 @@ fun setupArc(appConfig: AppConfig): Pair<AgentProvider, EventSubscriptionHolder>
     val agentFactory = ChatAgentFactory(CompositeBeanProvider(setOf(functionProvider), beanProvider))
     val agentLoader = ScriptingAgentLoader(agentFactory, eventPublisher = eventPublisher)
     agentLoader.loadAgentsFromFolder(appConfig.scriptFolder)
+    val agentProvider = CompositeAgentProvider(listOf(agentLoader), emptyList())
 
     /**
      * Set up hot-reload for agents and functions.
@@ -53,5 +55,5 @@ fun setupArc(appConfig: AppConfig): Pair<AgentProvider, EventSubscriptionHolder>
     val scriptHotReload = ScriptHotReload(agentLoader, functionLoader, 3.seconds)
     scriptHotReload.start(appConfig.scriptFolder)
 
-    return CompositeAgentProvider(listOf(agentLoader), emptyList()) to eventSubscriptionHolder
+    return agentProvider to eventSubscriptionHolder
 }
