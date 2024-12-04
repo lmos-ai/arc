@@ -114,7 +114,7 @@ subprojects {
             "implementation"(rootProject.libs.kotlinx.coroutines.jdk8)
             "implementation"(rootProject.libs.kotlinx.coroutines.reactor)
             "implementation"(rootProject.libs.kotlinx.serialization.json)
-        
+
             // Testing
             "testImplementation"("org.junit.jupiter:junit-jupiter:5.11.3")
             "testImplementation"("org.assertj:assertj-core:3.26.3")
