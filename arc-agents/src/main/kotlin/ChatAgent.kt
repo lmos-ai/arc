@@ -29,6 +29,7 @@ import ai.ancf.lmos.arc.core.recover
 import ai.ancf.lmos.arc.core.result
 import kotlinx.coroutines.coroutineScope
 import org.slf4j.LoggerFactory
+import java.util.concurrent.atomic.AtomicReference
 import kotlin.time.measureTime
 
 const val AGENT_LOG_CONTEXT_KEY = "agent"
@@ -56,10 +57,12 @@ class ChatAgent(
             val model = model()
 
             agentEventHandler?.publish(AgentStartedEvent(this@ChatAgent))
+
             var flowBreak = false
+            val usedFunctions = AtomicReference<List<LLMFunction>?>(null)
             val result: Result<Conversation, AgentFailedException>
             val duration = measureTime {
-                result = doExecute(input, model, context)
+                result = doExecute(input, model, context, usedFunctions)
                     .recover {
                         if (it is WithConversationResult) {
                             log.info("Agent $name interrupted!", it)
@@ -81,19 +84,27 @@ class ChatAgent(
                     model = model,
                     duration = duration,
                     flowBreak = flowBreak,
+                    tools = usedFunctions.get()?.map { it.name }?.toSet() ?: emptySet()
                 ),
             )
             result
         }
     }
 
-    private suspend fun doExecute(conversation: Conversation, model: String?, context: Set<Any>) =
+    private suspend fun doExecute(
+        conversation: Conversation,
+        model: String?,
+        context: Set<Any>,
+        usedFunctions: AtomicReference<List<LLMFunction>?>
+    ) =
         result<Conversation, Exception> {
             val fullContext = context + setOf(conversation, conversation.user).filterNotNull()
             val compositeBeanProvider = CompositeBeanProvider(fullContext, beanProvider)
             val scriptingContext = BasicDSLContext(compositeBeanProvider)
             val chatCompleter = compositeBeanProvider.chatCompleter(model = model)
+
             val functions = functions(scriptingContext)
+            usedFunctions.set(functions)
 
             val filteredInput = coroutineScope {
                 val filterContext = InputFilterContext(scriptingContext, conversation)
