@@ -110,10 +110,10 @@ subprojects {
 
     if (!project.name.endsWith("-bom")) {
         dependencies {
-            "implementation"(libs.kotlinx.coroutines.slf4j)
-            "implementation"(libs.kotlinx.coroutines.jdk8)
-            "implementation"(libs.kotlinx.coroutines.reactor)
-            "implementation"(libs.kotlinx.serialization.json)
+            "implementation"(rootProject.libs.kotlinx.coroutines.slf4j)
+            "implementation"(rootProject.libs.kotlinx.coroutines.jdk8)
+            "implementation"(rootProject.libs.kotlinx.coroutines.reactor)
+            "implementation"(rootProject.libs.kotlinx.serialization.json)
         
             // Testing
             "testImplementation"("org.junit.jupiter:junit-jupiter:5.11.3")
