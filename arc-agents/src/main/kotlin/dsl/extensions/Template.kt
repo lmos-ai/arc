@@ -17,3 +17,8 @@ package ai.ancf.lmos.arc.agents.dsl.extensions
  * """ Some string template ${if(someVariableThatResultToTrue) "Hello" else "" } """.
  */
 infix fun Any?.then(out: String) = if (this == true) out else ""
+
+/**
+ * Adds a newline character to the end of the string.
+**/
+fun String.newline() = this + "\n"
