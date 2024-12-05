@@ -16,4 +16,4 @@ data class Message(
 )
 
 @Serializable
-class BinaryData(val mimeType: String, val dataAsBase64: String)
+class BinaryData(val mimeType: String, val data: String)
