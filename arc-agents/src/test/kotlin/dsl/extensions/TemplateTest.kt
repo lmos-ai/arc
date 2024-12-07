@@ -18,4 +18,16 @@ class TemplateTest : TestBase() {
        """.trim()
         assertThat(result).isEqualTo("Hello, World!")
     }
+
+    @Test
+    fun `test markdown extension`() {
+        val result = listOf("one", "two", "three").markdown()
+        assertThat(result).isEqualTo("- one\n- two\n- three\n")
+    }
+
+    @Test
+    fun `test newline extension`() {
+        val result = "Hello".newline()
+        assertThat(result).isEqualTo("Hello\n")
+    }
 }

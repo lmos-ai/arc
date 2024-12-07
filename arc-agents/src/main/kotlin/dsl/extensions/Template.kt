@@ -22,3 +22,14 @@ infix fun Any?.then(out: String) = if (this == true) out else ""
  * Adds a newline character to the end of the string.
 **/
 fun String.newline() = this + "\n"
+
+/**
+ * Prints a list of strings as a markdown list.
+ * Example:
+ * listOf("one", "two", "three").printAsList()
+ * will return
+ * - one
+ * - two
+ * - three
+ */
+fun List<String>.markdown() = this.joinToString("") { "- $it".newline() }
