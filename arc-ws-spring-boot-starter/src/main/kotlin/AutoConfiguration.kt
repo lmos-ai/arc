@@ -24,7 +24,7 @@ open class AgentWSAutoConfiguration {
     @Bean
     fun webSocketService(): WebSocketService {
         val strategy = org.springframework.web.reactive.socket.server.upgrade.TomcatRequestUpgradeStrategy().apply {
-            setMaxBinaryMessageBufferSize(1024 * 1024 * 15) // 15MB
+            setMaxBinaryMessageBufferSize(1024 * 1024 * 35) // 15MB
         }
         return HandshakeWebSocketService(strategy)
     }

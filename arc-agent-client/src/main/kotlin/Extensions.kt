@@ -26,7 +26,7 @@ suspend fun AgentClient.callWithAudio(
                     content = message,
                     binaryData = listOf(
                         BinaryData(
-                            data = Base64.encode(data),
+                            dataAsBase64 = Base64.encode(data),
                             mimeType = mimeType.value,
                         ),
                     ),

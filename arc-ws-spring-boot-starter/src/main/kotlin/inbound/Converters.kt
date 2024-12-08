@@ -10,6 +10,8 @@ import ai.ancf.lmos.arc.agents.conversation.UserMessage
 import ai.ancf.lmos.arc.api.AnonymizationEntity
 import ai.ancf.lmos.arc.api.BinaryData
 import ai.ancf.lmos.arc.api.Message
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 import ai.ancf.lmos.arc.agents.conversation.AnonymizationEntity as CoreAnonymizationEntity
 import ai.ancf.lmos.arc.agents.conversation.BinaryData as CoreBinaryData
 
@@ -21,7 +23,10 @@ fun List<Message>.convert(dataProvider: WritableDataStream): List<ConversationMe
     }
 }
 
-fun AssistantMessage?.toMessage() = Message("assistant", this?.content ?: "", turnId = this?.turnId)
+@OptIn(ExperimentalEncodingApi::class)
+suspend fun AssistantMessage?.toMessage() =
+    Message("assistant", this?.content ?: "", turnId = this?.turnId,
+        binaryData = this?.binaryData?.map { BinaryData(it.mimeType, Base64.encode(it.readAllBytes())) })
 
 fun List<AnonymizationEntity>?.convertConversationEntities() = this?.map {
     ai.ancf.lmos.arc.agents.conversation.AnonymizationEntity(
