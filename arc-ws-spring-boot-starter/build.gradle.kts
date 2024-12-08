@@ -17,5 +17,6 @@ dependencies {
     // Test
     testImplementation(project(":arc-spring-boot-starter"))
     testImplementation(project(":arc-agent-client"))
+    testImplementation(project(":arc-openai-realtime-client"))
     testImplementation(libs.spring.boot.starter.test)
 }

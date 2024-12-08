@@ -4,7 +4,6 @@
 
 package ai.ancf.lmos.arc.ws.inbound
 
-import ai.ancf.lmos.arc.agent.client.ws.RequestEnvelope
 import ai.ancf.lmos.arc.agents.AgentProvider
 import ai.ancf.lmos.arc.agents.ChatAgent
 import ai.ancf.lmos.arc.agents.User
@@ -16,6 +15,7 @@ import ai.ancf.lmos.arc.agents.getAgentByName
 import ai.ancf.lmos.arc.api.AgentRequest
 import ai.ancf.lmos.arc.api.AgentResult
 import ai.ancf.lmos.arc.api.REQUEST_END
+import ai.ancf.lmos.arc.api.RequestEnvelope
 import ai.ancf.lmos.arc.core.Failure
 import ai.ancf.lmos.arc.core.Success
 import ai.ancf.lmos.arc.core.getOrThrow
@@ -46,8 +46,13 @@ import org.springframework.web.reactive.socket.WebSocketMessage.Type.BINARY
 import org.springframework.web.reactive.socket.WebSocketMessage.Type.TEXT
 import org.springframework.web.reactive.socket.WebSocketSession
 import org.springframework.web.server.ServerWebExchange
+import java.io.ByteArrayOutputStream
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 import java.time.Duration
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 class StreamingEndpoint(
     private val agentProvider: AgentProvider,
@@ -80,6 +85,7 @@ class StreamingEndpoint(
         null
     }
 
+    @OptIn(ExperimentalEncodingApi::class)
     private suspend fun handleTextMessage(session: WebSocketSession, message: WebSocketMessage) {
         val msg = message.payloadAsText
         log.info("Received message: $msg")
@@ -96,7 +102,9 @@ class StreamingEndpoint(
                 requestSession.data,
             ).map {
                 val jsonResult = json.encodeToString(AgentResult.serializer(), it)
-                session.textMessage(jsonResult)
+                val base = it.messages.last().binaryData!!.last().dataAsBase64!!
+                val wav = pcm16ToWav(Base64.decode(base), 24000, 1)
+                session.textMessage(Base64.encode(wav.toByteArray()))
             }
             session.send(result.asFlux()).awaitSingleOrNull()
             sessions[session.id]?.data?.close()
@@ -109,9 +117,10 @@ class StreamingEndpoint(
     }
 
     private suspend fun handleBinaryMessage(session: WebSocketSession, message: WebSocketMessage) {
-        log.info("Received binary message for: ${session.id}")
+        log.info("Received binary message for: ${session.id} ${sessions[session.id]}")
         sessions[session.id]?.let {
             val bytes = message.payload.asInputStream().use { b -> b.readAllBytes() }
+            log.info("Received ${bytes.size} bytes")
             sessions[session.id]?.data?.send(bytes)
         }
     }
@@ -125,7 +134,7 @@ class StreamingEndpoint(
                 val start = System.nanoTime()
                 val messageChannel = Channel<AssistantMessage>()
 
-                log.info("Received request: ${request.systemContext}")
+                log.info("Calling Agent $agentName")
 
                 async {
                     sendIntermediateMessage(messageChannel, start, anonymizationEntities)
@@ -212,4 +221,35 @@ class StreamingEndpoint(
             maxAge = 3600
         }
     }
+}
+
+fun pcm16ToWav(pcmData: ByteArray, sampleRate: Int, channels: Int): ByteArrayOutputStream {
+    val byteRate = sampleRate * channels * 2 // Bytes per second
+    val blockAlign = channels * 2 // Bytes per sample
+    val chunkSize = 36 + pcmData.size // Chunk size, including header
+
+    // Create header data
+    val header = ByteBuffer.allocate(44)
+    header.order(ByteOrder.LITTLE_ENDIAN)
+    header.put("RIFF".toByteArray())
+    header.putInt(chunkSize)
+    header.put("WAVE".toByteArray())
+    header.put("fmt ".toByteArray())
+    header.putInt(16) // Format chunk size
+    header.putShort(1.toShort()) // Audio format (1 = PCM)
+    header.putShort(channels.toShort())
+    header.putInt(sampleRate)
+    header.putInt(byteRate)
+    header.putShort(blockAlign.toShort())
+    header.putShort(16.toShort()) // Bits per sample
+    header.put("data".toByteArray())
+    header.putInt(pcmData.size)
+
+    // Write header and data to file
+    // FileOutputStream(outputFile).use { fos ->
+    val outputFile = ByteArrayOutputStream()
+    outputFile.write(header.array())
+    outputFile.write(pcmData)
+    //}
+    return outputFile
 }

@@ -9,6 +9,7 @@ import ai.ancf.lmos.arc.agent.client.ws.WsClient
 import ai.ancf.lmos.arc.api.BinaryData
 import ai.ancf.lmos.arc.api.STREAM_SOURCE
 import ai.ancf.lmos.arc.api.agentRequest
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -30,5 +31,10 @@ class WSStreamTest {
         dataProvider.send("This is data".encodeToByteArray())
 
         assertThat(lastBinaryData.get()).isEqualTo("This is data")
+    }
+
+    @Test
+    fun `server test`(): Unit = runBlocking {
+       delay(900_000)
     }
 }

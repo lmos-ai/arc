@@ -103,7 +103,7 @@ data class DeveloperMessage(
 }
 
 @Serializable
-class BinaryData(val mimeType: String, val data: ByteArray?, val stream: DataStream? = null) {
+class BinaryData(val mimeType: String, val data: ByteArray? = null, val stream: DataStream? = null) {
 
     /**
      * Reads all bytes from the data or reader.

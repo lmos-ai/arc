@@ -7,13 +7,13 @@ package ai.ancf.lmos.arc.agent.client.ws
 import ai.ancf.lmos.arc.api.AgentRequest
 import ai.ancf.lmos.arc.api.AgentResult
 import ai.ancf.lmos.arc.api.REQUEST_END
+import ai.ancf.lmos.arc.api.RequestEnvelope
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.http.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.flow.flow
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.slf4j.LoggerFactory
@@ -75,5 +75,3 @@ class WsClient : Closeable {
     }
 }
 
-@Serializable
-data class RequestEnvelope(val agentName: String?, val payload: AgentRequest)
