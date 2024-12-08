@@ -10,14 +10,12 @@ import ai.ancf.lmos.arc.agents.conversation.UserMessage
 import ai.ancf.lmos.arc.api.AnonymizationEntity
 import ai.ancf.lmos.arc.api.BinaryData
 import ai.ancf.lmos.arc.api.Message
-import kotlin.io.encoding.Base64
-import kotlin.io.encoding.ExperimentalEncodingApi
 import ai.ancf.lmos.arc.agents.conversation.AnonymizationEntity as CoreAnonymizationEntity
 import ai.ancf.lmos.arc.agents.conversation.BinaryData as CoreBinaryData
 
-fun List<Message>.convert(): List<ConversationMessage> = map {
+fun List<Message>.convert(dataProvider: WritableDataStream): List<ConversationMessage> = map {
     when (it.role) {
-        "user" -> UserMessage(it.content, binaryData = it.binaryData?.convertBinary() ?: emptyList())
+        "user" -> UserMessage(it.content, binaryData = it.binaryData?.convertBinary(dataProvider) ?: emptyList())
         "assistant" -> AssistantMessage(it.content)
         else -> throw IllegalArgumentException("Unknown role: ${it.role}")
     }
@@ -41,5 +39,5 @@ fun List<CoreAnonymizationEntity>?.convertAPIEntities() = this?.map {
     )
 } ?: emptyList()
 
-@OptIn(ExperimentalEncodingApi::class)
-fun List<BinaryData>.convertBinary() = map { CoreBinaryData(it.mimeType, Base64.decode(it.data)) }
+fun List<BinaryData>.convertBinary(dataProvider: WritableDataStream) =
+    map { CoreBinaryData(it.mimeType, null, dataProvider) }

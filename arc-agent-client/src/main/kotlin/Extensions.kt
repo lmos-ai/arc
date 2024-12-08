@@ -15,7 +15,7 @@ suspend fun AgentClient.callWithAudio(
     conversationId: String,
     data: ByteArray,
     mimeType: AudioMimeType,
-    message: String = "The input from the user."
+    message: String = "The input from the user.",
 ) =
     callAgent(
         AgentRequest(
@@ -27,10 +27,10 @@ suspend fun AgentClient.callWithAudio(
                     binaryData = listOf(
                         BinaryData(
                             data = Base64.encode(data),
-                            mimeType = mimeType.value
-                        )
-                    )
-                )
-            )
-        )
+                            mimeType = mimeType.value,
+                        ),
+                    ),
+                ),
+            ),
+        ),
     )
