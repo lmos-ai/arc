@@ -5,12 +5,15 @@
 package ai.ancf.lmos.arc.agent.client.ws
 
 import ai.ancf.lmos.arc.api.AgentRequest
+import ai.ancf.lmos.arc.api.AgentResult
+import ai.ancf.lmos.arc.api.REQUEST_END
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.http.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.flow.flow
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.slf4j.LoggerFactory
@@ -37,17 +40,18 @@ class WsClient : Closeable {
 
     fun callAgent(
         agentRequest: AgentRequest,
-        agentName: String?,
-        url: String?,
-        dataProvider: DataProvider? = null,
-        requestHeaders: Map<String, Any> = emptyMap()
+        agentName: String? = null,
+        url: String? = null,
+        dataStream: DataStream? = null,
+        requestHeaders: Map<String, Any> = emptyMap(),
     ) = flow {
         client.webSocket(url!!) {
             headers { requestHeaders.forEach { (key, value) -> append(key, value.toString()) } }
             val request = RequestEnvelope(agentName, agentRequest)
 
             send(Frame.Text(json.encodeToString(request)))
-            dataProvider?.provide()?.collect { (data, last) -> send(Frame.Binary(last, data)) }
+            dataStream?.provide()?.collect { data -> send(Frame.Binary(false, data)) }
+            send(Frame.Text(REQUEST_END))
 
             while (closing.get().not()) {
                 val next = nextMessage()
@@ -57,11 +61,11 @@ class WsClient : Closeable {
         }
     }
 
-    private suspend fun DefaultClientWebSocketSession.nextMessage(): String {
+    private suspend fun DefaultClientWebSocketSession.nextMessage(): AgentResult {
         val response = incoming.receive() as Frame.Text
         return response.readText().let {
             log.trace("Received $it")
-            it
+            json.decodeFromString(it)
         }
     }
 
@@ -71,4 +75,5 @@ class WsClient : Closeable {
     }
 }
 
+@Serializable
 data class RequestEnvelope(val agentName: String?, val payload: AgentRequest)

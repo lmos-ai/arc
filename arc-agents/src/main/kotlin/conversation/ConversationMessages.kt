@@ -4,6 +4,8 @@
 
 package ai.ancf.lmos.arc.agents.conversation
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.reduce
 import kotlinx.serialization.Serializable
 
 /**
@@ -85,10 +87,21 @@ data class AssistantMessage(
 }
 
 @Serializable
-class BinaryData(val mimeType: String, val data: ByteArray)
+class BinaryData(val mimeType: String, val data: ByteArray?, val stream: DataStream? = null) {
+
+    /**
+     * Reads all bytes from the data or reader.
+     */
+    suspend fun readAllBytes(): ByteArray =
+        data ?: stream?.stream()?.reduce { acc, bytes -> acc + bytes } ?: byteArrayOf()
+}
 
 enum class MessageFormat {
     JSON,
     TEXT,
     BINARY,
+}
+
+interface DataStream {
+    fun stream(): Flow<ByteArray>
 }
