@@ -15,6 +15,7 @@ import ai.ancf.lmos.arc.core.result
 import ai.ancf.lmos.arc.spring.Agents
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
+import java.util.concurrent.atomic.AtomicReference
 
 @SpringBootApplication
 open class TestApplication {
@@ -22,9 +23,7 @@ open class TestApplication {
     @Bean
     open fun myAgent(agent: Agents) = agent {
         name = "agent"
-        prompt {
-            "you are a helpful agent that tell funny jokes."
-        }
+        prompt { "you are a helpful agent that tell funny jokes." }
     }
 
     @Bean
@@ -38,8 +37,14 @@ open class TestApplication {
                 functions?.forEach { function ->
                     function.execute(mapOf("param" to "test"))
                 }
+
+                val binaryMessage = messages.last().binaryData.first().readAllBytes().decodeToString()
+                lastBinaryData.set(binaryMessage)
+
                 AssistantMessage("Hello!")
             }
         }
     }
 }
+
+val lastBinaryData = AtomicReference<String>()

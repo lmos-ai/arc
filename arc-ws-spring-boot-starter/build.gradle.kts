@@ -7,7 +7,6 @@ dependencies {
     implementation(project(":arc-agents"))
     implementation(project(":arc-result"))
     implementation(project(":arc-api"))
-    implementation(project(":arc-agent-client"))
 
     // Spring
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.2")

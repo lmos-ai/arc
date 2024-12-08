@@ -4,33 +4,31 @@
 
 package ai.ancf.lmos.arc.ws
 
-import ai.ancf.lmos.arc.agent.client.ws.DataProvider
+import ai.ancf.lmos.arc.agent.client.ws.DataStream
 import ai.ancf.lmos.arc.agent.client.ws.WsClient
 import ai.ancf.lmos.arc.api.BinaryData
+import ai.ancf.lmos.arc.api.STREAM_SOURCE
 import ai.ancf.lmos.arc.api.agentRequest
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-class AudioStreamTest {
+class WSStreamTest {
 
     @Test
-    fun `test agentSubscription is defined`(): Unit = runBlocking {
-        val dataProvider = DataProvider()
-        WsClient().callAgent(
-            agentRequest(
-                content = "Hello",
-                conversationId = "1",
-                BinaryData("audio/wav", "stream://audio"),
-            ),
-            agentName = "",
-            url = "ws://localhost:8080/ws/agent",
-            dataProvider
-        )
-        dataProvider.send("This is data".encodeToByteArray(), last = true)
+    fun `test endpoint receives data`(): Unit = runBlocking {
+        lastBinaryData.set(null)
 
-        delay(200_000)
+        val dataProvider = DataStream()
+        WsClient().callAgent(
+            agentRequest("Hello", "1", BinaryData("audio/wav", source = STREAM_SOURCE)),
+            url = "ws://localhost:8080/ws/agent",
+            dataStream = dataProvider,
+        )
+        dataProvider.send("This is data".encodeToByteArray())
+
+        assertThat(lastBinaryData.get()).isEqualTo("This is data")
     }
 }
