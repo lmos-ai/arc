@@ -30,12 +30,16 @@ fun String.toUseCases(): List<UseCase> {
                     line.contains("# Example") -> EXAMPLES
                     else -> error("Unknown UseCase section: $line")
                 }
+                return@forEachLine
             }
         } else if (line.startsWith("----")) {
             currentSection = NONE
         }
         currentUseCase = when (currentSection) {
-            SOLUTION -> currentUseCase?.copy(solution = (currentUseCase?.solution ?: "") + line)
+            SOLUTION -> currentUseCase?.copy(
+                solution = (currentUseCase?.solution ?: emptyList()) + line.asConditional()
+            )
+
             STEPS -> currentUseCase?.copy(steps = (currentUseCase?.steps ?: "") + line)
             EXAMPLES -> currentUseCase?.copy(examples = (currentUseCase?.examples ?: "") + line)
             DESCRIPTION -> currentUseCase?.copy(
@@ -47,10 +51,7 @@ fun String.toUseCases(): List<UseCase> {
             )
 
             ALTERNATIVE_SOLUTION -> currentUseCase?.copy(
-                alternativeSolution = (
-                    currentUseCase?.alternativeSolution
-                        ?: ""
-                    ) + line.replace("# Alternative Solution", "# Solution"),
+                alternativeSolution = (currentUseCase?.alternativeSolution ?: "") + line,
             )
 
             NONE -> currentUseCase
@@ -58,6 +59,22 @@ fun String.toUseCases(): List<UseCase> {
     }
     currentUseCase?.let { useCases.add(it) }
     return useCases
+}
+
+/**
+ * Extracts conditions from a given string.
+ * Conditions are defined in the format
+ * "This is my string <Condition1, Condition2>".
+ */
+fun String.parseConditions(): Pair<String, Set<String>> {
+    val regex = Regex("<(.*?)>")
+    val conditions = regex.find(this)?.groupValues?.get(1)
+    return replace(regex, "").trim() to (conditions?.split(",")?.map { it.trim().lowercase() }?.toSet() ?: emptySet())
+}
+
+fun String.asConditional(): Conditional {
+    val (text, conditions) = parseConditions()
+    return Conditional(text, conditions)
 }
 
 /**
@@ -81,8 +98,21 @@ data class UseCase(
     val id: String,
     val description: String = "",
     val steps: String = "",
-    val solution: String = "",
+    val solution: List<Conditional> = emptyList(),
     val alternativeSolution: String = "",
     val fallbackSolution: String = "",
     val examples: String = "",
 )
+
+data class Conditional(
+    val text: String = "",
+    val conditions: Set<String> = emptySet(),
+) {
+    operator fun plus(other: String): Conditional {
+        return copy(text = text + other)
+    }
+
+    fun matches(allConditions: Set<String>): Boolean {
+        return conditions.all { allConditions.contains(it) }
+    }
+}
