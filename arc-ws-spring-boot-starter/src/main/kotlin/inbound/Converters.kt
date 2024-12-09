@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.graphql.inbound
+package ai.ancf.lmos.arc.ws.inbound
 
 import ai.ancf.lmos.arc.agents.conversation.AssistantMessage
 import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
@@ -15,15 +15,18 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 import ai.ancf.lmos.arc.agents.conversation.AnonymizationEntity as CoreAnonymizationEntity
 import ai.ancf.lmos.arc.agents.conversation.BinaryData as CoreBinaryData
 
-fun List<Message>.convert(): List<ConversationMessage> = map {
+fun List<Message>.convert(dataProvider: WritableDataStream): List<ConversationMessage> = map {
     when (it.role) {
-        "user" -> UserMessage(it.content, binaryData = it.binaryData?.convertBinary() ?: emptyList())
+        "user" -> UserMessage(it.content, binaryData = it.binaryData?.convertBinary(dataProvider) ?: emptyList())
         "assistant" -> AssistantMessage(it.content)
         else -> throw IllegalArgumentException("Unknown role: ${it.role}")
     }
 }
 
-fun AssistantMessage?.toMessage() = Message("assistant", this?.content ?: "", turnId = this?.turnId)
+@OptIn(ExperimentalEncodingApi::class)
+suspend fun AssistantMessage?.toMessage() =
+    Message("assistant", this?.content ?: "", turnId = this?.turnId,
+        binaryData = this?.binaryData?.map { BinaryData(it.mimeType, Base64.encode(it.readAllBytes())) })
 
 fun List<AnonymizationEntity>?.convertConversationEntities() = this?.map {
     ai.ancf.lmos.arc.agents.conversation.AnonymizationEntity(
@@ -41,5 +44,5 @@ fun List<CoreAnonymizationEntity>?.convertAPIEntities() = this?.map {
     )
 } ?: emptyList()
 
-@OptIn(ExperimentalEncodingApi::class)
-fun List<BinaryData>.convertBinary() = map { CoreBinaryData(it.mimeType, Base64.decode(it.dataAsBase64)) }
+fun List<BinaryData>.convertBinary(dataProvider: WritableDataStream) =
+    map { CoreBinaryData(it.mimeType, null, dataProvider) }
