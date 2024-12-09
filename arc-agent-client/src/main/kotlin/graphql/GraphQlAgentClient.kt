@@ -10,7 +10,7 @@ import ai.ancf.lmos.arc.api.AgentRequest
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.websocket.*
-import io.ktor.http.*
+import io.ktor.client.request.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.encodeToString
@@ -39,13 +39,17 @@ class GraphQlAgentClient(private val defaultUrl: String? = null) : AgentClient, 
         }
     }
 
-    override suspend fun callAgent(agentRequest: AgentRequest, agentName: String?, url: String?, requestHeaders: Map<String, Any>) = flow {
+    override suspend fun callAgent(
+        agentRequest: AgentRequest,
+        agentName: String?,
+        url: String?,
+        requestHeaders: Map<String, Any>,
+    ) = flow {
         if (url == null && defaultUrl == null) error("Agent Url not provided!")
         val opId = UUID.randomUUID().toString()
-        client.webSocket(url ?: defaultUrl!!) {
-            headers {
-                requestHeaders.forEach { (key, value) -> append(key, value.toString()) }
-            }
+        client.webSocket(url ?: defaultUrl!!, {
+            requestHeaders.forEach { (key, value) -> header(key, value.toString()) }
+        }) {
             initConnection()
             sendSubscription(opId, agentRequest, agentName)
             while (closing.get().not()) {
