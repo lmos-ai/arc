@@ -30,6 +30,7 @@ Primary Solution
 The description of the use case 3.
 
 #### Solution
+Solution for use case 3
 The mobile solution for use case 3
 
 ----

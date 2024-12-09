@@ -37,7 +37,7 @@ fun String.toUseCases(): List<UseCase> {
         }
         currentUseCase = when (currentSection) {
             SOLUTION -> currentUseCase?.copy(
-                solution = (currentUseCase?.solution ?: emptyList()) + line.asConditional()
+                solution = (currentUseCase?.solution ?: emptyList()) + line.asConditional(),
             )
 
             STEPS -> currentUseCase?.copy(steps = (currentUseCase?.steps ?: "") + line)
@@ -113,6 +113,6 @@ data class Conditional(
     }
 
     fun matches(allConditions: Set<String>): Boolean {
-        return conditions.all { allConditions.contains(it) }
+        return conditions.isEmpty() || conditions.all { allConditions.contains(it) }
     }
 }

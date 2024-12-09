@@ -17,7 +17,7 @@ class ConditionsParserTest : TestBase() {
         assertThat(text).isEqualTo("This is a test")
         assertThat(conditions).containsOnly("mobile")
 
-        val (text2, conditions2)  = "<mobile> This is a test".parseConditions()
+        val (text2, conditions2) = "<mobile> This is a test".parseConditions()
         assertThat(text2).isEqualTo("This is a test")
         assertThat(conditions2).containsOnly("mobile")
     }
@@ -28,7 +28,7 @@ class ConditionsParserTest : TestBase() {
         assertThat(text).isEqualTo("This is a test")
         assertThat(conditions).containsOnly("mobile", "web")
 
-        val (text2, conditions2)  = "<mobile,web> This is a test".parseConditions()
+        val (text2, conditions2) = "<mobile,web> This is a test".parseConditions()
         assertThat(text2).isEqualTo("This is a test")
         assertThat(conditions2).containsOnly("mobile", "web")
     }

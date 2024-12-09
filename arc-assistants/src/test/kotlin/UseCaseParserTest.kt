@@ -33,5 +33,4 @@ class UseCaseParserTest : TestBase() {
             assertThat(parsedUseCases.trim()).isEqualTo(("#" + expectedResult.substringAfter("#")).trim()) // remove copyright
         }
     }
-
 }

@@ -15,7 +15,7 @@ package ai.ancf.lmos.arc.assistants.support.usecases
 fun List<UseCase>.formatToString(
     useAlternatives: Set<String> = emptySet(),
     useFallbacks: Set<String> = emptySet(),
-    conditions: Set<String> = emptySet()
+    conditions: Set<String> = emptySet(),
 ) =
     buildString {
         this@formatToString.forEach { useCase ->
