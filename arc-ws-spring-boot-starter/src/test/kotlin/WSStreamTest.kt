@@ -35,6 +35,6 @@ class WSStreamTest {
 
     @Test
     fun `server test`(): Unit = runBlocking {
-       delay(900_000)
+        delay(900_000)
     }
 }

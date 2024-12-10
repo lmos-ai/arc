@@ -7,11 +7,10 @@ package ai.ancf.lmos.arc.graphql.inbound
 import ai.ancf.lmos.arc.agents.conversation.AssistantMessage
 import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
 import ai.ancf.lmos.arc.agents.conversation.UserMessage
+import ai.ancf.lmos.arc.agents.conversation.asDataStream
 import ai.ancf.lmos.arc.api.AnonymizationEntity
 import ai.ancf.lmos.arc.api.BinaryData
 import ai.ancf.lmos.arc.api.Message
-import kotlin.io.encoding.Base64
-import kotlin.io.encoding.ExperimentalEncodingApi
 import ai.ancf.lmos.arc.agents.conversation.AnonymizationEntity as CoreAnonymizationEntity
 import ai.ancf.lmos.arc.agents.conversation.BinaryData as CoreBinaryData
 
@@ -41,5 +40,12 @@ fun List<CoreAnonymizationEntity>?.convertAPIEntities() = this?.map {
     )
 } ?: emptyList()
 
-@OptIn(ExperimentalEncodingApi::class)
-fun List<BinaryData>.convertBinary() = map { CoreBinaryData(it.mimeType, Base64.decode(it.dataAsBase64)) }
+/**
+ * Converts a list of [BinaryData] to a list of core [BinaryData].
+ */
+fun List<BinaryData>.convertBinary() = map {
+    CoreBinaryData(
+        it.mimeType,
+        it.dataAsBase64?.asDataStream() ?: error("Only Base64 Binaries are currently supported!"),
+    )
+}

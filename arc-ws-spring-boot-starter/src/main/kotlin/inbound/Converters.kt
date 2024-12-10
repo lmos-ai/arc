@@ -25,8 +25,12 @@ fun List<Message>.convert(dataProvider: WritableDataStream): List<ConversationMe
 
 @OptIn(ExperimentalEncodingApi::class)
 suspend fun AssistantMessage?.toMessage() =
-    Message("assistant", this?.content ?: "", turnId = this?.turnId,
-        binaryData = this?.binaryData?.map { BinaryData(it.mimeType, Base64.encode(it.readAllBytes())) })
+    Message(
+        "assistant",
+        this?.content ?: "",
+        turnId = this?.turnId,
+        binaryData = this?.binaryData?.map { BinaryData(it.mimeType, Base64.encode(it.readAllBytes())) },
+    )
 
 fun List<AnonymizationEntity>?.convertConversationEntities() = this?.map {
     ai.ancf.lmos.arc.agents.conversation.AnonymizationEntity(
@@ -45,4 +49,4 @@ fun List<CoreAnonymizationEntity>?.convertAPIEntities() = this?.map {
 } ?: emptyList()
 
 fun List<BinaryData>.convertBinary(dataProvider: WritableDataStream) =
-    map { CoreBinaryData(it.mimeType, null, dataProvider) }
+    map { CoreBinaryData(it.mimeType, stream = dataProvider) }

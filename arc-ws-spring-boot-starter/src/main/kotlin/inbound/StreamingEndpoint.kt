@@ -54,6 +54,9 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
+/**
+ * A WebSocket handler that streams audio data to an agent and returns the result.
+ */
 class StreamingEndpoint(
     private val agentProvider: AgentProvider,
     private val errorHandler: ErrorHandler? = null,
@@ -101,10 +104,14 @@ class StreamingEndpoint(
                 requestSession.envelope.payload,
                 requestSession.data,
             ).map {
-                val jsonResult = json.encodeToString(AgentResult.serializer(), it)
-                val base = it.messages.last().binaryData!!.last().dataAsBase64!!
-                val wav = pcm16ToWav(Base64.decode(base), 24000, 1)
-                session.textMessage(Base64.encode(wav.toByteArray()))
+                // TODO
+                it.messages.lastOrNull()?.binaryData?.lastOrNull()?.dataAsBase64?.let {
+                    val wav = pcm16ToWav(Base64.decode(it), 24000, 1)
+                    session.textMessage(Base64.encode(wav.toByteArray()))
+                } ?: run {
+                    val jsonResult = json.encodeToString(AgentResult.serializer(), it)
+                    session.textMessage(jsonResult)
+                }
             }
             session.send(result.asFlux()).awaitSingleOrNull()
             sessions[session.id]?.data?.close()
@@ -125,7 +132,10 @@ class StreamingEndpoint(
         }
     }
 
-    private fun callAgent(agentName: String? = null, request: AgentRequest, dataProvider: WritableDataStream) =
+    /**
+     * Calls the agent with the given request and data stream.
+     */
+    private fun callAgent(agentName: String? = null, request: AgentRequest, dataStream: WritableDataStream) =
         channelFlow {
             coroutineScope {
                 val agent = findAgent(agentName, request)
@@ -149,7 +159,7 @@ class StreamingEndpoint(
                                 currentTurnId = request.conversationContext.turnId
                                     ?: request.messages.lastOrNull()?.turnId
                                     ?: request.messages.size.toString(),
-                                transcript = request.messages.convert(dataProvider),
+                                transcript = request.messages.convert(dataStream),
                                 anonymizationEntities = anonymizationEntities.entities,
                             ),
                             setOf(
@@ -221,35 +231,35 @@ class StreamingEndpoint(
             maxAge = 3600
         }
     }
-}
 
-fun pcm16ToWav(pcmData: ByteArray, sampleRate: Int, channels: Int): ByteArrayOutputStream {
-    val byteRate = sampleRate * channels * 2 // Bytes per second
-    val blockAlign = channels * 2 // Bytes per sample
-    val chunkSize = 36 + pcmData.size // Chunk size, including header
+    private fun pcm16ToWav(pcmData: ByteArray, sampleRate: Int, channels: Int): ByteArrayOutputStream {
+        val byteRate = sampleRate * channels * 2 // Bytes per second
+        val blockAlign = channels * 2 // Bytes per sample
+        val chunkSize = 36 + pcmData.size // Chunk size, including header
 
-    // Create header data
-    val header = ByteBuffer.allocate(44)
-    header.order(ByteOrder.LITTLE_ENDIAN)
-    header.put("RIFF".toByteArray())
-    header.putInt(chunkSize)
-    header.put("WAVE".toByteArray())
-    header.put("fmt ".toByteArray())
-    header.putInt(16) // Format chunk size
-    header.putShort(1.toShort()) // Audio format (1 = PCM)
-    header.putShort(channels.toShort())
-    header.putInt(sampleRate)
-    header.putInt(byteRate)
-    header.putShort(blockAlign.toShort())
-    header.putShort(16.toShort()) // Bits per sample
-    header.put("data".toByteArray())
-    header.putInt(pcmData.size)
+        // Create header data
+        val header = ByteBuffer.allocate(44)
+        header.order(ByteOrder.LITTLE_ENDIAN)
+        header.put("RIFF".toByteArray())
+        header.putInt(chunkSize)
+        header.put("WAVE".toByteArray())
+        header.put("fmt ".toByteArray())
+        header.putInt(16) // Format chunk size
+        header.putShort(1.toShort()) // Audio format (1 = PCM)
+        header.putShort(channels.toShort())
+        header.putInt(sampleRate)
+        header.putInt(byteRate)
+        header.putShort(blockAlign.toShort())
+        header.putShort(16.toShort()) // Bits per sample
+        header.put("data".toByteArray())
+        header.putInt(pcmData.size)
 
-    // Write header and data to file
-    // FileOutputStream(outputFile).use { fos ->
-    val outputFile = ByteArrayOutputStream()
-    outputFile.write(header.array())
-    outputFile.write(pcmData)
-    //}
-    return outputFile
+        // Write header and data to file
+        // FileOutputStream(outputFile).use { fos ->
+        val outputFile = ByteArrayOutputStream()
+        outputFile.write(header.array())
+        outputFile.write(pcmData)
+        // }
+        return outputFile
+    }
 }

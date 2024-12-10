@@ -7,5 +7,5 @@ server:
 
 logging:
   level:
-    root: INFO
+    root: DEBUG
     ai.ancf.lmos.arc: DEBUG

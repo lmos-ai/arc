@@ -18,19 +18,18 @@ import java.nio.ByteOrder
 val key =
     "sk-proj--"
 
-
 class AgentClientTest {
 
     @Test
     fun `test`(): Unit = runBlocking {
         OpenAIRealtimeClient(
             "wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-10-01",
-            key
+            key,
         ).use { client ->
             val result = client.complete(
                 listOf(
-                    UserMessage("Hello, do you know what time it is?")
-                )
+                    UserMessage("Hello, do you know what time it is?"),
+                ),
             ).getOrThrow()
             println("-------> $result")
             val out = File("output.wav")
@@ -68,5 +67,4 @@ class AgentClientTest {
             fos.write(pcmData)
         }
     }
-
 }

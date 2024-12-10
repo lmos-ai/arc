@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicReference
 open class TestApplication {
 
     val key = ""
+
     @Bean
     open fun myAgent(agent: Agents) = agent {
         name = "agent"
