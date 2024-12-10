@@ -9,9 +9,9 @@ import org.eclipse.lmos.arc.agents.conversation.UserMessage
 import org.eclipse.lmos.arc.api.AnonymizationEntity
 import org.eclipse.lmos.arc.api.Message
 
-fun List<Message>.convert(): List<ConversationMessage> = map {
+fun List<Message>.convert(stream: DataStream? = null): List<ConversationMessage> = map {
     when (it.role) {
-        "user" -> UserMessage(it.content, binaryData = it.binaryData?.convertBinary() ?: emptyList())
+        "user" -> UserMessage(it.content, binaryData = it.binaryData?.convertBinary(stream) ?: emptyList())
         "assistant" -> AssistantMessage(it.content)
         else -> throw IllegalArgumentException("Unknown role: ${it.role}")
     }
@@ -35,5 +35,16 @@ fun List<org.eclipse.lmos.arc.agents.conversation.AnonymizationEntity>?.convertA
     )
 } ?: emptyList()
 
-@OptIn(ExperimentalEncodingApi::class)
-fun List<BinaryData>.convertBinary() = map { CoreBinaryData(it.mimeType, Base64.decode(it.dataAsBase64)) }
+/**
+ * Converts a list of [BinaryData] to a list of core [BinaryData].
+ */
+fun List<BinaryData>.convertBinary(stream: DataStream?) =
+    map {
+        CoreBinaryData(
+            it.mimeType,
+            stream = when (it.source) {
+                STREAM_SOURCE -> stream ?: error("Stream source provided but streaming not enabled!")
+                else -> it.dataAsBase64?.asDataStream() ?: error("No data or source provided!")
+            }
+        )
+    }

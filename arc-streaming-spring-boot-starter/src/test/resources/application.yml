@@ -17,7 +17,7 @@ spring:
 logging:
   level:
     root: INFO
-    ai.ancf.lmos.ai: DEBUG
+    ai.ancf.lmos.arc: DEBUG
 
 server:
   port: 8080

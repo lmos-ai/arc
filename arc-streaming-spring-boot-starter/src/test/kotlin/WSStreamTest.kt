@@ -4,8 +4,8 @@
 
 package ai.ancf.lmos.arc.ws
 
-import ai.ancf.lmos.arc.agent.client.ws.DataStream
-import ai.ancf.lmos.arc.agent.client.ws.WsClient
+import ai.ancf.lmos.arc.agent.client.stream.DataStream
+import ai.ancf.lmos.arc.agent.client.stream.StreamClient
 import ai.ancf.lmos.arc.api.BinaryData
 import ai.ancf.lmos.arc.api.STREAM_SOURCE
 import ai.ancf.lmos.arc.api.agentRequest
@@ -20,21 +20,21 @@ class WSStreamTest {
 
     @Test
     fun `test endpoint receives data`(): Unit = runBlocking {
-        lastBinaryData.set(null)
+        lastInputMessage.set(null)
 
         val dataProvider = DataStream()
-        WsClient().callAgent(
-            agentRequest("Hello", "1", BinaryData("audio/wav", source = STREAM_SOURCE)),
+        StreamClient().callAgent(
+            agentRequest("Hello", "1", BinaryData("audio/pcm", source = STREAM_SOURCE)),
             url = "ws://localhost:8080/ws/agent",
             dataStream = dataProvider,
         )
         dataProvider.send("This is data".encodeToByteArray())
 
-        assertThat(lastBinaryData.get()).isEqualTo("This is data")
+        assertThat(String(lastInputMessage.get().binaryData.first().readAllBytes())).isEqualTo("This is data")
     }
 
     @Test
     fun `server test`(): Unit = runBlocking {
-       delay(900_000)
+        delay(9000_000)
     }
 }

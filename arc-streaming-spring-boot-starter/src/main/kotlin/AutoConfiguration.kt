@@ -5,6 +5,10 @@
 package ai.ancf.lmos.arc.ws
 
 import ai.ancf.lmos.arc.agents.AgentProvider
+import ai.ancf.lmos.arc.graphql.AgentResolver
+import ai.ancf.lmos.arc.graphql.ContextHandler
+import ai.ancf.lmos.arc.graphql.EmptyContextHandler
+import ai.ancf.lmos.arc.graphql.ErrorHandler
 import ai.ancf.lmos.arc.ws.inbound.StreamingEndpoint
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.context.annotation.Bean
@@ -15,7 +19,7 @@ import org.springframework.web.reactive.socket.server.support.HandshakeWebSocket
 import org.springframework.web.reactive.socket.server.support.WebSocketHandlerAdapter
 
 @AutoConfiguration
-open class AgentWSAutoConfiguration {
+open class AgentStreamingAutoConfiguration {
 
     @Bean
     fun handlerAdapter() =
@@ -31,16 +35,19 @@ open class AgentWSAutoConfiguration {
 
     @Bean
     fun handlerMapping(streamingEndpoint: StreamingEndpoint): HandlerMapping {
-        val map = mapOf("/ws/agent" to streamingEndpoint)
+        val map = mapOf("/stream/agent" to streamingEndpoint)
         val order = -1
         return SimpleUrlHandlerMapping(map, order)
     }
 
     @Bean
-    fun streamingEndpoint(
+    fun agentCaller(
         agentProvider: AgentProvider,
         errorHandler: ErrorHandler? = null,
         contextHandler: ContextHandler? = null,
         agentResolver: AgentResolver? = null,
-    ) = StreamingEndpoint(agentProvider, errorHandler, contextHandler ?: EmptyContextHandler(), agentResolver)
+    ) = AgentCaller(agentProvider, errorHandler, contextHandler ?: EmptyContextHandler(), agentResolver)
+
+    @Bean
+    fun streamingEndpoint(agentCaller: AgentCaller) = StreamingEndpoint(agentCaller)
 }

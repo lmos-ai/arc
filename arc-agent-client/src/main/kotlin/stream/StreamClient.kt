@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agent.client.ws
+package ai.ancf.lmos.arc.agent.client.stream
 
 import ai.ancf.lmos.arc.api.AgentRequest
 import ai.ancf.lmos.arc.api.AgentResult
@@ -21,9 +21,9 @@ import java.io.Closeable
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
- * Implementation of [AgentClient] that uses WebSockets to communicate with the agents.
+ * Implementation of [AgentClient] that uses the Arc Streaming Endpoint to communicate with agents.
  */
-class WsClient : Closeable {
+class StreamClient : Closeable {
 
     private val log = LoggerFactory.getLogger(this.javaClass)
     private val closing = AtomicBoolean(false)
@@ -50,7 +50,7 @@ class WsClient : Closeable {
             val request = RequestEnvelope(agentName, agentRequest)
 
             send(Frame.Text(json.encodeToString(request)))
-            dataStream?.provide()?.collect { data -> send(Frame.Binary(false, data)) }
+            dataStream?.read()?.collect { data -> send(Frame.Binary(false, data)) }
             send(Frame.Text(REQUEST_END))
 
             while (closing.get().not()) {
@@ -74,4 +74,3 @@ class WsClient : Closeable {
         client.close()
     }
 }
-

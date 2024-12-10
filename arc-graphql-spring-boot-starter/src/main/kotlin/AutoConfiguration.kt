@@ -37,4 +37,8 @@ open class AgentGraphQLAutoConfiguration {
     @Bean
     @ConditionalOnProperty("arc.chat.ui.enabled", havingValue = "true")
     fun chatResourceRouter() = RouterFunctions.resources("/chat/**", ClassPathResource("chat/"))
+
+    @Bean
+    @ConditionalOnProperty("arc.cors.enabled", havingValue = "true")
+    fun corsFilter() = CorsFilter()
 }

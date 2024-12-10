@@ -17,7 +17,7 @@ data class Message(
 
 /**
  * Presents binary data in a message. The data can be encoded as base64 directly in this object or
- * this object may contain a source from where the data can be read.
+ * this object may contain a source from where the data can be read, for example, a http address.
  */
 @Serializable
 class BinaryData(val mimeType: String, val dataAsBase64: String? = null, val source: String? = null)
