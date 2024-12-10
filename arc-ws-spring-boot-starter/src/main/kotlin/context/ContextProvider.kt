@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.graphql.context
+package ai.ancf.lmos.arc.ws.context
 
 import ai.ancf.lmos.arc.agents.dsl.extensions.SystemContext
 import ai.ancf.lmos.arc.agents.dsl.extensions.SystemContextProvider

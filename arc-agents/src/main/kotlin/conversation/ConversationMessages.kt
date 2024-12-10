@@ -4,7 +4,12 @@
 
 package ai.ancf.lmos.arc.agents.conversation
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.reduce
 import kotlinx.serialization.Serializable
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 /**
  * Conversation Messages.
@@ -85,10 +90,34 @@ data class AssistantMessage(
 }
 
 @Serializable
-class BinaryData(val mimeType: String, val data: ByteArray)
+class BinaryData(val mimeType: String, val stream: DataStream) {
+
+    /**
+     * Reads all bytes from the data or reader.
+     */
+    suspend fun readAllBytes(): ByteArray =
+        stream.stream().reduce { acc, bytes -> acc + bytes }
+}
 
 enum class MessageFormat {
     JSON,
     TEXT,
     BINARY,
 }
+
+interface DataStream {
+    fun stream(): Flow<ByteArray>
+}
+
+/**
+ * A data stream that reads data from a base64 encoded string.
+ */
+class Base64DataStream(dataAsBase64: String) : DataStream {
+
+    @OptIn(ExperimentalEncodingApi::class)
+    private val data = Base64.decode(dataAsBase64)
+
+    override fun stream(): Flow<ByteArray> = flow { emit(data) }
+}
+
+fun String.asDataStream() = Base64DataStream(this)

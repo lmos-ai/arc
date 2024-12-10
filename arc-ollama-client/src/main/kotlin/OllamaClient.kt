@@ -35,7 +35,6 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
-import io.ktor.util.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -154,7 +153,7 @@ class OllamaClient(
                     ChatMessage(
                         content = it.content,
                         role = "user",
-                        images = it.binaryData.map { it.data.encodeBase64() },
+                        // images = it.binaryData.map { it.readAllBytes().encodeBase64() },
                     )
                 } else {
                     ChatMessage(content = it.content, role = "user")
