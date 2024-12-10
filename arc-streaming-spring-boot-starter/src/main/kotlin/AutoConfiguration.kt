@@ -37,10 +37,13 @@ open class AgentWSAutoConfiguration {
     }
 
     @Bean
-    fun streamingEndpoint(
+    fun agentCaller(
         agentProvider: AgentProvider,
         errorHandler: ErrorHandler? = null,
         contextHandler: ContextHandler? = null,
         agentResolver: AgentResolver? = null,
-    ) = StreamingEndpoint(agentProvider, errorHandler, contextHandler ?: EmptyContextHandler(), agentResolver)
+    ) = AgentCaller(agentProvider, errorHandler, contextHandler ?: EmptyContextHandler(), agentResolver)
+
+    @Bean
+    fun streamingEndpoint(agentCaller: AgentCaller) = StreamingEndpoint(agentCaller)
 }

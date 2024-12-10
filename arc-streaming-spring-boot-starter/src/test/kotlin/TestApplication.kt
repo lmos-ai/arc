@@ -5,19 +5,29 @@
 package ai.ancf.lmos.arc.ws
 
 import ai.ancf.lmos.arc.agent.client.ws.OpenAIRealtimeClient
+import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
 import ai.ancf.lmos.arc.agents.llm.ChatCompleterProvider
 import ai.ancf.lmos.arc.spring.Agents
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
+import java.io.File
+import java.io.StringReader
+import java.util.*
 import java.util.concurrent.atomic.AtomicReference
 
 @SpringBootApplication
 open class TestApplication {
 
-    val key = ""
+    val key = File(System.getProperty("user.home"), ".arc/arc.properties").readText().let {
+        Properties().apply { load(StringReader(it)) }.getProperty("ARC_AI_KEY")
+    }
+
     @Bean
     open fun myAgent(agent: Agents) = agent {
         name = "agent"
+        filterInput {
+            lastInputMessage.set(inputMessage)
+        }
         prompt { "you are a helpful agent that tell funny jokes." }
     }
 
@@ -27,4 +37,4 @@ open class TestApplication {
     }
 }
 
-val lastBinaryData = AtomicReference<String>()
+val lastInputMessage = AtomicReference<ConversationMessage>()
