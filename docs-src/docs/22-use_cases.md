@@ -119,7 +119,7 @@ agent {
        
      """
   }
-  tools = {
+  tools {
       +"send_password_reset_link"
   }
 }
