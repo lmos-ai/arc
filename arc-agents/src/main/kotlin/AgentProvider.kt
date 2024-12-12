@@ -6,6 +6,8 @@ package org.eclipse.lmos.arc.agents
 
 import java.util.*
 
+import java.util.*
+
 /**
  * Provides Agents to other components to an application.
  * Usually there is one instance of this class per application.
