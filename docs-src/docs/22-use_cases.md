@@ -60,7 +60,7 @@ If the customer cannot access their email, escalate the issue to a higher tier o
 If the Agent has access to tools, such as `send_password_reset_link`, these would be called as part of this use case.
 
 
-### Notes on Use Case Definitions
+### Guidelines
 
 - Use consistent terms and language throughout the use case to ensure clarity and avoid confusion.
   For example, if you refer to the user as "customer" in one section, use "customer" throughout the document.
@@ -68,6 +68,32 @@ If the Agent has access to tools, such as `send_password_reset_link`, these woul
 
 - Providing examples when necessary. Examples are a very powerful construct 
   and should only be used if the Agent struggles to understand the use case.
+
+
+### Conditionals
+
+`Conditionals` is a feature that enables us to omit lines from the use cases based on certain conditions.
+`Conditionals` are defined in brackets, for example, `<condition1, condition2>`. 
+Each line containing such a `conditional` is filtered out before being provided to the Agent unless all conditions
+are met. `Conditionals` can be placed anywhere within the line.
+
+Example:
+
+```markdown
+### UseCase: password_reset
+#### Description
+Customer has forgotten their password and needs to reset it.
+
+#### Solution
+<isBusinessCustomer>Provide the webpage https://www.example.com/business/reset-password.
+Provide the webpage https://www.example.com/reset-password.<isPrivateCustomer>
+```
+
+The conditions are passed to the `useCases` function as a set of strings.
+
+```kts
+ useCases("use_cases.md", conditions = setOf("isBusinessCustomer"))
+```
 
 
 ### Adding the Use Case to an Agent
