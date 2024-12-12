@@ -17,6 +17,8 @@ you can do so by following the steps below.
 The `DSLAgents` is a convenient way to load Agents that are defined with Kotlin DSL.
 
 ```kotlin
+ val chatCompleterProvider = { AzureAIClient(...) } // or any other AIClient
+
  val agentBuilder = DSLAgents.init(chatCompleterProvider).apply {
     define {
         agent {
@@ -47,6 +49,8 @@ val agents = agentBuilder.getAgents()
 The `DSLScriptAgents` class can be used to load Agents that are defined with kotlin scripts.
 
 ```kotlin
+val chatCompleterProvider = { AzureAIClient(...) } // or any other AIClient
+
  val agentBuilder = DSLScriptAgents.init(chatCompleterProvider).apply {
     define(
         """
