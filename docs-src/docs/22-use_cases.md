@@ -95,6 +95,20 @@ The conditions are passed to the `useCases` function as a set of strings.
  useCases("use_cases.md", conditions = setOf("isBusinessCustomer"))
 ```
 
+This would produce the following output that would be feed to the Agent:
+
+```markdown
+### UseCase: password_reset
+#### Description
+Customer has forgotten their password and needs to reset it.
+
+#### Solution
+Provide the webpage https://www.example.com/business/reset-password.
+```
+
+**Important** `Conditionals` are only supported in the body of `Steps`, `Solution`,
+`Alternative Solution` and `Fallback Solution`.
+
 
 ### Adding the Use Case to an Agent
 
