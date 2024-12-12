@@ -4,6 +4,7 @@
 
 package ai.ancf.lmos.arc.scripting
 
+import ai.ancf.lmos.arc.core.getOrThrow
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -17,10 +18,10 @@ class DSLScriptAgentsTest : TestBase() {
             agent {
                 name = "agent"
                 description = "agent description"
-                systemPrompt = { "does stuff" }
+                prompt { "does stuff" }
             }
-        }""",
-        )
+        """,
+        ).getOrThrow()
         val result = agentBuilder.getAgents()
         assertThat(result).hasSize(1)
         assertThat(result[0].name).isEqualTo("agent")
@@ -38,9 +39,8 @@ class DSLScriptAgentsTest : TestBase() {
             ) {
                 "result"
             }
-        }
         """,
-        )
+        ).getOrThrow()
         val result = agentBuilder.provideAll()
         assertThat(result).hasSize(1)
         assertThat(result[0].name).isEqualTo("get_weather")
