@@ -36,7 +36,7 @@ The `ChatAgent` is the main implementation of the Arc Agent interface.
 As the name suggests, `ChatAgent`s are agents that conduct a conversation with the client/user.
 They take a `Conversation` object as input and outputs the `Conversation` containing a new message.
 
-See the [Conversations](#conversations) section for more details on conversations.
+See the [Conversations](#conversation-model) section for more details on conversations.
 
 
 ### AgentProvider/LLMFunctionProvider Interface

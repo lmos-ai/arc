@@ -3,106 +3,85 @@ title: Manual Setup
 sidebar_position: 2
 ---
 
-The Arc Framework can easily be setup with a few lines of code to run in any JVM application.
+Usually the Arc Agent Framework will be used with the Spring Boot Starter
+or the Arc Runner, which will automatically set up the framework for you.
 
-> Note: When using Spring Boot, it is recommended to use the [Arc Spring Boot Starter](/docs/spring) 
-> so that all the following steps are done automatically.
+However, if you want to set up the framework manually and use it in a different frameworks or environments, 
+you can do so by following the steps below.
 
 > Also: read the [Component Overview](/docs/component_overview) page for a better understanding of core components of the Framework.
 
-The best way to understand how to set up the Arc Framework is to look at the following example:
 
-- https://github.com/lmos-ai/arc/tree/main/arc-runner/src/main/kotlin/server/ArcSetup.kt
+### Loading Agents
+
+The `DSLAgents` is a convenient way to load Agents that are defined with Kotlin DSL.
+
+```kotlin
+ val agentBuilder = DSLAgents.init(chatCompleterProvider).apply {
+    define {
+        agent {
+            name = "agent"
+            description = "agent description"
+            systemPrompt = { "Agent prompt goes here." }
+        }
+    }
+
+    defineFunctions {
+        function(
+            name = "get_weather",
+            description = "the weather service",
+            params = types(string("location", "the location")),
+        ) {
+            httpGet("https://api.weather.com/$$location")
+        }
+    }
+}
+
+val agents = agentBuilder.getAgents()
+
+```
 
 
 ### Loading Scripted Agents
 
-Arc Agent DSL scripts can also be loaded from a file, folder, or string.
+The `DSLScriptAgents` class can be used to load Agents that are defined with kotlin scripts.
 
 ```kotlin
-val agentLoader: ScriptingAgentLoader
+ val agentBuilder = DSLScriptAgents.init(chatCompleterProvider).apply {
+    define(
+        """
+            agent {
+                name = "agent"
+                description = "agent description"
+                prompt { "Agent prompt goes here." }
+            }
+        """,
+    ).getOrThrow()
 
-agentLoader.loadAgents(File("my-agent.agent.kts"))
+    defineFunctions(
+        """
+            function(
+                name = "get_weather",
+                description = "the weather service",
+                params = types(string("location", "the location")),
+            ) { location ->
+               httpGet("https://api.weather.com/${"$"}location")
+            }
+        """,
+    )
+}
 
-agentLoader.loadAgentsFromFolder("agents")
-
-agentLoader.loadAgent("""
-  agent {
-     name = "simple-agent"
-     model = { "modelId" }
-     prompt {
-      "You are a helpful agent." 
-     }
-  }
-""") 
+val agents = agentBuilder.getAgents()
 
 ```
 
-
-#### Hot Reloading Scripts
-
-Arc Agent DSL script files can be hot-loaded when modified.
-
-```kotlin
-
-val scriptHotReload = ScriptHotReload(agentLoader, functionLoader, 3.seconds)
-scriptHotReload.start(File("./agents"))
-
-```
-
-> Note: In order for Agents Scripts to be correctly identified, their files must end with `.agent.kts` when containing Agents and
-> `.functions.kts` when containing Functions. This will enable an IDE, such as the IntelliJ IDE,
-> to provide syntax highlighting and code completion.
-
-Once loaded, Scripted Agents are no different from Agents loaded by other
-mechanisms.
 
 ### Executing Agents
 Once an Agent is loaded, it can be executed by passing a `Conversation` object to the `execute` method.
 
 ```kotlin
- val agent = agentLoader.getAgentByName(agentName) as ChatAgent? ?: error("Agent not found!")
- val conversation = Conversation(User("anonymous")) + UserMessage("My question")
+ val agent = agentBuilder.getAgentByName(agentName) as ChatAgent? ?: error("Agent not found!")
+ val conversation = Conversation(User("userOrClientId")) + UserMessage("My question")
  val result = agent.execute(conversation).getOrNull()
 ```
 
-
-### Defining Agents (without scripting)
-
-Loading Agent from scripting files is a great way to develop and prototype Agents.
-However, the Agent DSL can also be used to create Agents programmatically.
-
-Example:
-
-```kotlin
-import ai.ancf.lmos.arc.agents.dsl.buildAgents
-import ai.ancf.lmos.arc.agents.dsl.buildFunctions
-
-   val loadedAgents = buildAgents(agentFactory) {
-        agent {
-            name = "MyAgent"
-            description = "My agent"
-            tools {
-                +"get_content"
-            }
-            prompt {
-                """
-                 Always answer with 'Hello, World!'. 
-                """
-            }
-        }
-    }
-
-    val functions = buildFunctions(beanProvider) {
-        function(
-            name = "get_content",
-            description = "Returns content from the web.",
-            params = types(
-                string("url", "The URL of the content to fetch.")
-            )
-        ) { (url) ->
-            httpGet(url.toString())
-        }
-    }
-
-```
