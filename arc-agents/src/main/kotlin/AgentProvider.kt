@@ -4,6 +4,8 @@
 
 package ai.ancf.lmos.arc.agents
 
+import java.util.*
+
 /**
  * Provides Agents to other components to an application.
  * Usually there is one instance of this class per application.
@@ -36,5 +38,19 @@ class CompositeAgentProvider(private val loaders: List<AgentLoader>, private val
 
     override fun getAgents(): List<Agent<*, *>> {
         return loaders.flatMap { it.getAgents() } + agents
+    }
+}
+
+/**
+ * Implementation of the [AgentLoader] that is backed by a list of [Agent]s.
+ */
+class ListAgentLoader : AgentLoader {
+
+    private val allAgents = Vector<Agent<*, *>>()
+
+    override fun getAgents() = allAgents
+
+    fun addAll(agents: List<Agent<*, *>>) {
+        allAgents.addAll(agents)
     }
 }

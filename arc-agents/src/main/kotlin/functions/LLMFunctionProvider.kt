@@ -8,6 +8,7 @@ import ai.ancf.lmos.arc.agents.FunctionNotFoundException
 import ai.ancf.lmos.arc.core.Failure
 import ai.ancf.lmos.arc.core.Result
 import ai.ancf.lmos.arc.core.Success
+import java.util.*
 
 /**
  * Provides LLMFunctions.
@@ -53,4 +54,18 @@ class CompositeLLMFunctionProvider(
     override fun provideAll(): List<LLMFunction> = functions()
 
     private fun functions() = loaders.flatMap { it.load() } + functions
+}
+
+/**
+ * Implementation of the [LLMFunctionLoader] that is backed by a list of [LLMFunction]s.
+ */
+class ListFunctionsLoader : LLMFunctionLoader {
+
+    private val allFunctions = Vector<LLMFunction>()
+
+    override fun load(): List<LLMFunction> = allFunctions
+
+    fun addAll(functions: List<LLMFunction>) {
+        allFunctions.addAll(functions)
+    }
 }
