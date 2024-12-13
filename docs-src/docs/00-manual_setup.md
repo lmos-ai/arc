@@ -24,7 +24,7 @@ The `DSLAgents` is a convenient way to load Agents that are defined with Kotlin 
         agent {
             name = "agent"
             description = "agent description"
-            systemPrompt = { "Agent prompt goes here." }
+            prompt { "Agent prompt goes here." }
         }
     }
 
@@ -34,7 +34,7 @@ The `DSLAgents` is a convenient way to load Agents that are defined with Kotlin 
             description = "the weather service",
             params = types(string("location", "the location")),
         ) {
-            httpGet("https://api.weather.com/$$location")
+            httpGet("https://api.weather.com/$location")
         }
     }
 }
