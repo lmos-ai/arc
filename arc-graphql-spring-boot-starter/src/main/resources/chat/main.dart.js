@@ -46552,7 +46552,7 @@ A.ahr.prototype={
 $1(a){return B.b.v(this.a.e,a.gee(a))},
 $S:87}
 A.ahs.prototype={
-$0(){A.aOg("https://lmos-ai.github.io/arc/docs/graphql#event-subscriptions")},
+$0(){A.aOg("https://lmos-ai.github.io/arc/docs/spring/graphql#event-subscriptions")},
 $S:0}
 A.aht.prototype={
 $2(a,b){var s=null,r="duration",q=this.b[b],p=t.P.a(B.K.kC(0,q.glP(),s)),o=this.a,n=o.aeX(p),m=J.a1(p)
