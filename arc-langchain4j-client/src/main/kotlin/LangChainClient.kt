@@ -126,7 +126,7 @@ class LangChainClient(
         }
     }
 
-    private fun toLangChainMessages(messages: List<ConversationMessage>) =
+    private suspend fun toLangChainMessages(messages: List<ConversationMessage>) =
         messages.map {
             when (it) {
                 is UserMessage -> {
@@ -146,11 +146,13 @@ class LangChainClient(
         }
 
     @OptIn(ExperimentalEncodingApi::class)
-    private fun BinaryData.toContent(): Content {
+    private suspend fun BinaryData.toContent(): Content {
+        val bytes = readAllBytes()
+        log.debug("Converting binary data to content: $mimeType with ${bytes.size} bytes")
         return when {
-            mimeType.startsWith("audio/") -> AudioContent.from(Base64.encode(data), mimeType)
-            mimeType.startsWith("video/") -> VideoContent.from(Base64.encode(data), mimeType)
-            mimeType.startsWith("image/") -> ImageContent.from(Base64.encode(data), mimeType)
+            mimeType.startsWith("audio/") -> AudioContent.from(Base64.encode(bytes), mimeType)
+            mimeType.startsWith("video/") -> VideoContent.from(Base64.encode(bytes), mimeType)
+            mimeType.startsWith("image/") -> ImageContent.from(Base64.encode(bytes), mimeType)
             else -> error("Unsupported binary data type: $mimeType!")
         }
     }

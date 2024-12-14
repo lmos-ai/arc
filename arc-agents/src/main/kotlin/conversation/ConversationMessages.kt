@@ -4,7 +4,13 @@
 
 package ai.ancf.lmos.arc.agents.conversation
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.reduce
 import kotlinx.serialization.Serializable
+import java.util.*
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 /**
  * Conversation Messages.
@@ -79,16 +85,71 @@ data class AssistantMessage(
     override val anonymized: Boolean = false,
     override val binaryData: List<BinaryData> = emptyList(),
     override val format: MessageFormat = MessageFormat.TEXT,
+    val userTranscript: String? = null, // TODO reevaluate this
 ) : ConversationMessage() {
     override fun applyTurn(turnId: String): AssistantMessage = copy(turnId = turnId)
     override fun update(content: String): AssistantMessage = copy(content = content)
 }
 
 @Serializable
-class BinaryData(val mimeType: String, val data: ByteArray)
+class BinaryData(val mimeType: String, val stream: DataStream) {
+
+    /**
+     * Reads all bytes from stream.
+     */
+    suspend fun readAllBytes(): ByteArray = stream.readAllBytes()
+}
 
 enum class MessageFormat {
     JSON,
     TEXT,
     BINARY,
 }
+
+/**
+ * Represents a data stream used to stream binary data of a Conversation Message.
+ */
+interface DataStream {
+    fun stream(): Flow<ByteArray>
+}
+
+/**
+ * Reads all bytes from stream.
+ */
+suspend fun DataStream.readAllBytes(): ByteArray = stream().reduce { acc, bytes -> acc + bytes }
+
+/**
+ * A data stream that reads data from a base64 encoded string.
+ */
+class Base64DataStream(dataAsBase64: String) : DataStream {
+
+    @OptIn(ExperimentalEncodingApi::class)
+    private val data = Base64.decode(dataAsBase64)
+
+    override fun stream(): Flow<ByteArray> = flow { emit(data) }
+}
+
+fun String.asDataStream() = Base64DataStream(this)
+
+/**
+ * A data stream that can be written to.
+ */
+class WritableDataStream : DataStream {
+    private val channel = Vector<ByteArray>()
+
+    override fun stream(): Flow<ByteArray> = flow { channel.forEach { emit(it) } }
+
+    fun write(data: ByteArray) {
+        channel.add(data)
+    }
+}
+
+/**
+ * A data stream that holds a ByteArray
+ */
+class ArrayDataStream(private val data: ByteArray) : DataStream {
+
+    override fun stream(): Flow<ByteArray> = flow { emit(data) }
+}
+
+fun ByteArray.asDataStream() = ArrayDataStream(this)
