@@ -1,37 +1,43 @@
+// SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
+//
+// SPDX-License-Identifier: Apache-2.0
+
+package ai.ancf.lmos.arc.client.openai
+
 import ai.ancf.lmos.arc.agents.functions.*
 import ai.ancf.lmos.arc.agents.llm.ChatCompletionSettings
 import ai.ancf.lmos.arc.core.Result
 import ai.ancf.lmos.arc.core.Success
-import com.openai.client.okhttp.OpenAIOkHttpClient
+import com.openai.client.okhttp.OpenAIOkHttpClientAsync
 import com.openai.core.JsonValue
 import com.openai.models.*
-import java.util.*
-
+import kotlinx.coroutines.future.await
+import kotlinx.coroutines.runBlocking
 
 fun main() {
-
-    val client = OpenAIOkHttpClient.builder()
-        .apiKey("")
+    System.setProperty("OPENAI_LOG", "debug")
+    val client = OpenAIOkHttpClientAsync.builder()
+        .apiKey(System.getenv("OPENAI_API_KEY"))
         .build()
 
     val functionArgs = listOf(
-    ParameterSchema(
-        name = "location",
-        description = "The city and state, e.g., San Francisco, CA.",
-        type = ParameterType("string"),
-        enum = emptyList(),
+        ParameterSchema(
+            name = "location",
+            description = "The city and state, e.g., San Francisco, CA.",
+            type = ParameterType("string"),
+            enum = emptyList(),
+        ),
+        ParameterSchema(
+            name = "unit",
+            description = "The temperature unit to use.",
+            type = ParameterType("string"),
+            enum = listOf("celsius", "fahrenheit"),
+        ),
     )
-
-   ,ParameterSchema(
-        name = "unit",
-        description = "The temperature unit to use.",
-        type = ParameterType("string"),
-        enum = listOf("celsius", "fahrenheit"),
-    ))
 
     val parameters = ParametersSchema(
         required = listOf("location", "unit"),
-        parameters = functionArgs
+        parameters = functionArgs,
     )
 
     val functions = listOf(
@@ -47,15 +53,14 @@ fun main() {
                             description = "The city and state, e.g., San Francisco, CA.",
                             type = ParameterType("string"),
                             enum = emptyList(),
-                        )
-
-                        ,ParameterSchema(
+                        ),
+                        ParameterSchema(
                             name = "unit",
                             description = "The temperature unit to use.",
                             type = ParameterType("string"),
                             enum = listOf("celsius", "fahrenheit"),
-                        )
-                    )
+                        ),
+                    ),
                 )
             override val description: String
                 get() = "Retrieve the current weather for a specified location."
@@ -80,8 +85,8 @@ fun main() {
                             description = "The city and state, e.g., San Francisco, CA.",
                             type = ParameterType("string"),
                             enum = emptyList(),
-                        )
-                    )
+                        ),
+                    ),
                 )
             override val description: String
                 get() = "Dummy test function."
@@ -93,7 +98,7 @@ fun main() {
             override suspend fun execute(input: Map<String, Any?>): Result<String, LLMFunctionException> {
                 return Success("test")
             }
-        }
+        },
     )
 
     val settings = ChatCompletionSettings()
@@ -105,24 +110,31 @@ fun main() {
                     ChatCompletionDeveloperMessageParam.builder()
                         .role(ChatCompletionDeveloperMessageParam.Role.DEVELOPER)
                         .content(ChatCompletionDeveloperMessageParam.Content.ofTextContent("You are a helpful assistant."))
-                        .build()
+                        .build(),
                 ),
                 ChatCompletionMessageParam.ofChatCompletionUserMessageParam(
                     ChatCompletionUserMessageParam.builder()
                         .role(ChatCompletionUserMessageParam.Role.USER)
                         .content(ChatCompletionUserMessageParam.Content.ofTextContent("What's the weather like in New York today?"))
-                        .build()
-                )
-            )
+                        .build(),
+                ),
+            ),
         )
-        .functions(toOpenAIFunctions(functions) ?: emptyList())
+        .tools(toOpenAIFunctions(functions) ?: emptyList())
         .model(ChatModel.GPT_4O_MINI)
         .apply {
             settings.temperature?.let { temperature(it) }
         }
         .build()
 
-    val chatCompletion: ChatCompletion = client.chat().completions().create(params)
+    val chatCompletion = try {
+        runBlocking {
+            client.chat().completions().create(params).await()
+        }
+    } catch (ex: Exception) {
+        println(ex)
+        return
+    }
     println(chatCompletion)
     val message = chatCompletion.choices().get(0).message()
     val finishReason = chatCompletion.choices().get(0).finishReason()
@@ -130,21 +142,23 @@ fun main() {
     println(finishReason)
 }
 
+private fun toOpenAIFunctions(functions: List<LLMFunction>) = functions.map { fn ->
+    val map = fn.parameters.parameters.associate { param ->
+        param.name to mapOf(
+            "type" to param.type.schemaType,
+            "description" to param.description,
+            "enum" to param.enum,
+        )
+    }
 
-    private fun toOpenAIFunctions(functions: List<LLMFunction>) = functions.map { fn ->
-        val map = fn.parameters.parameters.associate { param ->
-            param.name to mapOf(
-                "type" to param.type.schemaType,
-                "description" to param.description,
-                "enum" to param.enum
-            )
-        }
-        ChatCompletionCreateParams.Function.builder().name(fn.name)
-            .description(fn.description)
-            .parameters(
-                FunctionParameters.builder().putAdditionalProperty("type", JsonValue.from("object"))
-                    .putAdditionalProperty("properties", JsonValue.from(map))
-                    .putAdditionalProperty("required", JsonValue.from(fn.parameters.required)).build()
-            )
-            .build()
-    }.takeIf { it.isNotEmpty() }
+    ChatCompletionTool.builder()
+        .type(ChatCompletionTool.Type.FUNCTION)
+        .function(
+            FunctionDefinition.builder()
+                .name(fn.name).description(fn.description).parameters(
+                    FunctionParameters.builder().putAdditionalProperty("type", JsonValue.from("object"))
+                        .putAdditionalProperty("properties", JsonValue.from(map))
+                        .putAdditionalProperty("required", JsonValue.from(fn.parameters.required)).build(),
+                ).build(),
+        ).build()
+}.takeIf { it.isNotEmpty() }

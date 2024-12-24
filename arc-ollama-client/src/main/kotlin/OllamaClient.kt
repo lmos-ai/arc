@@ -162,6 +162,7 @@ class OllamaClient(
 
                 is AssistantMessage -> ChatMessage(content = it.content, role = "assistant")
                 is SystemMessage -> ChatMessage(content = it.content, role = "system")
+                else -> throw ArcException("Unsupported message type: $it")
             }
         }
 

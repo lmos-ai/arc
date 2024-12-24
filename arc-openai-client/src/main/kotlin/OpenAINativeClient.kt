@@ -2,22 +2,19 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
+package ai.ancf.lmos.arc.client.openai
+
 import ai.ancf.lmos.arc.agents.ArcException
 import ai.ancf.lmos.arc.agents.conversation.*
 import ai.ancf.lmos.arc.agents.events.EventPublisher
 import ai.ancf.lmos.arc.agents.functions.LLMFunction
-import ai.ancf.lmos.arc.agents.functions.ParameterSchema
-import ai.ancf.lmos.arc.agents.functions.ParameterType
-import ai.ancf.lmos.arc.agents.functions.ParametersSchema
 import ai.ancf.lmos.arc.agents.llm.*
 import ai.ancf.lmos.arc.agents.llm.OutputFormat.JSON
 import ai.ancf.lmos.arc.core.*
-import com.openai.client.OpenAIClient
 import com.openai.client.OpenAIClientAsync
 import com.openai.core.JsonValue
 import com.openai.models.*
 import kotlinx.coroutines.future.await
-import kotlinx.coroutines.reactive.awaitFirst
 import org.slf4j.LoggerFactory
 import kotlin.time.Duration
 import kotlin.time.measureTime
@@ -51,7 +48,7 @@ class OpenAINativeClient(
                 result = getChatCompletions(openAIMessages, openAIFunctions, functionCallHandler, settings)
             }
 
-            var chatCompletions: ChatCompletions? = null
+            var chatCompletions: ChatCompletion? = null
             finally { publishEvent(it, messages, functions, chatCompletions, duration, functionCallHandler, settings) }
             chatCompletions = result failWith { it }
             chatCompletions.getFirstAssistantMessage(
@@ -64,7 +61,7 @@ class OpenAINativeClient(
         result: Result<AssistantMessage, ArcException>,
         messages: List<ConversationMessage>,
         functions: List<LLMFunction>?,
-        chatCompletions: ChatCompletions?,
+        chatCompletions: ChatCompletion?,
         duration: Duration,
         functionCallHandler: FunctionCallHandler,
         settings: ChatCompletionSettings?,
@@ -75,9 +72,9 @@ class OpenAINativeClient(
                 messages,
                 functions,
                 config.modelName,
-                chatCompletions?.usage?.totalTokens ?: -1,
-                chatCompletions?.usage?.promptTokens ?: -1,
-                chatCompletions?.usage?.completionTokens ?: -1,
+                chatCompletions?.usage()?.get()?.totalTokens()?.toInt() ?: -1,
+                chatCompletions?.usage()?.get()?.promptTokens()?.toInt() ?: -1,
+                chatCompletions?.usage()?.get()?.completionTokens()?.toInt() ?: -1,
                 functionCallHandler.calledFunctions.size,
                 duration,
                 settings = settings,
@@ -85,10 +82,10 @@ class OpenAINativeClient(
         )
     }
 
-    private fun ChatCompletions.getFirstAssistantMessage(
+    private fun ChatCompletion.getFirstAssistantMessage(
         sensitive: Boolean = false,
         settings: ChatCompletionSettings?,
-    ) = choices.first().message.content.let {
+    ) = choices().first().message().content().get().let {
         AssistantMessage(
             it,
             sensitive = sensitive,
@@ -101,14 +98,14 @@ class OpenAINativeClient(
 
     private suspend fun getChatCompletions(
         messages: List<ChatCompletionMessageParam>,
-        openAIFunctions: List<ChatCompletionCreateParams.Function>? = null,
+        openAIFunctions: List<ChatCompletionTool>? = null,
         functionCallHandler: FunctionCallHandler,
         settings: ChatCompletionSettings?,
     ): Result<ChatCompletion, ArcException> {
         val params = ChatCompletionCreateParams.builder()
             .model(config.modelName)
             .messages(messages)
-            .functions(openAIFunctions?: listOf())
+            .tools(openAIFunctions ?: listOf())
             .apply {
                 settings?.temperature?.let { temperature(it) }
                 settings?.topP?.let { topP(it) }
@@ -118,8 +115,8 @@ class OpenAINativeClient(
                 settings?.format?.takeIf { JSON == it }?.let {
                     ChatCompletionCreateParams.ResponseFormat.ofResponseFormatJsonObject(
                         ResponseFormatJsonObject.builder().type(
-                            ResponseFormatJsonObject.Type.JSON_OBJECT
-                        ).build()
+                            ResponseFormatJsonObject.Type.JSON_OBJECT,
+                        ).build(),
                     )
                 }
             }.build()
@@ -140,31 +137,34 @@ class OpenAINativeClient(
         return Success(chatCompletions)
     }
 
-    private fun mapOpenAIException(ex: Exception): ArcException = when (ex) {
-        is ClientAuthenticationException -> ArcException(ex.message ?: "Unexpected error!", ex)
-        else -> ArcException(ex.message ?: "Unexpected error!", ex)
+    private fun mapOpenAIException(ex: Exception): ArcException {
+        return ArcException(ex.message ?: "Unexpected error!", ex)
     }
 
     private fun toOpenAIMessages(messages: List<ConversationMessage>) = messages.map { msg ->
         when (msg) {
             is UserMessage -> ChatCompletionMessageParam.ofChatCompletionUserMessageParam(
                 ChatCompletionUserMessageParam.builder()
-                    .content(ChatCompletionUserMessageParam.Content.ofTextContent(msg.content)).build()
+                    .role(ChatCompletionUserMessageParam.Role.USER)
+                    .content(ChatCompletionUserMessageParam.Content.ofTextContent(msg.content)).build(),
             )
 
             is SystemMessage -> ChatCompletionMessageParam.ofChatCompletionSystemMessageParam(
                 ChatCompletionSystemMessageParam.builder()
-                    .content(ChatCompletionSystemMessageParam.Content.ofTextContent(msg.content)).build()
+                    .role(ChatCompletionSystemMessageParam.Role.SYSTEM)
+                    .content(ChatCompletionSystemMessageParam.Content.ofTextContent(msg.content)).build(),
             )
 
             is AssistantMessage -> ChatCompletionMessageParam.ofChatCompletionAssistantMessageParam(
                 ChatCompletionAssistantMessageParam.builder()
-                    .content(ChatCompletionAssistantMessageParam.Content.ofTextContent(msg.content)).build()
+                    .role(ChatCompletionAssistantMessageParam.Role.ASSISTANT)
+                    .content(ChatCompletionAssistantMessageParam.Content.ofTextContent(msg.content)).build(),
             )
 
             is DeveloperMessage -> ChatCompletionMessageParam.ofChatCompletionDeveloperMessageParam(
                 ChatCompletionDeveloperMessageParam.builder()
-                    .content(ChatCompletionDeveloperMessageParam.Content.ofTextContent(msg.content)).build()
+                    .role(ChatCompletionDeveloperMessageParam.Role.DEVELOPER)
+                    .content(ChatCompletionDeveloperMessageParam.Content.ofTextContent(msg.content)).build(),
             )
         }
     }
@@ -177,24 +177,28 @@ class OpenAINativeClient(
             param.name to mapOf(
                 "type" to param.type.schemaType,
                 "description" to param.description,
-                "enum" to param.enum
+                "enum" to param.enum,
             )
         }
-        ChatCompletionCreateParams.Function.builder().name(fn.name)
-            .description(fn.description)
-            .parameters(
-                FunctionParameters.builder().putAdditionalProperty("type", JsonValue.from("object"))
-                    .putAdditionalProperty("properties", JsonValue.from(map))
-                    .putAdditionalProperty("required", JsonValue.from(fn.parameters.required)).build()
-            )
-            .build()
+
+        ChatCompletionTool.builder()
+            .type(ChatCompletionTool.Type.FUNCTION)
+            .function(
+                FunctionDefinition.builder()
+                    .name(fn.name).description(fn.description).parameters(
+                        FunctionParameters.builder().putAdditionalProperty("type", JsonValue.from("object"))
+                            .putAdditionalProperty("properties", JsonValue.from(map))
+                            .putAdditionalProperty("required", JsonValue.from(fn.parameters.required)).build(),
+                    ).build(),
+            ).build()
     }.takeIf { it.isNotEmpty() }
-}
 
     override suspend fun embed(texts: List<String>) = result<TextEmbeddings, Exception> {
-        val embedding = client.getEmbeddings(config.modelName, EmbeddingsOptions(texts)).awaitFirst().let { result ->
-            result.data.map { e -> TextEmbedding(texts[e.promptIndex], e.embedding) }
-        }
+        EmbeddingCreateParams.EmbeddingCreateBody.builder().model(EmbeddingModel.of(config.modelName)).build().toBuilder()
+        val embedding = client.embeddings()
+            .create(EmbeddingCreateParams.builder().model(EmbeddingModel.of(config.modelName)).build()).await().let { result ->
+                result.data().map { e -> TextEmbedding(texts[e.index().toInt()], e.embedding()) }
+            }
         TextEmbeddings(embedding)
     }.mapFailure { ArcException("Failed to create text embeddings!", it) }
 }
