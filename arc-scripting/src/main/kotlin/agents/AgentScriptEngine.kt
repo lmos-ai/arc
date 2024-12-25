@@ -41,7 +41,8 @@ class KtsAgentScriptEngine : AgentScriptEngine {
         val res = evalScript(script, context)
         val errors = res.reports.getErrors()
         if (errors.isNotEmpty()) failWith { ScriptFailedException(errors.joinToString()) }
-        res.valueOrNull()?.returnValue
+        val returnValue = res.valueOrNull()?.returnValue
+        return@result if (returnValue is ResultValue.Error) failWith { ScriptFailedException("Script failed with error: $returnValue") } else returnValue
     }
 
     private fun List<ScriptDiagnostic>.getErrors(): List<String> = buildList {
