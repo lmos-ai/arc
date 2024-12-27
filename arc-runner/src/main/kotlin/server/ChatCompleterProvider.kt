@@ -1,22 +1,22 @@
 // SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
 //
 // SPDX-License-Identifier: Apache-2.0
-package ai.ancf.lmos.arc.runner.server
+package org.eclipse.lmos.arc.runner.server
 
-import ai.ancf.lmos.arc.agents.events.EventPublisher
-import ai.ancf.lmos.arc.agents.llm.ChatCompleterProvider
-import ai.ancf.lmos.arc.client.azure.AzureAIClient
-import ai.ancf.lmos.arc.client.azure.AzureClientConfig
-import ai.ancf.lmos.arc.client.langchain4j.LangChainClient
-import ai.ancf.lmos.arc.client.langchain4j.LangChainConfig
-import ai.ancf.lmos.arc.client.langchain4j.builders.bedrockBuilder
-import ai.ancf.lmos.arc.client.langchain4j.builders.geminiBuilder
-import ai.ancf.lmos.arc.client.langchain4j.builders.groqBuilder
-import ai.ancf.lmos.arc.client.langchain4j.builders.ollamaBuilder
 import com.azure.ai.openai.OpenAIClientBuilder
 import com.azure.core.credential.AzureKeyCredential
 import com.azure.core.credential.KeyCredential
 import com.azure.identity.DefaultAzureCredentialBuilder
+import org.eclipse.lmos.arc.agents.events.EventPublisher
+import org.eclipse.lmos.arc.agents.llm.ChatCompleterProvider
+import org.eclipse.lmos.arc.client.azure.AzureAIClient
+import org.eclipse.lmos.arc.client.azure.AzureClientConfig
+import org.eclipse.lmos.arc.client.langchain4j.LangChainClient
+import org.eclipse.lmos.arc.client.langchain4j.LangChainConfig
+import org.eclipse.lmos.arc.client.langchain4j.builders.bedrockBuilder
+import org.eclipse.lmos.arc.client.langchain4j.builders.geminiBuilder
+import org.eclipse.lmos.arc.client.langchain4j.builders.groqBuilder
+import org.eclipse.lmos.arc.client.langchain4j.builders.ollamaBuilder
 
 /**
  * Provides a ChatCompleterProvider based on the given configuration.

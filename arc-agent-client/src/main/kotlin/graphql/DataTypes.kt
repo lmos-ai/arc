@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agent.client.graphql
+package org.eclipse.lmos.arc.agent.client.graphql
 
-import ai.ancf.lmos.arc.api.AgentRequest
-import ai.ancf.lmos.arc.api.AgentResult
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.eclipse.lmos.arc.api.AgentRequest
+import org.eclipse.lmos.arc.api.AgentResult
 
 /**
  * Message types defined by the graphql-ws Specification.

@@ -1,12 +1,12 @@
 // SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
 //
 // SPDX-License-Identifier: Apache-2.0
-package ai.ancf.lmos.arc.spring.ai
+package org.eclipse.lmos.arc.spring.ai
 
-import ai.ancf.lmos.arc.agents.conversation.AssistantMessage
-import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
-import ai.ancf.lmos.arc.agents.conversation.SystemMessage
-import ai.ancf.lmos.arc.agents.conversation.UserMessage
+import org.eclipse.lmos.arc.agents.conversation.AssistantMessage
+import org.eclipse.lmos.arc.agents.conversation.ConversationMessage
+import org.eclipse.lmos.arc.agents.conversation.SystemMessage
+import org.eclipse.lmos.arc.agents.conversation.UserMessage
 
 /**
  * Converts a list of ConversationMessages to a list of Spring AI messages.

@@ -2,26 +2,26 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents
+package org.eclipse.lmos.arc.agents
 
-import ai.ancf.lmos.arc.agents.conversation.AssistantMessage
-import ai.ancf.lmos.arc.agents.conversation.Conversation
-import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
-import ai.ancf.lmos.arc.agents.conversation.toConversation
-import ai.ancf.lmos.arc.agents.dsl.*
-import ai.ancf.lmos.arc.agents.functions.LLMFunction
-import ai.ancf.lmos.arc.agents.functions.LLMFunctionException
-import ai.ancf.lmos.arc.agents.functions.LLMFunctionProvider
-import ai.ancf.lmos.arc.agents.functions.ParametersSchema
-import ai.ancf.lmos.arc.agents.llm.ChatCompleter
-import ai.ancf.lmos.arc.agents.llm.ChatCompleterProvider
-import ai.ancf.lmos.arc.core.Result
-import ai.ancf.lmos.arc.core.Success
-import ai.ancf.lmos.arc.core.getOrThrow
 import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.slot
+import org.eclipse.lmos.arc.agents.conversation.AssistantMessage
+import org.eclipse.lmos.arc.agents.conversation.Conversation
+import org.eclipse.lmos.arc.agents.conversation.ConversationMessage
+import org.eclipse.lmos.arc.agents.conversation.toConversation
+import org.eclipse.lmos.arc.agents.dsl.*
+import org.eclipse.lmos.arc.agents.functions.LLMFunction
+import org.eclipse.lmos.arc.agents.functions.LLMFunctionException
+import org.eclipse.lmos.arc.agents.functions.LLMFunctionProvider
+import org.eclipse.lmos.arc.agents.functions.ParametersSchema
+import org.eclipse.lmos.arc.agents.llm.ChatCompleter
+import org.eclipse.lmos.arc.agents.llm.ChatCompleterProvider
+import org.eclipse.lmos.arc.core.Result
+import org.eclipse.lmos.arc.core.Success
+import org.eclipse.lmos.arc.core.getOrThrow
 import org.junit.jupiter.api.BeforeEach
 
 open class TestBase {

@@ -15,8 +15,8 @@ plugins {
 gradlePlugin {
     plugins {
         create("ArcGradlePlugin") {
-            id = "ai.ancf.lmos.arc.gradle.plugin"
-            implementationClass = "ai.ancf.lmos.arc.gradle.plugin.ArcPlugin"
+            id = "org.eclipse.lmos.arc.gradle.plugin"
+            implementationClass = "org.eclipse.lmos.arc.gradle.plugin.ArcPlugin"
             version = version
         }
     }
@@ -30,12 +30,12 @@ mavenPublishing {
     pom {
         name = "ARC"
         description = "ARC is an AI framework."
-        url = "https://github.com/lmos-ai/arc"
+        url = "https://github.com/eclipse-lmos/arc"
         licenses {
             license {
                 name = "Apache-2.0"
                 distribution = "repo"
-                url = "https://github.com/lmos-ai/arc/blob/main/LICENSES/Apache-2.0.txt"
+                url = "https://github.com/eclipse-lmos/arc/blob/main/LICENSES/Apache-2.0.txt"
             }
         }
         developers {
@@ -56,14 +56,14 @@ mavenPublishing {
             }
         }
         scm {
-            url = "https://github.com/lmos-ai/arc.git"
+            url = "https://github.com/eclipse-lmos/arc.git"
         }
     }
 
     repositories {
         maven {
             name = "GitHubPackages"
-            url = URI("https://maven.pkg.github.com/lmos-ai/arc")
+            url = URI("https://maven.pkg.github.com/eclipse-lmos/arc")
             credentials {
                 username = findProperty("GITHUB_USER")?.toString() ?: getenv("GITHUB_USER")
                 password = findProperty("GITHUB_TOKEN")?.toString() ?: getenv("GITHUB_TOKEN")

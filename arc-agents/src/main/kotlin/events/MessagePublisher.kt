@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.events
+package org.eclipse.lmos.arc.agents.events
 
-import ai.ancf.lmos.arc.agents.conversation.AssistantMessage
 import kotlinx.coroutines.channels.Channel
+import org.eclipse.lmos.arc.agents.conversation.AssistantMessage
 
 /**
  * Publishes a message that is returned to the client.

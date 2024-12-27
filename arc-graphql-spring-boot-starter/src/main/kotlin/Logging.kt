@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.graphql
+package org.eclipse.lmos.arc.graphql
 
-import ai.ancf.lmos.arc.api.AgentRequest
 import kotlinx.coroutines.slf4j.MDCContext
 import kotlinx.coroutines.withContext
+import org.eclipse.lmos.arc.api.AgentRequest
 import org.slf4j.MDC
 
 suspend fun <T> withLogContext(

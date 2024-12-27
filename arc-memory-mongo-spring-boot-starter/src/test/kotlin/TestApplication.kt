@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.memory.mongo
+package org.eclipse.lmos.arc.memory.mongo
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection

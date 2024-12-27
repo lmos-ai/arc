@@ -2,11 +2,8 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agent.client.graphql
+package org.eclipse.lmos.arc.agent.client.graphql
 
-import ai.ancf.lmos.arc.agent.client.AgentClient
-import ai.ancf.lmos.arc.agent.client.AgentException
-import ai.ancf.lmos.arc.api.AgentRequest
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.websocket.*
@@ -15,6 +12,9 @@ import io.ktor.websocket.*
 import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.eclipse.lmos.arc.agent.client.AgentClient
+import org.eclipse.lmos.arc.agent.client.AgentException
+import org.eclipse.lmos.arc.api.AgentRequest
 import org.slf4j.LoggerFactory
 import java.io.Closeable
 import java.util.*

@@ -2,18 +2,18 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.scripting.agents
+package org.eclipse.lmos.arc.scripting.agents
 
-import ai.ancf.lmos.arc.agents.Agent
-import ai.ancf.lmos.arc.agents.AgentLoader
-import ai.ancf.lmos.arc.agents.dsl.AgentFactory
-import ai.ancf.lmos.arc.agents.dsl.BasicAgentDefinitionContext
-import ai.ancf.lmos.arc.agents.events.EventPublisher
-import ai.ancf.lmos.arc.core.Failure
-import ai.ancf.lmos.arc.core.Result
-import ai.ancf.lmos.arc.core.Success
-import ai.ancf.lmos.arc.core.onFailure
-import ai.ancf.lmos.arc.scripting.ScriptFailedException
+import org.eclipse.lmos.arc.agents.Agent
+import org.eclipse.lmos.arc.agents.AgentLoader
+import org.eclipse.lmos.arc.agents.dsl.AgentFactory
+import org.eclipse.lmos.arc.agents.dsl.BasicAgentDefinitionContext
+import org.eclipse.lmos.arc.agents.events.EventPublisher
+import org.eclipse.lmos.arc.core.Failure
+import org.eclipse.lmos.arc.core.Result
+import org.eclipse.lmos.arc.core.Success
+import org.eclipse.lmos.arc.core.onFailure
+import org.eclipse.lmos.arc.scripting.ScriptFailedException
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap

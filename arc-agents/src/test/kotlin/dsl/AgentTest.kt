@@ -2,23 +2,23 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.dsl
+package org.eclipse.lmos.arc.agents.dsl
 
-import ai.ancf.lmos.arc.agents.*
-import ai.ancf.lmos.arc.agents.conversation.Conversation
-import ai.ancf.lmos.arc.agents.conversation.toConversation
-import ai.ancf.lmos.arc.agents.events.BasicEventPublisher
-import ai.ancf.lmos.arc.agents.events.EventHandler
-import ai.ancf.lmos.arc.agents.functions.LLMFunction
-import ai.ancf.lmos.arc.agents.functions.ParametersSchema
-import ai.ancf.lmos.arc.core.Failure
-import ai.ancf.lmos.arc.core.Result
-import ai.ancf.lmos.arc.core.Success
-import ai.ancf.lmos.arc.core.getOrThrow
 import io.mockk.coEvery
 import io.mockk.slot
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.eclipse.lmos.arc.agents.*
+import org.eclipse.lmos.arc.agents.conversation.Conversation
+import org.eclipse.lmos.arc.agents.conversation.toConversation
+import org.eclipse.lmos.arc.agents.events.BasicEventPublisher
+import org.eclipse.lmos.arc.agents.events.EventHandler
+import org.eclipse.lmos.arc.agents.functions.LLMFunction
+import org.eclipse.lmos.arc.agents.functions.ParametersSchema
+import org.eclipse.lmos.arc.core.Failure
+import org.eclipse.lmos.arc.core.Result
+import org.eclipse.lmos.arc.core.Success
+import org.eclipse.lmos.arc.core.getOrThrow
 import org.junit.jupiter.api.Test
 import kotlin.time.Duration.Companion.seconds
 

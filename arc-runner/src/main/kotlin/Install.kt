@@ -4,7 +4,7 @@
 
 @file:Suppress("ktlint")
 
-package ai.ancf.lmos.arc.runner
+package org.eclipse.lmos.arc.runner
 
 import picocli.CommandLine.Command
 import picocli.CommandLine.Parameters
@@ -37,7 +37,7 @@ class InstallAgent : Runnable {
         }
         println("Installing Arc Runner...")
         val fullName = "$agent.agent.kts"
-        val `in` = URL("https://raw.githubusercontent.com/lmos-ai/arc/main/arc-runner/$fullName").openStream()
+        val `in` = URL("https://raw.githubusercontent.com/eclipse-lmos/arc/main/arc-runner/$fullName").openStream()
         Files.copy(`in`, File(home(), fullName).toPath(), StandardCopyOption.REPLACE_EXISTING)
     }
 }

@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.scripting.agents
+package org.eclipse.lmos.arc.scripting.agents
 
-import ai.ancf.lmos.arc.scripting.TestBase
-import ai.ancf.lmos.arc.scripting.readScript
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.eclipse.lmos.arc.scripting.TestBase
+import org.eclipse.lmos.arc.scripting.readScript
 import org.junit.jupiter.api.Test
 import java.io.File
 

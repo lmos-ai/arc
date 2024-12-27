@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.graphql
+package org.eclipse.lmos.arc.graphql
 
-import ai.ancf.lmos.arc.graphql.inbound.AgentSubscription
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.eclipse.lmos.arc.graphql.inbound.AgentSubscription
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

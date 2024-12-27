@@ -2,15 +2,15 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.dsl.extensions
+package org.eclipse.lmos.arc.agents.dsl.extensions
 
-import ai.ancf.lmos.arc.agents.conversation.AssistantMessage
-import ai.ancf.lmos.arc.agents.conversation.Conversation
-import ai.ancf.lmos.arc.agents.dsl.DSLContext
-import ai.ancf.lmos.arc.agents.dsl.get
-import ai.ancf.lmos.arc.agents.events.Event
-import ai.ancf.lmos.arc.agents.events.EventPublisher
-import ai.ancf.lmos.arc.agents.events.MessagePublisher
+import org.eclipse.lmos.arc.agents.conversation.AssistantMessage
+import org.eclipse.lmos.arc.agents.conversation.Conversation
+import org.eclipse.lmos.arc.agents.dsl.DSLContext
+import org.eclipse.lmos.arc.agents.dsl.get
+import org.eclipse.lmos.arc.agents.events.Event
+import org.eclipse.lmos.arc.agents.events.EventPublisher
+import org.eclipse.lmos.arc.agents.events.MessagePublisher
 
 /**
  * Extensions for eventing.

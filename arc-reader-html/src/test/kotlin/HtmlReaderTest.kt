@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-import ai.ancf.lmos.arc.agents.dsl.BasicDSLContext
-import ai.ancf.lmos.arc.agents.dsl.BeanProvider
-import ai.ancf.lmos.arc.agents.dsl.extensions.htmlDocument
-import ai.ancf.lmos.arc.core.getOrThrow
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.eclipse.lmos.arc.agents.dsl.BasicDSLContext
+import org.eclipse.lmos.arc.agents.dsl.BeanProvider
+import org.eclipse.lmos.arc.agents.dsl.extensions.htmlDocument
+import org.eclipse.lmos.arc.core.getOrThrow
 import org.junit.jupiter.api.Test
 import java.io.File
 import kotlin.reflect.KClass

@@ -2,22 +2,22 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.client.langchain4j
+package org.eclipse.lmos.arc.client.langchain4j
 
-import ai.ancf.lmos.arc.agents.ArcException
-import ai.ancf.lmos.arc.agents.HallucinationDetectedException
-import ai.ancf.lmos.arc.agents.events.EventPublisher
-import ai.ancf.lmos.arc.agents.functions.LLMFunction
-import ai.ancf.lmos.arc.agents.functions.LLMFunctionCalledEvent
-import ai.ancf.lmos.arc.agents.functions.LLMFunctionStartedEvent
-import ai.ancf.lmos.arc.agents.functions.convertToJsonMap
-import ai.ancf.lmos.arc.core.Result
-import ai.ancf.lmos.arc.core.failWith
-import ai.ancf.lmos.arc.core.getOrNull
-import ai.ancf.lmos.arc.core.result
 import dev.langchain4j.data.message.AiMessage
 import dev.langchain4j.data.message.ChatMessage
 import dev.langchain4j.data.message.ToolExecutionResultMessage
+import org.eclipse.lmos.arc.agents.ArcException
+import org.eclipse.lmos.arc.agents.HallucinationDetectedException
+import org.eclipse.lmos.arc.agents.events.EventPublisher
+import org.eclipse.lmos.arc.agents.functions.LLMFunction
+import org.eclipse.lmos.arc.agents.functions.LLMFunctionCalledEvent
+import org.eclipse.lmos.arc.agents.functions.LLMFunctionStartedEvent
+import org.eclipse.lmos.arc.agents.functions.convertToJsonMap
+import org.eclipse.lmos.arc.core.Result
+import org.eclipse.lmos.arc.core.failWith
+import org.eclipse.lmos.arc.core.getOrNull
+import org.eclipse.lmos.arc.core.result
 import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger

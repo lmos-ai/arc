@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.dsl.extensions
+package org.eclipse.lmos.arc.agents.dsl.extensions
 
-import ai.ancf.lmos.arc.agents.dsl.DSLContext
-import ai.ancf.lmos.arc.assistants.support.usecases.formatToString
-import ai.ancf.lmos.arc.assistants.support.usecases.toUseCases
+import org.eclipse.lmos.arc.agents.dsl.DSLContext
+import org.eclipse.lmos.arc.assistants.support.usecases.formatToString
+import org.eclipse.lmos.arc.assistants.support.usecases.toUseCases
 import org.slf4j.LoggerFactory
 
 private val log = LoggerFactory.getLogger("UseCasesLoader")

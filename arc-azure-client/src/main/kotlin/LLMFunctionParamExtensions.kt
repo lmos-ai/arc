@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.client.azure
+package org.eclipse.lmos.arc.client.azure
 
-import ai.ancf.lmos.arc.agents.functions.ParameterSchema
-import ai.ancf.lmos.arc.agents.functions.ParametersSchema
 import kotlinx.serialization.json.*
+import org.eclipse.lmos.arc.agents.functions.ParameterSchema
+import org.eclipse.lmos.arc.agents.functions.ParametersSchema
 
 /**
  * Extension functions for ParametersSchema to convert it to OpenAPI JSON format.

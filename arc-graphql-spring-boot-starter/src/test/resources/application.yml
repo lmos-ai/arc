@@ -5,7 +5,7 @@
 logging:
   level:
     root: INFO
-    ai.ancf.lmos.ai: DEBUG
+    org.eclipse.lmos.ai: DEBUG
 
 server:
   port: 8080

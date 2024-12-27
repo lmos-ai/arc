@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.functions
+package org.eclipse.lmos.arc.agents.functions
 
-import ai.ancf.lmos.arc.core.Result
 import kotlinx.serialization.Serializable
+import org.eclipse.lmos.arc.core.Result
 
 /**
  * Describes a function that can be passed to a Large Language Model.

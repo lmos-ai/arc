@@ -2,32 +2,32 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents
+package org.eclipse.lmos.arc.agents
 
-import ai.ancf.lmos.arc.agents.conversation.Conversation
-import ai.ancf.lmos.arc.agents.conversation.SystemMessage
-import ai.ancf.lmos.arc.agents.dsl.AllTools
-import ai.ancf.lmos.arc.agents.dsl.BasicDSLContext
-import ai.ancf.lmos.arc.agents.dsl.BeanProvider
-import ai.ancf.lmos.arc.agents.dsl.CompositeBeanProvider
-import ai.ancf.lmos.arc.agents.dsl.DSLContext
-import ai.ancf.lmos.arc.agents.dsl.InputFilterContext
-import ai.ancf.lmos.arc.agents.dsl.OutputFilterContext
-import ai.ancf.lmos.arc.agents.dsl.ToolsDSLContext
-import ai.ancf.lmos.arc.agents.dsl.provideOptional
-import ai.ancf.lmos.arc.agents.events.EventPublisher
-import ai.ancf.lmos.arc.agents.functions.FunctionWithContext
-import ai.ancf.lmos.arc.agents.functions.LLMFunction
-import ai.ancf.lmos.arc.agents.functions.LLMFunctionProvider
-import ai.ancf.lmos.arc.agents.llm.ChatCompleterProvider
-import ai.ancf.lmos.arc.agents.llm.ChatCompletionSettings
-import ai.ancf.lmos.arc.core.Result
-import ai.ancf.lmos.arc.core.failWith
-import ai.ancf.lmos.arc.core.getOrThrow
-import ai.ancf.lmos.arc.core.mapFailure
-import ai.ancf.lmos.arc.core.recover
-import ai.ancf.lmos.arc.core.result
 import kotlinx.coroutines.coroutineScope
+import org.eclipse.lmos.arc.agents.conversation.Conversation
+import org.eclipse.lmos.arc.agents.conversation.SystemMessage
+import org.eclipse.lmos.arc.agents.dsl.AllTools
+import org.eclipse.lmos.arc.agents.dsl.BasicDSLContext
+import org.eclipse.lmos.arc.agents.dsl.BeanProvider
+import org.eclipse.lmos.arc.agents.dsl.CompositeBeanProvider
+import org.eclipse.lmos.arc.agents.dsl.DSLContext
+import org.eclipse.lmos.arc.agents.dsl.InputFilterContext
+import org.eclipse.lmos.arc.agents.dsl.OutputFilterContext
+import org.eclipse.lmos.arc.agents.dsl.ToolsDSLContext
+import org.eclipse.lmos.arc.agents.dsl.provideOptional
+import org.eclipse.lmos.arc.agents.events.EventPublisher
+import org.eclipse.lmos.arc.agents.functions.FunctionWithContext
+import org.eclipse.lmos.arc.agents.functions.LLMFunction
+import org.eclipse.lmos.arc.agents.functions.LLMFunctionProvider
+import org.eclipse.lmos.arc.agents.llm.ChatCompleterProvider
+import org.eclipse.lmos.arc.agents.llm.ChatCompletionSettings
+import org.eclipse.lmos.arc.core.Result
+import org.eclipse.lmos.arc.core.failWith
+import org.eclipse.lmos.arc.core.getOrThrow
+import org.eclipse.lmos.arc.core.mapFailure
+import org.eclipse.lmos.arc.core.recover
+import org.eclipse.lmos.arc.core.result
 import org.slf4j.LoggerFactory
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.time.measureTime

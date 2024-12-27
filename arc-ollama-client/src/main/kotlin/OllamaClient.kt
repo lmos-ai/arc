@@ -2,29 +2,8 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.client.ollama
+package org.eclipse.lmos.arc.client.ollama
 
-import ai.ancf.lmos.arc.agents.ArcException
-import ai.ancf.lmos.arc.agents.FeatureNotSupportedException
-import ai.ancf.lmos.arc.agents.conversation.AssistantMessage
-import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
-import ai.ancf.lmos.arc.agents.conversation.SystemMessage
-import ai.ancf.lmos.arc.agents.conversation.UserMessage
-import ai.ancf.lmos.arc.agents.events.EventPublisher
-import ai.ancf.lmos.arc.agents.functions.LLMFunction
-import ai.ancf.lmos.arc.agents.llm.ChatCompleter
-import ai.ancf.lmos.arc.agents.llm.ChatCompletionSettings
-import ai.ancf.lmos.arc.agents.llm.LLMFinishedEvent
-import ai.ancf.lmos.arc.agents.llm.LLMStartedEvent
-import ai.ancf.lmos.arc.agents.llm.OutputFormat.JSON
-import ai.ancf.lmos.arc.agents.llm.TextEmbedder
-import ai.ancf.lmos.arc.agents.llm.TextEmbedding
-import ai.ancf.lmos.arc.agents.llm.TextEmbeddings
-import ai.ancf.lmos.arc.core.Result
-import ai.ancf.lmos.arc.core.ensure
-import ai.ancf.lmos.arc.core.failWith
-import ai.ancf.lmos.arc.core.finally
-import ai.ancf.lmos.arc.core.result
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
@@ -43,6 +22,27 @@ import kotlinx.serialization.json.double
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import org.eclipse.lmos.arc.agents.ArcException
+import org.eclipse.lmos.arc.agents.FeatureNotSupportedException
+import org.eclipse.lmos.arc.agents.conversation.AssistantMessage
+import org.eclipse.lmos.arc.agents.conversation.ConversationMessage
+import org.eclipse.lmos.arc.agents.conversation.SystemMessage
+import org.eclipse.lmos.arc.agents.conversation.UserMessage
+import org.eclipse.lmos.arc.agents.events.EventPublisher
+import org.eclipse.lmos.arc.agents.functions.LLMFunction
+import org.eclipse.lmos.arc.agents.llm.ChatCompleter
+import org.eclipse.lmos.arc.agents.llm.ChatCompletionSettings
+import org.eclipse.lmos.arc.agents.llm.LLMFinishedEvent
+import org.eclipse.lmos.arc.agents.llm.LLMStartedEvent
+import org.eclipse.lmos.arc.agents.llm.OutputFormat.JSON
+import org.eclipse.lmos.arc.agents.llm.TextEmbedder
+import org.eclipse.lmos.arc.agents.llm.TextEmbedding
+import org.eclipse.lmos.arc.agents.llm.TextEmbeddings
+import org.eclipse.lmos.arc.core.Result
+import org.eclipse.lmos.arc.core.ensure
+import org.eclipse.lmos.arc.core.failWith
+import org.eclipse.lmos.arc.core.finally
+import org.eclipse.lmos.arc.core.result
 import org.slf4j.LoggerFactory
 import kotlin.time.Duration
 import kotlin.time.measureTime

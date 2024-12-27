@@ -2,10 +2,8 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.functions
+package org.eclipse.lmos.arc.agents.functions
 
-import ai.ancf.lmos.arc.core.failWith
-import ai.ancf.lmos.arc.core.result
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
@@ -21,6 +19,8 @@ import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.longOrNull
+import org.eclipse.lmos.arc.core.failWith
+import org.eclipse.lmos.arc.core.result
 
 /**
  * Converts json strings to a map of any types.

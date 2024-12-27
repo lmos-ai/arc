@@ -2,20 +2,20 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.spring
+package org.eclipse.lmos.arc.spring
 
-import ai.ancf.lmos.arc.agents.events.EventPublisher
-import ai.ancf.lmos.arc.agents.llm.ChatCompleter
-import ai.ancf.lmos.arc.agents.llm.ChatCompleterProvider
-import ai.ancf.lmos.arc.client.azure.AzureAIClient
-import ai.ancf.lmos.arc.client.azure.AzureClientConfig
-import ai.ancf.lmos.arc.client.ollama.OllamaClient
-import ai.ancf.lmos.arc.client.ollama.OllamaClientConfig
 import com.azure.ai.openai.OpenAIAsyncClient
 import com.azure.ai.openai.OpenAIClientBuilder
 import com.azure.core.credential.AzureKeyCredential
 import com.azure.core.credential.KeyCredential
 import com.azure.identity.DefaultAzureCredentialBuilder
+import org.eclipse.lmos.arc.agents.events.EventPublisher
+import org.eclipse.lmos.arc.agents.llm.ChatCompleter
+import org.eclipse.lmos.arc.agents.llm.ChatCompleterProvider
+import org.eclipse.lmos.arc.client.azure.AzureAIClient
+import org.eclipse.lmos.arc.client.azure.AzureClientConfig
+import org.eclipse.lmos.arc.client.ollama.OllamaClient
+import org.eclipse.lmos.arc.client.ollama.OllamaClientConfig
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties

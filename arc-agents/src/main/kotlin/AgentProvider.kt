@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents
+package org.eclipse.lmos.arc.agents
 
 /**
  * Provides Agents to other components to an application.

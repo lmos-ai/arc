@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.client.langchain4j
+package org.eclipse.lmos.arc.client.langchain4j
 
-import ai.ancf.lmos.arc.client.langchain4j.builders.bedrockBuilder
+import org.eclipse.lmos.arc.client.langchain4j.builders.bedrockBuilder
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test

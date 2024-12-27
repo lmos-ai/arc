@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.runner
+package org.eclipse.lmos.arc.runner
 
 import picocli.CommandLine.Command
 import picocli.CommandLine.Parameters
@@ -34,7 +34,7 @@ open class Spring : Runnable {
         if (name.isEmpty()) {
             println("Invalid agent name. Please provide a valid agent name.")
         }
-        ProcessBuilder("git", "clone", "https://github.com/lmos-ai/arc-spring-init", name)
+        ProcessBuilder("git", "clone", "https://github.com/eclipse-lmos/arc-spring-init", name)
             .start()
             .apply {
                 inputStream.bufferedReader().use { reader ->

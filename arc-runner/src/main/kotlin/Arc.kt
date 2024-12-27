@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.runner
+package org.eclipse.lmos.arc.runner
 
 import picocli.CommandLine.Command
 import java.io.File

@@ -2,20 +2,20 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.runner.server
+package org.eclipse.lmos.arc.runner.server
 
-import ai.ancf.lmos.arc.agents.AgentProvider
-import ai.ancf.lmos.arc.agents.CompositeAgentProvider
-import ai.ancf.lmos.arc.agents.dsl.ChatAgentFactory
-import ai.ancf.lmos.arc.agents.dsl.CompositeBeanProvider
-import ai.ancf.lmos.arc.agents.dsl.beans
-import ai.ancf.lmos.arc.agents.events.BasicEventPublisher
-import ai.ancf.lmos.arc.agents.events.LoggingEventHandler
-import ai.ancf.lmos.arc.agents.functions.CompositeLLMFunctionProvider
-import ai.ancf.lmos.arc.graphql.inbound.EventSubscriptionHolder
-import ai.ancf.lmos.arc.scripting.ScriptHotReload
-import ai.ancf.lmos.arc.scripting.agents.ScriptingAgentLoader
-import ai.ancf.lmos.arc.scripting.functions.ScriptingLLMFunctionLoader
+import org.eclipse.lmos.arc.agents.AgentProvider
+import org.eclipse.lmos.arc.agents.CompositeAgentProvider
+import org.eclipse.lmos.arc.agents.dsl.ChatAgentFactory
+import org.eclipse.lmos.arc.agents.dsl.CompositeBeanProvider
+import org.eclipse.lmos.arc.agents.dsl.beans
+import org.eclipse.lmos.arc.agents.events.BasicEventPublisher
+import org.eclipse.lmos.arc.agents.events.LoggingEventHandler
+import org.eclipse.lmos.arc.agents.functions.CompositeLLMFunctionProvider
+import org.eclipse.lmos.arc.graphql.inbound.EventSubscriptionHolder
+import org.eclipse.lmos.arc.scripting.ScriptHotReload
+import org.eclipse.lmos.arc.scripting.agents.ScriptingAgentLoader
+import org.eclipse.lmos.arc.scripting.functions.ScriptingLLMFunctionLoader
 import kotlin.time.Duration.Companion.seconds
 
 /**

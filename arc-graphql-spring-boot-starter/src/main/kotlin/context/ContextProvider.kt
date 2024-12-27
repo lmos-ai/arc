@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.graphql.context
+package org.eclipse.lmos.arc.graphql.context
 
-import ai.ancf.lmos.arc.agents.dsl.extensions.SystemContext
-import ai.ancf.lmos.arc.agents.dsl.extensions.SystemContextProvider
-import ai.ancf.lmos.arc.agents.dsl.extensions.UserProfile
-import ai.ancf.lmos.arc.agents.dsl.extensions.UserProfileProvider
-import ai.ancf.lmos.arc.api.AgentRequest
+import org.eclipse.lmos.arc.agents.dsl.extensions.SystemContext
+import org.eclipse.lmos.arc.agents.dsl.extensions.SystemContextProvider
+import org.eclipse.lmos.arc.agents.dsl.extensions.UserProfile
+import org.eclipse.lmos.arc.agents.dsl.extensions.UserProfileProvider
+import org.eclipse.lmos.arc.api.AgentRequest
 
 /**
  * Provides the system context and user profile to the context of the DSL.

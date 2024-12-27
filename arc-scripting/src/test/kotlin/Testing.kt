@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.scripting
+package org.eclipse.lmos.arc.scripting
 
 /**
  * Reads a script from the resource folder.

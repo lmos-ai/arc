@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.scripting.agents
+package org.eclipse.lmos.arc.scripting.agents
 
-import ai.ancf.lmos.arc.agents.dsl.AgentDefinitionContext
+import org.eclipse.lmos.arc.agents.dsl.AgentDefinitionContext
 import kotlin.script.experimental.annotations.KotlinScript
 import kotlin.script.experimental.api.*
 import kotlin.script.experimental.jvm.dependenciesFromCurrentContext
@@ -27,15 +27,15 @@ object ScriptConfiguration : ScriptCompilationConfiguration(
         compilerOptions("-Xcontext-receivers")
 
         defaultImports(
-            "ai.ancf.lmos.arc.agents.dsl.get",
-            "ai.ancf.lmos.arc.agents.dsl.*",
-            "ai.ancf.lmos.arc.core.*",
-            "ai.ancf.lmos.arc.agents.conversation.UserMessage",
-            "ai.ancf.lmos.arc.agents.conversation.latest",
-            "ai.ancf.lmos.arc.agents.dsl.extensions.*",
-            "ai.ancf.lmos.arc.agents.llm.ChatCompletionSettings",
-            "ai.ancf.lmos.arc.agents.llm.OutputFormat",
-            "ai.ancf.lmos.arc.agents.dsl.custom.extensions.*",
+            "org.eclipse.lmos.arc.agents.dsl.get",
+            "org.eclipse.lmos.arc.agents.dsl.*",
+            "org.eclipse.lmos.arc.core.*",
+            "org.eclipse.lmos.arc.agents.conversation.UserMessage",
+            "org.eclipse.lmos.arc.agents.conversation.latest",
+            "org.eclipse.lmos.arc.agents.dsl.extensions.*",
+            "org.eclipse.lmos.arc.agents.llm.ChatCompletionSettings",
+            "org.eclipse.lmos.arc.agents.llm.OutputFormat",
+            "org.eclipse.lmos.arc.agents.dsl.custom.extensions.*",
         )
 
         ide {

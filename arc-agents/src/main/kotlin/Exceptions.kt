@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents
+package org.eclipse.lmos.arc.agents
 
-import ai.ancf.lmos.arc.agents.conversation.Conversation
+import org.eclipse.lmos.arc.agents.conversation.Conversation
 
 /**
  * Indicates that calling the Azure client has failed.

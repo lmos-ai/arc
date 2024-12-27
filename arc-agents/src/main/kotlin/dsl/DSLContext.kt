@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.dsl
+package org.eclipse.lmos.arc.agents.dsl
 
-import ai.ancf.lmos.arc.agents.functions.LLMFunction
 import kotlinx.coroutines.future.await
+import org.eclipse.lmos.arc.agents.functions.LLMFunction
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest

@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.router
+package org.eclipse.lmos.arc.agents.router
 
-import ai.ancf.lmos.arc.agents.events.BaseEvent
-import ai.ancf.lmos.arc.agents.events.Event
+import org.eclipse.lmos.arc.agents.events.BaseEvent
+import org.eclipse.lmos.arc.agents.events.Event
 import java.time.Instant
 import kotlin.time.Duration
 

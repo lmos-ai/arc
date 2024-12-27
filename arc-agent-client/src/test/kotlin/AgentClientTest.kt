@@ -2,15 +2,15 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agent.client
+package org.eclipse.lmos.arc.agent.client
 
-import ai.ancf.lmos.arc.agent.client.graphql.GraphQlAgentClient
-import ai.ancf.lmos.arc.api.AgentRequest
-import ai.ancf.lmos.arc.api.ConversationContext
-import ai.ancf.lmos.arc.api.UserContext
 import kotlinx.coroutines.flow.toCollection
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.eclipse.lmos.arc.agent.client.graphql.GraphQlAgentClient
+import org.eclipse.lmos.arc.api.AgentRequest
+import org.eclipse.lmos.arc.api.ConversationContext
+import org.eclipse.lmos.arc.api.UserContext
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 

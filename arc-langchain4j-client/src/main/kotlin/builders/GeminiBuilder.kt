@@ -2,14 +2,14 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.client.langchain4j.builders
+package org.eclipse.lmos.arc.client.langchain4j.builders
 
-import ai.ancf.lmos.arc.agents.llm.ChatCompletionSettings
-import ai.ancf.lmos.arc.agents.llm.OutputFormat
-import ai.ancf.lmos.arc.client.langchain4j.LangChainConfig
 import dev.langchain4j.model.chat.ChatLanguageModel
 import dev.langchain4j.model.chat.request.ResponseFormat
 import dev.langchain4j.model.googleai.GoogleAiGeminiChatModel
+import org.eclipse.lmos.arc.agents.llm.ChatCompletionSettings
+import org.eclipse.lmos.arc.agents.llm.OutputFormat
+import org.eclipse.lmos.arc.client.langchain4j.LangChainConfig
 import java.util.concurrent.ConcurrentHashMap
 
 private val cache = ConcurrentHashMap<Pair<LangChainConfig, ChatCompletionSettings?>, ChatLanguageModel>()

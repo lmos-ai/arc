@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.runner
+package org.eclipse.lmos.arc.runner
 
-import ai.ancf.lmos.arc.runner.server.AIClientConfig
-import ai.ancf.lmos.arc.runner.server.AppConfig
-import ai.ancf.lmos.arc.runner.server.runApp
+import org.eclipse.lmos.arc.runner.server.AIClientConfig
+import org.eclipse.lmos.arc.runner.server.AppConfig
+import org.eclipse.lmos.arc.runner.server.runApp
 import picocli.CommandLine.Command
 import picocli.CommandLine.Parameters
 import java.io.File

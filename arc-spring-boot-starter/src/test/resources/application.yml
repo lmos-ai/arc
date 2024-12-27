@@ -14,4 +14,4 @@ arc:
 logging:
   level:
     root: WARN
-    ai.ancf.lmos.ai: DEBUG
+    org.eclipse.lmos.ai: DEBUG

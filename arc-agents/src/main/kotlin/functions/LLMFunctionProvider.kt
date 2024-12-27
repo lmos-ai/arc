@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.functions
+package org.eclipse.lmos.arc.agents.functions
 
-import ai.ancf.lmos.arc.agents.FunctionNotFoundException
-import ai.ancf.lmos.arc.core.Failure
-import ai.ancf.lmos.arc.core.Result
-import ai.ancf.lmos.arc.core.Success
+import org.eclipse.lmos.arc.agents.FunctionNotFoundException
+import org.eclipse.lmos.arc.core.Failure
+import org.eclipse.lmos.arc.core.Result
+import org.eclipse.lmos.arc.core.Success
 
 /**
  * Provides LLMFunctions.

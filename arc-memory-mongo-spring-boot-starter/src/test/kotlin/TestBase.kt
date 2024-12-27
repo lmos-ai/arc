@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
 //
 // SPDX-License-Identifier: Apache-2.0
-package ai.ancf.lmos.arc.memory.mongo
+package org.eclipse.lmos.arc.memory.mongo
 
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.TestInstance

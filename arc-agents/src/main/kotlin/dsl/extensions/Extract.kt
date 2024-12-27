@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.dsl.extensions
+package org.eclipse.lmos.arc.agents.dsl.extensions
 
-import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
-import ai.ancf.lmos.arc.agents.dsl.DSLContext
-import ai.ancf.lmos.arc.agents.dsl.InputFilterContext
-import ai.ancf.lmos.arc.agents.dsl.OutputFilterContext
+import org.eclipse.lmos.arc.agents.conversation.ConversationMessage
+import org.eclipse.lmos.arc.agents.dsl.DSLContext
+import org.eclipse.lmos.arc.agents.dsl.InputFilterContext
+import org.eclipse.lmos.arc.agents.dsl.OutputFilterContext
 
 /**
  * Extensions for extracting data from messages.

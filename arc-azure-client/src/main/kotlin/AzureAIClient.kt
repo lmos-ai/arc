@@ -2,20 +2,20 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.client.azure
+package org.eclipse.lmos.arc.client.azure
 
-import ai.ancf.lmos.arc.agents.ArcException
-import ai.ancf.lmos.arc.agents.conversation.*
-import ai.ancf.lmos.arc.agents.events.EventPublisher
-import ai.ancf.lmos.arc.agents.functions.LLMFunction
-import ai.ancf.lmos.arc.agents.llm.*
-import ai.ancf.lmos.arc.agents.llm.OutputFormat.JSON
-import ai.ancf.lmos.arc.core.*
 import com.azure.ai.openai.OpenAIAsyncClient
 import com.azure.ai.openai.models.*
 import com.azure.core.exception.ClientAuthenticationException
 import com.azure.core.util.BinaryData
 import kotlinx.coroutines.reactive.awaitFirst
+import org.eclipse.lmos.arc.agents.ArcException
+import org.eclipse.lmos.arc.agents.conversation.*
+import org.eclipse.lmos.arc.agents.events.EventPublisher
+import org.eclipse.lmos.arc.agents.functions.LLMFunction
+import org.eclipse.lmos.arc.agents.llm.*
+import org.eclipse.lmos.arc.agents.llm.OutputFormat.JSON
+import org.eclipse.lmos.arc.core.*
 import org.slf4j.LoggerFactory
 import kotlin.time.Duration
 import kotlin.time.measureTime

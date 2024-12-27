@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.dsl
+package org.eclipse.lmos.arc.agents.dsl
 
-import ai.ancf.lmos.arc.agents.Agent
-import ai.ancf.lmos.arc.agents.llm.ChatCompletionSettings
+import org.eclipse.lmos.arc.agents.Agent
+import org.eclipse.lmos.arc.agents.llm.ChatCompletionSettings
 
 @DslMarker
 annotation class AgentDefinitionContextMarker

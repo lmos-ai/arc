@@ -2,16 +2,16 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents
+package org.eclipse.lmos.arc.agents
 
-import ai.ancf.lmos.arc.agents.conversation.toConversation
-import ai.ancf.lmos.arc.agents.dsl.AllTools
-import ai.ancf.lmos.arc.agents.dsl.extensions.breakWith
-import ai.ancf.lmos.arc.core.getOrThrow
 import io.mockk.coEvery
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.eclipse.lmos.arc.agents.conversation.toConversation
+import org.eclipse.lmos.arc.agents.dsl.AllTools
+import org.eclipse.lmos.arc.agents.dsl.extensions.breakWith
+import org.eclipse.lmos.arc.core.getOrThrow
 import org.junit.jupiter.api.Test
 
 class ChatAgentTest : TestBase() {

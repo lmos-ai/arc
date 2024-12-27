@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.dsl
+package org.eclipse.lmos.arc.agents.dsl
 
-import ai.ancf.lmos.arc.agents.conversation.Conversation
-import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
-import ai.ancf.lmos.arc.agents.withLogContext
 import kotlinx.coroutines.*
 import kotlinx.coroutines.CoroutineScope
+import org.eclipse.lmos.arc.agents.conversation.Conversation
+import org.eclipse.lmos.arc.agents.conversation.ConversationMessage
+import org.eclipse.lmos.arc.agents.withLogContext
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.reflect.KClass
 

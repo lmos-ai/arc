@@ -3,9 +3,9 @@
 // SPDX-License-Identifier: Apache-2.0
 @file:Suppress("ktlint")
 
-package ai.ancf.lmos.arc.agents.gen
+package org.eclipse.lmos.arc.agents.gen
 
-import ai.ancf.lmos.arc.agents.dsl.AgentDefinitionContext
+import org.eclipse.lmos.arc.agents.dsl.AgentDefinitionContext
 
 class Agents {
 

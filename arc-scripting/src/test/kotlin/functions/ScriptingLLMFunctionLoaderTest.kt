@@ -1,12 +1,12 @@
 // SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
 //
 // SPDX-License-Identifier: Apache-2.0
-package ai.ancf.lmos.arc.scripting.functions
+package org.eclipse.lmos.arc.scripting.functions
 
-import ai.ancf.lmos.arc.scripting.TestBase
-import ai.ancf.lmos.arc.scripting.readScript
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.eclipse.lmos.arc.scripting.TestBase
+import org.eclipse.lmos.arc.scripting.readScript
 import org.junit.jupiter.api.Test
 import java.io.File
 

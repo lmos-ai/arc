@@ -2,28 +2,28 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.assistants.support
+package org.eclipse.lmos.arc.assistants.support
 
-import ai.ancf.lmos.arc.agents.Agent
-import ai.ancf.lmos.arc.agents.ChatAgent
-import ai.ancf.lmos.arc.agents.User
-import ai.ancf.lmos.arc.agents.conversation.AssistantMessage
-import ai.ancf.lmos.arc.agents.conversation.Conversation
-import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
-import ai.ancf.lmos.arc.agents.conversation.toConversation
-import ai.ancf.lmos.arc.agents.dsl.AgentDefinitionContext
-import ai.ancf.lmos.arc.agents.dsl.BasicAgentDefinitionContext
-import ai.ancf.lmos.arc.agents.dsl.ChatAgentFactory
-import ai.ancf.lmos.arc.agents.dsl.SetBeanProvider
-import ai.ancf.lmos.arc.agents.functions.LLMFunctionProvider
-import ai.ancf.lmos.arc.agents.llm.ChatCompleter
-import ai.ancf.lmos.arc.agents.llm.ChatCompleterProvider
-import ai.ancf.lmos.arc.core.Success
-import ai.ancf.lmos.arc.core.getOrThrow
 import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.mockk
 import io.mockk.slot
+import org.eclipse.lmos.arc.agents.Agent
+import org.eclipse.lmos.arc.agents.ChatAgent
+import org.eclipse.lmos.arc.agents.User
+import org.eclipse.lmos.arc.agents.conversation.AssistantMessage
+import org.eclipse.lmos.arc.agents.conversation.Conversation
+import org.eclipse.lmos.arc.agents.conversation.ConversationMessage
+import org.eclipse.lmos.arc.agents.conversation.toConversation
+import org.eclipse.lmos.arc.agents.dsl.AgentDefinitionContext
+import org.eclipse.lmos.arc.agents.dsl.BasicAgentDefinitionContext
+import org.eclipse.lmos.arc.agents.dsl.ChatAgentFactory
+import org.eclipse.lmos.arc.agents.dsl.SetBeanProvider
+import org.eclipse.lmos.arc.agents.functions.LLMFunctionProvider
+import org.eclipse.lmos.arc.agents.llm.ChatCompleter
+import org.eclipse.lmos.arc.agents.llm.ChatCompleterProvider
+import org.eclipse.lmos.arc.core.Success
+import org.eclipse.lmos.arc.core.getOrThrow
 import org.junit.jupiter.api.BeforeEach
 
 open class TestBase {

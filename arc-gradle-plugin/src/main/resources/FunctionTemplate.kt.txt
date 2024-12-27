@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 @file:Suppress("ktlint")
-package ai.ancf.lmos.arc.agents.gen
+package org.eclipse.lmos.arc.agents.gen
 
 //@@IMPORTS@@
-import ai.ancf.lmos.arc.agents.dsl.*
-import ai.ancf.lmos.arc.agents.dsl.extensions.*
-import ai.ancf.lmos.arc.core.*
+import org.eclipse.lmos.arc.agents.dsl.*
+import org.eclipse.lmos.arc.agents.dsl.extensions.*
+import org.eclipse.lmos.arc.core.*
 
 class Functions {
 

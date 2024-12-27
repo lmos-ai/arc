@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.llm
+package org.eclipse.lmos.arc.agents.llm
 
 import kotlin.math.sqrt
 

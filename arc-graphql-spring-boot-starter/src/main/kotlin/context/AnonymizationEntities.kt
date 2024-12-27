@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.graphql.context
+package org.eclipse.lmos.arc.graphql.context
 
-import ai.ancf.lmos.arc.agents.conversation.AnonymizationEntity
+import org.eclipse.lmos.arc.agents.conversation.AnonymizationEntity
 import java.util.concurrent.atomic.AtomicReference
 
 /**

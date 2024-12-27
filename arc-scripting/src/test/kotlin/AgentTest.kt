@@ -2,19 +2,19 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.scripting
+package org.eclipse.lmos.arc.scripting
 
-import ai.ancf.lmos.arc.agents.ChatAgent
-import ai.ancf.lmos.arc.agents.User
-import ai.ancf.lmos.arc.agents.conversation.AssistantMessage
-import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
-import ai.ancf.lmos.arc.agents.conversation.toConversation
-import ai.ancf.lmos.arc.core.Success
-import ai.ancf.lmos.arc.core.getOrThrow
 import io.mockk.coEvery
 import io.mockk.slot
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.eclipse.lmos.arc.agents.ChatAgent
+import org.eclipse.lmos.arc.agents.User
+import org.eclipse.lmos.arc.agents.conversation.AssistantMessage
+import org.eclipse.lmos.arc.agents.conversation.ConversationMessage
+import org.eclipse.lmos.arc.agents.conversation.toConversation
+import org.eclipse.lmos.arc.core.Success
+import org.eclipse.lmos.arc.core.getOrThrow
 import org.junit.jupiter.api.Test
 
 class AgentTest : TestBase() {

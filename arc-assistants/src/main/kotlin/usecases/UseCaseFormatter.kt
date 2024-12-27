@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.assistants.support.usecases
+package org.eclipse.lmos.arc.assistants.support.usecases
 
 /**
  * Formats the given use cases to a string.

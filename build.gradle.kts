@@ -21,7 +21,7 @@ plugins {
 }
 
 subprojects {
-    group = "ai.ancf.lmos"
+    group = "org.eclipse.lmos"
 
     apply(plugin = "org.cyclonedx.bom")
     apply(plugin = "org.jetbrains.dokka")
@@ -65,12 +65,12 @@ subprojects {
             pom {
                 name = "ARC"
                 description = "ARC is an AI framework."
-                url = "https://github.com/lmos-ai/arc"
+                url = "https://github.com/eclipse-lmos/arc"
                 licenses {
                     license {
                         name = "Apache-2.0"
                         distribution = "repo"
-                        url = "https://github.com/lmos-ai/arc/blob/main/LICENSES/Apache-2.0.txt"
+                        url = "https://github.com/eclipse-lmos/arc/blob/main/LICENSES/Apache-2.0.txt"
                     }
                 }
                 developers {
@@ -91,14 +91,14 @@ subprojects {
                     }
                 }
                 scm {
-                    url = "https://github.com/lmos-ai/arc.git"
+                    url = "https://github.com/eclipse-lmos/arc.git"
                 }
             }
 
             repositories {
                 maven {
                     name = "GitHubPackages"
-                    url = URI("https://maven.pkg.github.com/lmos-ai/arc")
+                    url = URI("https://maven.pkg.github.com/eclipse-lmos/arc")
                     credentials {
                         username = findProperty("GITHUB_USER")?.toString() ?: getenv("GITHUB_USER")
                         password = findProperty("GITHUB_TOKEN")?.toString() ?: getenv("GITHUB_TOKEN")

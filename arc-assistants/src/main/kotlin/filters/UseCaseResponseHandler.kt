@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.assistants.support.filters
+package org.eclipse.lmos.arc.assistants.support.filters
 
-import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
-import ai.ancf.lmos.arc.agents.dsl.AgentFilter
-import ai.ancf.lmos.arc.agents.dsl.DSLContext
-import ai.ancf.lmos.arc.agents.dsl.extensions.memory
-import ai.ancf.lmos.arc.assistants.support.usecases.extractUseCaseId
+import org.eclipse.lmos.arc.agents.conversation.ConversationMessage
+import org.eclipse.lmos.arc.agents.dsl.AgentFilter
+import org.eclipse.lmos.arc.agents.dsl.DSLContext
+import org.eclipse.lmos.arc.agents.dsl.extensions.memory
+import org.eclipse.lmos.arc.assistants.support.usecases.extractUseCaseId
 import org.slf4j.LoggerFactory
 
 /**
