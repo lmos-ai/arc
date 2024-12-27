@@ -4,9 +4,15 @@
 
 package ai.ancf.lmos.arc.agents
 
-import ai.ancf.lmos.arc.agents.conversation.toConversation
+import ai.ancf.lmos.arc.agents.conversation.*
 import ai.ancf.lmos.arc.agents.dsl.AllTools
 import ai.ancf.lmos.arc.agents.dsl.extensions.breakWith
+import ai.ancf.lmos.arc.agents.functions.LLMFunction
+import ai.ancf.lmos.arc.agents.llm.ChatCompleter
+import ai.ancf.lmos.arc.agents.llm.ChatCompleterProvider
+import ai.ancf.lmos.arc.agents.llm.ChatCompletionSettings
+import ai.ancf.lmos.arc.core.Result
+import ai.ancf.lmos.arc.core.Success
 import ai.ancf.lmos.arc.core.getOrThrow
 import io.mockk.coEvery
 import io.mockk.verify
@@ -84,5 +90,41 @@ class ChatAgentTest : TestBase() {
 
         executeAgent(agent, "question?")
         verify { functionProvider.provideAll() }
+    }
+
+    @Test
+    fun `test init block execution`(): Unit = runBlocking {
+        var initExecuted = 0
+        val agent = agent {
+            name = "agent"
+            description = "agent description"
+            systemPrompt = { "$initExecuted" }
+            init = {
+                initExecuted += 1
+            }
+        } as ChatAgent
+
+        assertThat(initExecuted).isEqualTo(1)
+        var result = testBeanProvider.setContext(setOf(ChatCompleterProvider { TestChatCompleter() })) {
+            agent.execute("test".toConversation(User("user"))).getOrThrow()
+        }
+        assertThat(initExecuted.toString()).isEqualTo(result.transcript.findLast { it is AssistantMessage }?.content)
+
+        result = testBeanProvider.setContext(setOf(ChatCompleterProvider { TestChatCompleter() })) {
+            agent.execute("test".toConversation(User("user"))).getOrThrow()
+        }
+        assertThat(initExecuted.toString()).isEqualTo(result.transcript.findLast { it is AssistantMessage }?.content)
+    }
+
+    class TestChatCompleter : ChatCompleter {
+        override suspend fun complete(
+            messages: List<ConversationMessage>,
+            functions: List<LLMFunction>?,
+            settings: ChatCompletionSettings?,
+        ): Result<AssistantMessage, ArcException> {
+            return messages.findLast { it is SystemMessage }?.let {
+                Success(AssistantMessage(it.content))
+            } ?: throw ArcException("No system message found")
+        }
     }
 }
