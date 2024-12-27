@@ -14,7 +14,7 @@ SPDX-License-Identifier: CC0-1.0
 The goal of the Arc project is to utilize the power of Kotlin DSL and Kotlin Scripting to define
 a language optimized for building LLM powered solutions.
 
-Please take a look at the documentation -> https://eclipse.dev/lmos
+Please take a look at the documentation -> https://eclipse.dev/lmos/arc
 
 Check out the [Arc Agent Demo Project](https://github.com/eclipse-lmos/arc-spring-init) for 
 an example Spring Boot project that uses the Arc Agent Framework.
