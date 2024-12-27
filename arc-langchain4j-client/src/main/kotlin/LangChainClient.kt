@@ -142,6 +142,7 @@ class LangChainClient(
 
                 is AssistantMessage -> dev.langchain4j.data.message.AiMessage(it.content)
                 is SystemMessage -> dev.langchain4j.data.message.SystemMessage(it.content)
+                else -> error("Unsupported message type: $it")
             }
         }
 

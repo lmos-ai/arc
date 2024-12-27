@@ -13,10 +13,13 @@ import ai.ancf.lmos.arc.client.langchain4j.builders.bedrockBuilder
 import ai.ancf.lmos.arc.client.langchain4j.builders.geminiBuilder
 import ai.ancf.lmos.arc.client.langchain4j.builders.groqBuilder
 import ai.ancf.lmos.arc.client.langchain4j.builders.ollamaBuilder
+import ai.ancf.lmos.arc.client.openai.OpenAINativeClient
+import ai.ancf.lmos.arc.client.openai.OpenAINativeClientConfig
 import com.azure.ai.openai.OpenAIClientBuilder
 import com.azure.core.credential.AzureKeyCredential
 import com.azure.core.credential.KeyCredential
 import com.azure.identity.DefaultAzureCredentialBuilder
+import com.openai.client.okhttp.OpenAIOkHttpClientAsync
 
 /**
  * Provides a ChatCompleterProvider based on the given configuration.
@@ -65,6 +68,14 @@ fun chatCompleterProvider(config: AIClientConfig, eventPublisher: EventPublisher
                 .endpoint(config.url)
                 .buildAsyncClient(),
             eventPublisher,
+        )
+
+        "openai-sdk" == config.client && config.apiKey != null -> OpenAINativeClient(
+            config = OpenAINativeClientConfig(config.modelName, config.url ?: "", config.apiKey),
+            client = OpenAIOkHttpClientAsync.builder()
+                .apiKey(config.apiKey)
+                .build(),
+            eventHandler = eventPublisher,
         )
 
         else -> error("No client could be configured for client: ${config.client}")

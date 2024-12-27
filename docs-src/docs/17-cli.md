@@ -38,7 +38,7 @@ On Windows using Powershell:
 ```
 $env:ARC_AI_URL="https://gpt4-se-dev.openai.azure.com/" // The url hosting the models. Can be omitted if using openai.
 $env:ARC_AI_KEY="YOUR_OPENAI_KEY" // The key to authenticate with the AI service. can be omitted if using Azure Login.
-$env:ARC_CLIENT="openai" // or azure, ollama, etc.
+$env:ARC_CLIENT="openai" // or azure, ollama, openai-sdk etc.
 $env:ARC_MODEL="gpt-4o" // the name of the model to use
 ```
 

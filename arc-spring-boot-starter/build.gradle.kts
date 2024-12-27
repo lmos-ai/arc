@@ -11,6 +11,7 @@ dependencies {
     compileOnly(project(":arc-azure-client"))
     compileOnly(project(":arc-ollama-client"))
     compileOnly(project(":arc-gen"))
+    compileOnly(project(":arc-openai-client"))
 
     compileOnly("io.micrometer:micrometer-registry-atlas:1.14.1")
     compileOnly("com.azure:azure-identity:1.13.1")

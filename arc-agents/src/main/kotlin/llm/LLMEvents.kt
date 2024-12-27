@@ -24,6 +24,7 @@ data class LLMFinishedEvent(
     val messages: List<ConversationMessage>,
     val functions: List<LLMFunction>?,
     val model: String,
+    // TODO:: openAI SDK support Long For totalTokens, promptTokens, completionTokens. Revisit this
     val totalTokens: Int,
     val promptTokens: Int,
     val completionTokens: Int,
