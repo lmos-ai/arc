@@ -139,6 +139,7 @@ class AzureAIClient(
             is UserMessage -> ChatRequestUserMessage(msg.content)
             is SystemMessage -> ChatRequestSystemMessage(msg.content)
             is AssistantMessage -> ChatRequestAssistantMessage(msg.content)
+            else -> throw ArcException("Unsupported message type: $msg")
         }
     }
 

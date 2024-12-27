@@ -80,4 +80,9 @@ class AgentDefinition {
     fun filterInput(fn: suspend InputFilterContext.() -> Unit) {
         inputFilter = fn
     }
+
+    var init: DSLContext.() -> Unit = { }
+    fun init(fn: DSLContext.() -> Unit) {
+        init = fn
+    }
 }

@@ -89,6 +89,11 @@ subprojects {
                         name = "Max Erren"
                         email = "opensource@telekom.de"
                     }
+                    developer {
+                        id = "jas34"
+                        name = "Jasbir Singh"
+                        email = "jasbirsinghkamboj@gmail.com"
+                    }
                 }
                 scm {
                     url = "https://github.com/eclipse-lmos/arc.git"

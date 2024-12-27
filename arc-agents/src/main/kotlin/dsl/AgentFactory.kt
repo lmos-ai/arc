@@ -30,6 +30,7 @@ class ChatAgentFactory(private val beanProvider: BeanProvider) : AgentFactory<Ch
             agentDefinition.toolsProvider,
             agentDefinition.outputFilter,
             agentDefinition.inputFilter,
+            agentDefinition.init,
         )
     }
 }

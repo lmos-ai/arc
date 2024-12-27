@@ -84,6 +84,22 @@ data class AssistantMessage(
     override fun update(content: String): AssistantMessage = copy(content = content)
 }
 
+/**
+ * A message sent by the Developer.
+ */
+@Serializable
+data class DeveloperMessage(
+    override val content: String,
+    override val turnId: String? = null,
+    override val sensitive: Boolean = false,
+    override val anonymized: Boolean = false,
+    override val binaryData: List<BinaryData> = emptyList(),
+    override val format: MessageFormat = MessageFormat.TEXT,
+) : ConversationMessage() {
+    override fun applyTurn(turnId: String): DeveloperMessage = copy(turnId = turnId)
+    override fun update(content: String): DeveloperMessage = copy(content = content)
+}
+
 @Serializable
 class BinaryData(val mimeType: String, val data: ByteArray)
 

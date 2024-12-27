@@ -47,9 +47,14 @@ class ChatAgent(
     private val toolsProvider: suspend DSLContext.() -> Unit,
     private val filterOutput: suspend OutputFilterContext.() -> Unit,
     private val filterInput: suspend InputFilterContext.() -> Unit,
+    val init: DSLContext.() -> Unit,
 ) : Agent<Conversation, Conversation> {
 
     private val log = LoggerFactory.getLogger(javaClass)
+
+    init {
+        init.invoke(BasicDSLContext(beanProvider))
+    }
 
     override suspend fun execute(input: Conversation, context: Set<Any>): Result<Conversation, AgentFailedException> {
         return withLogContext(mapOf(AGENT_LOG_CONTEXT_KEY to name)) {
