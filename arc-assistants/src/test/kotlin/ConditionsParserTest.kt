@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.assistants.support
+package org.eclipse.lmos.arc.assistants.support
 
-import ai.ancf.lmos.arc.assistants.support.usecases.parseConditions
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.eclipse.lmos.arc.assistants.support.usecases.parseConditions
 import org.junit.jupiter.api.Test
 
 class ConditionsParserTest : TestBase() {

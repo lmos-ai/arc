@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.scripting.agents
+package org.eclipse.lmos.arc.scripting.agents
 
-import ai.ancf.lmos.arc.agents.dsl.AgentDefinitionContext
-import ai.ancf.lmos.arc.core.Result
-import ai.ancf.lmos.arc.core.failWith
-import ai.ancf.lmos.arc.core.result
-import ai.ancf.lmos.arc.scripting.ScriptFailedException
+import org.eclipse.lmos.arc.agents.dsl.AgentDefinitionContext
+import org.eclipse.lmos.arc.core.Result
+import org.eclipse.lmos.arc.core.failWith
+import org.eclipse.lmos.arc.core.result
+import org.eclipse.lmos.arc.scripting.ScriptFailedException
 import org.slf4j.LoggerFactory
 import kotlin.script.experimental.api.EvaluationResult
 import kotlin.script.experimental.api.ResultValue
@@ -41,7 +41,8 @@ class KtsAgentScriptEngine : AgentScriptEngine {
         val res = evalScript(script, context)
         val errors = res.reports.getErrors()
         if (errors.isNotEmpty()) failWith { ScriptFailedException(errors.joinToString()) }
-        res.valueOrNull()?.returnValue
+        val returnValue = res.valueOrNull()?.returnValue
+        return@result if (returnValue is ResultValue.Error) failWith { ScriptFailedException("Script failed with error: $returnValue") } else returnValue
     }
 
     private fun List<ScriptDiagnostic>.getErrors(): List<String> = buildList {

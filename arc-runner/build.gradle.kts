@@ -13,6 +13,7 @@ dependencies {
     implementation(project(":arc-api"))
     implementation(project(":arc-azure-client"))
     implementation(project(":arc-langchain4j-client"))
+    implementation(project(":arc-openai-client"))
     implementation(project(":arc-scripting"))
     implementation(project(":arc-graphql-spring-boot-starter"))
     implementation(project(":arc-reader-html"))

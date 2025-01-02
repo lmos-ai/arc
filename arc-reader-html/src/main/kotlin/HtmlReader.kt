@@ -2,14 +2,14 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.dsl.extensions
+package org.eclipse.lmos.arc.agents.dsl.extensions
 
-import ai.ancf.lmos.arc.agents.dsl.DSLContext
-import ai.ancf.lmos.arc.core.closeWith
-import ai.ancf.lmos.arc.core.failWith
-import ai.ancf.lmos.arc.core.getOrThrow
-import ai.ancf.lmos.arc.core.result
 import kotlinx.coroutines.future.await
+import org.eclipse.lmos.arc.agents.dsl.DSLContext
+import org.eclipse.lmos.arc.core.closeWith
+import org.eclipse.lmos.arc.core.failWith
+import org.eclipse.lmos.arc.core.getOrThrow
+import org.eclipse.lmos.arc.core.result
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import java.net.URI

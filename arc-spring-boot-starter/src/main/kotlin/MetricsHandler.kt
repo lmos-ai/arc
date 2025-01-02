@@ -1,17 +1,17 @@
 // SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
 //
 // SPDX-License-Identifier: Apache-2.0
-package ai.ancf.lmos.arc.spring
+package org.eclipse.lmos.arc.spring
 
-import ai.ancf.lmos.arc.agents.AgentFinishedEvent
-import ai.ancf.lmos.arc.agents.events.Event
-import ai.ancf.lmos.arc.agents.events.EventHandler
-import ai.ancf.lmos.arc.agents.llm.LLMFinishedEvent
-import ai.ancf.lmos.arc.agents.router.RouterRoutedEvent
-import ai.ancf.lmos.arc.core.Success
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.core.instrument.Tag
 import io.micrometer.core.instrument.Timer
+import org.eclipse.lmos.arc.agents.AgentFinishedEvent
+import org.eclipse.lmos.arc.agents.events.Event
+import org.eclipse.lmos.arc.agents.events.EventHandler
+import org.eclipse.lmos.arc.agents.llm.LLMFinishedEvent
+import org.eclipse.lmos.arc.agents.router.RouterRoutedEvent
+import org.eclipse.lmos.arc.core.Success
 import java.math.RoundingMode.DOWN
 import kotlin.time.Duration
 import kotlin.time.toJavaDuration

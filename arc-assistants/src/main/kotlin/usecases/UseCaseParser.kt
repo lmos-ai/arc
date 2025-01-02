@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.assistants.support.usecases
+package org.eclipse.lmos.arc.assistants.support.usecases
 
-import ai.ancf.lmos.arc.assistants.support.usecases.Section.*
+import org.eclipse.lmos.arc.assistants.support.usecases.Section.*
 
 /**
  * Parses the given string into a list of use cases.
@@ -40,18 +40,18 @@ fun String.toUseCases(): List<UseCase> {
                 solution = (currentUseCase?.solution ?: emptyList()) + line.asConditional(),
             )
 
-            STEPS -> currentUseCase?.copy(steps = (currentUseCase?.steps ?: "") + line)
+            STEPS -> currentUseCase?.copy(steps = (currentUseCase?.steps ?: emptyList()) + line.asConditional())
             EXAMPLES -> currentUseCase?.copy(examples = (currentUseCase?.examples ?: "") + line)
             DESCRIPTION -> currentUseCase?.copy(
                 description = (currentUseCase?.description ?: "") + line,
             )
 
             FALLBACK_SOLUTION -> currentUseCase?.copy(
-                fallbackSolution = (currentUseCase?.fallbackSolution ?: "") + line,
+                fallbackSolution = (currentUseCase?.fallbackSolution ?: emptyList()) + line.asConditional(),
             )
 
             ALTERNATIVE_SOLUTION -> currentUseCase?.copy(
-                alternativeSolution = (currentUseCase?.alternativeSolution ?: "") + line,
+                alternativeSolution = (currentUseCase?.alternativeSolution ?: emptyList()) + line.asConditional(),
             )
 
             NONE -> currentUseCase
@@ -97,10 +97,10 @@ enum class Section {
 data class UseCase(
     val id: String,
     val description: String = "",
-    val steps: String = "",
+    val steps: List<Conditional> = emptyList(),
     val solution: List<Conditional> = emptyList(),
-    val alternativeSolution: String = "",
-    val fallbackSolution: String = "",
+    val alternativeSolution: List<Conditional> = emptyList(),
+    val fallbackSolution: List<Conditional> = emptyList(),
     val examples: String = "",
 )
 

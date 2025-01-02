@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.memory.mongo
+package org.eclipse.lmos.arc.memory.mongo
 
-import ai.ancf.lmos.arc.agents.memory.Memory
+import org.eclipse.lmos.arc.agents.memory.Memory
 import org.slf4j.LoggerFactory.getLogger
 import java.time.Duration
 import java.time.Instant

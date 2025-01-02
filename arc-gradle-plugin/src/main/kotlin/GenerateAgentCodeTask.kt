@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.gradle.plugin
+package org.eclipse.lmos.arc.gradle.plugin
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.Directory

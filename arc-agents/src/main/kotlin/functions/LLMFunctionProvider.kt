@@ -2,12 +2,13 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.functions
+package org.eclipse.lmos.arc.agents.functions
 
-import ai.ancf.lmos.arc.agents.FunctionNotFoundException
-import ai.ancf.lmos.arc.core.Failure
-import ai.ancf.lmos.arc.core.Result
-import ai.ancf.lmos.arc.core.Success
+import org.eclipse.lmos.arc.agents.FunctionNotFoundException
+import org.eclipse.lmos.arc.core.Failure
+import org.eclipse.lmos.arc.core.Result
+import org.eclipse.lmos.arc.core.Success
+import java.util.*
 
 /**
  * Provides LLMFunctions.
@@ -53,4 +54,18 @@ class CompositeLLMFunctionProvider(
     override fun provideAll(): List<LLMFunction> = functions()
 
     private fun functions() = loaders.flatMap { it.load() } + functions
+}
+
+/**
+ * Implementation of the [LLMFunctionLoader] that is backed by a list of [LLMFunction]s.
+ */
+class ListFunctionsLoader : LLMFunctionLoader {
+
+    private val allFunctions = Vector<LLMFunction>()
+
+    override fun load(): List<LLMFunction> = allFunctions
+
+    fun addAll(functions: List<LLMFunction>) {
+        allFunctions.addAll(functions)
+    }
 }

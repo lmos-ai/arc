@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.conversation
+package org.eclipse.lmos.arc.agents.conversation
 
 import kotlinx.serialization.Serializable
 
@@ -82,6 +82,22 @@ data class AssistantMessage(
 ) : ConversationMessage() {
     override fun applyTurn(turnId: String): AssistantMessage = copy(turnId = turnId)
     override fun update(content: String): AssistantMessage = copy(content = content)
+}
+
+/**
+ * A message sent by the Developer.
+ */
+@Serializable
+data class DeveloperMessage(
+    override val content: String,
+    override val turnId: String? = null,
+    override val sensitive: Boolean = false,
+    override val anonymized: Boolean = false,
+    override val binaryData: List<BinaryData> = emptyList(),
+    override val format: MessageFormat = MessageFormat.TEXT,
+) : ConversationMessage() {
+    override fun applyTurn(turnId: String): DeveloperMessage = copy(turnId = turnId)
+    override fun update(content: String): DeveloperMessage = copy(content = content)
 }
 
 @Serializable

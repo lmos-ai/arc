@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.dsl
+package org.eclipse.lmos.arc.agents.dsl
 
-import ai.ancf.lmos.arc.core.getOrNull
-import ai.ancf.lmos.arc.core.result
 import kotlinx.coroutines.asContextElement
 import kotlinx.coroutines.isPresent
 import kotlinx.coroutines.withContext
+import org.eclipse.lmos.arc.core.getOrNull
+import org.eclipse.lmos.arc.core.result
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind.EXACTLY_ONCE
 import kotlin.contracts.contract

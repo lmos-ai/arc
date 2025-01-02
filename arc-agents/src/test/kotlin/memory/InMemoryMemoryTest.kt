@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.memory
+package org.eclipse.lmos.arc.agents.memory
 
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat

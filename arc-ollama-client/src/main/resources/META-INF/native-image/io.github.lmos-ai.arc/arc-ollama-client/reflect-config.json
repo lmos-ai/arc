@@ -1,6 +1,6 @@
 [
   {
-    "name": "ai.ancf.lmos.arc.client.ollama.ChatRequest",
+    "name": "org.eclipse.lmos.arc.client.ollama.ChatRequest",
     "fields":[{"name":"Companion"}],
     "allDeclaredMethods": true,
     "allDeclaredFields": true,
@@ -15,7 +15,7 @@
     "unsafeAllocated": true
   },
   {
-    "name":"ai.ancf.lmos.arc.client.ollama.ChatRequest$Companion",
+    "name":"org.eclipse.lmos.arc.client.ollama.ChatRequest$Companion",
     "methods":[{"name":"serializer","parameterTypes":[] }]
   }
 ]

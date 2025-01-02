@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.dsl
+package org.eclipse.lmos.arc.agents.dsl
 
-import ai.ancf.lmos.arc.agents.functions.*
+import org.eclipse.lmos.arc.agents.functions.*
 
 @DslMarker
 annotation class FunctionDefinitionContextMarker

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.client.langchain4j
+package org.eclipse.lmos.arc.client.langchain4j
 
 data class LangChainConfig(
     val modelName: String,

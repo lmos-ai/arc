@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.api
+package org.eclipse.lmos.arc.api
 
 import kotlinx.serialization.Serializable
 

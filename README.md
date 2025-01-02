@@ -4,8 +4,8 @@ SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
 SPDX-License-Identifier: CC0-1.0    
 -->
 
-[![GitHub Actions Build Status](https://github.com/lmos-ai/arc/actions/workflows/gradle.yml/badge.svg?branch=main)](https://github.com/lmos-ai/arc/actions/workflows/gradle.yml)
-[![GitHub Actions Publish Status](https://github.com/lmos-ai/arc/actions/workflows/gradle-publish.yml/badge.svg?branch=main)](https://github.com/lmos-ai/arc/actions/workflows/gradle-publish.yml)
+[![GitHub Actions Build Status](https://github.com/eclipse-lmos/arc/actions/workflows/gradle.yml/badge.svg?branch=main)](https://github.com/eclipse-lmos/arc/actions/workflows/gradle.yml)
+[![GitHub Actions Publish Status](https://github.com/eclipse-lmos/arc/actions/workflows/gradle-publish.yml/badge.svg?branch=main)](https://github.com/eclipse-lmos/arc/actions/workflows/gradle-publish.yml)
 [![Apache 2.0 License](https://img.shields.io/badge/license-Apache%202.0-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE_OF_CONDUCT.md)
 
@@ -14,9 +14,9 @@ SPDX-License-Identifier: CC0-1.0
 The goal of the Arc project is to utilize the power of Kotlin DSL and Kotlin Scripting to define
 a language optimized for building LLM powered solutions.
 
-Please take a look at the documentation -> https://lmos-ai.github.io/arc/
+Please take a look at the documentation -> https://eclipse.dev/lmos/arc
 
-Check out the [Arc Agent Demo Project](https://github.com/lmos-ai/arc-spring-init) for 
+Check out the [Arc Agent Demo Project](https://github.com/eclipse-lmos/arc-spring-init) for 
 an example Spring Boot project that uses the Arc Agent Framework.
 
 ## Code of Conduct

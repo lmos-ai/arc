@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.dsl
+package org.eclipse.lmos.arc.agents.dsl
 
-import ai.ancf.lmos.arc.agents.ChatAgent
-import ai.ancf.lmos.arc.agents.TestBase
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.eclipse.lmos.arc.agents.ChatAgent
+import org.eclipse.lmos.arc.agents.TestBase
 import org.junit.jupiter.api.Test
 
 class AgentSystemPromptTest : TestBase() {

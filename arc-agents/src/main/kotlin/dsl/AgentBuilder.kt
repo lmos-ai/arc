@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.dsl
+package org.eclipse.lmos.arc.agents.dsl
 
-import ai.ancf.lmos.arc.agents.Agent
-import ai.ancf.lmos.arc.agents.functions.LLMFunction
+import org.eclipse.lmos.arc.agents.Agent
+import org.eclipse.lmos.arc.agents.functions.LLMFunction
 
 /**
  * Handy function to builds agents using the given [agentFactory] and [builder].

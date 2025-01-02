@@ -2,18 +2,18 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.router
+package org.eclipse.lmos.arc.agents.router
 
-import ai.ancf.lmos.arc.agents.events.EventPublisher
-import ai.ancf.lmos.arc.agents.llm.TextEmbedder
-import ai.ancf.lmos.arc.agents.llm.TextEmbedding
-import ai.ancf.lmos.arc.agents.llm.TextEmbeddings
-import ai.ancf.lmos.arc.agents.llm.embed
-import ai.ancf.lmos.arc.core.getOrThrow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import org.eclipse.lmos.arc.agents.events.EventPublisher
+import org.eclipse.lmos.arc.agents.llm.TextEmbedder
+import org.eclipse.lmos.arc.agents.llm.TextEmbedding
+import org.eclipse.lmos.arc.agents.llm.TextEmbeddings
+import org.eclipse.lmos.arc.agents.llm.embed
+import org.eclipse.lmos.arc.core.getOrThrow
 import org.slf4j.LoggerFactory
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference

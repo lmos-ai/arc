@@ -2,14 +2,14 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.spring
+package org.eclipse.lmos.arc.spring
 
-import ai.ancf.lmos.arc.agents.AgentLoader
-import ai.ancf.lmos.arc.agents.dsl.BasicAgentDefinitionContext
-import ai.ancf.lmos.arc.agents.dsl.BasicFunctionDefinitionContext
-import ai.ancf.lmos.arc.agents.dsl.BeanProvider
-import ai.ancf.lmos.arc.agents.dsl.ChatAgentFactory
-import ai.ancf.lmos.arc.agents.functions.LLMFunctionLoader
+import org.eclipse.lmos.arc.agents.AgentLoader
+import org.eclipse.lmos.arc.agents.dsl.BasicAgentDefinitionContext
+import org.eclipse.lmos.arc.agents.dsl.BasicFunctionDefinitionContext
+import org.eclipse.lmos.arc.agents.dsl.BeanProvider
+import org.eclipse.lmos.arc.agents.dsl.ChatAgentFactory
+import org.eclipse.lmos.arc.agents.functions.LLMFunctionLoader
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
@@ -18,22 +18,22 @@ import org.springframework.context.annotation.Bean
 class CompiledScriptsConfiguration {
 
     @Bean
-    @ConditionalOnClass(ai.ancf.lmos.arc.agents.gen.Agents::class)
+    @ConditionalOnClass(org.eclipse.lmos.arc.agents.gen.Agents::class)
     fun agents(agentFactory: ChatAgentFactory): AgentLoader {
         val context = BasicAgentDefinitionContext(agentFactory)
         with(context) {
-            ai.ancf.lmos.arc.agents.gen.Agents().build()
+            org.eclipse.lmos.arc.agents.gen.Agents().build()
         }
         val agents = context.agents.toList()
         return AgentLoader { agents }
     }
 
     @Bean
-    @ConditionalOnClass(ai.ancf.lmos.arc.agents.gen.Functions::class)
+    @ConditionalOnClass(org.eclipse.lmos.arc.agents.gen.Functions::class)
     fun functions(beanProvider: BeanProvider): LLMFunctionLoader {
         val context = BasicFunctionDefinitionContext(beanProvider)
         with(context) {
-            ai.ancf.lmos.arc.agents.gen.Functions().build()
+            org.eclipse.lmos.arc.agents.gen.Functions().build()
         }
         val functions = context.functions.toList()
         return LLMFunctionLoader { functions }

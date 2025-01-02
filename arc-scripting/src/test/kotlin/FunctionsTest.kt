@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.scripting
+package org.eclipse.lmos.arc.scripting
 
-import ai.ancf.lmos.arc.agents.dsl.BasicFunctionDefinitionContext
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.eclipse.lmos.arc.agents.dsl.BasicFunctionDefinitionContext
 import org.junit.jupiter.api.Test
 
 class FunctionsTest : TestBase() {

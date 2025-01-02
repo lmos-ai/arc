@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.scripting.agents
+package org.eclipse.lmos.arc.scripting.agents
 
-import ai.ancf.lmos.arc.agents.events.BaseEvent
-import ai.ancf.lmos.arc.agents.events.Event
+import org.eclipse.lmos.arc.agents.events.BaseEvent
+import org.eclipse.lmos.arc.agents.events.Event
 
 /**
  * Events published when an agent is loaded.

@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.events
+package org.eclipse.lmos.arc.agents.events
 
 import org.slf4j.LoggerFactory
 

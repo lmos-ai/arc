@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.llm
+package org.eclipse.lmos.arc.agents.llm
 
-import ai.ancf.lmos.arc.agents.ArcException
-import ai.ancf.lmos.arc.core.Result
-import ai.ancf.lmos.arc.core.failWith
-import ai.ancf.lmos.arc.core.result
 import kotlinx.serialization.Serializable
+import org.eclipse.lmos.arc.agents.ArcException
+import org.eclipse.lmos.arc.core.Result
+import org.eclipse.lmos.arc.core.failWith
+import org.eclipse.lmos.arc.core.result
 
 /**
  * Creates text embeddings for a given text.

@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.graphql
+package org.eclipse.lmos.arc.graphql
 
-import ai.ancf.lmos.arc.agents.Agent
-import ai.ancf.lmos.arc.api.AgentRequest
+import org.eclipse.lmos.arc.agents.Agent
+import org.eclipse.lmos.arc.api.AgentRequest
 
 /**
  * Resolves the agent for the given request.

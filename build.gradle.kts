@@ -17,11 +17,11 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
     id("org.jetbrains.kotlinx.kover") version "0.8.3"
     id("net.researchgate.release") version "3.0.2"
-    id("com.vanniktech.maven.publish") version "0.29.0"
+    id("com.vanniktech.maven.publish") version "0.30.0"
 }
 
 subprojects {
-    group = "ai.ancf.lmos"
+    group = "org.eclipse.lmos"
 
     apply(plugin = "org.cyclonedx.bom")
     apply(plugin = "org.jetbrains.dokka")
@@ -59,18 +59,18 @@ subprojects {
 
     if (project.name != "arc-gradle-plugin") {
         mavenPublishing {
-            publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+            publishToMavenCentral(SonatypeHost.DEFAULT)
             signAllPublications()
 
             pom {
                 name = "ARC"
                 description = "ARC is an AI framework."
-                url = "https://github.com/lmos-ai/arc"
+                url = "https://github.com/eclipse-lmos/arc"
                 licenses {
                     license {
                         name = "Apache-2.0"
                         distribution = "repo"
-                        url = "https://github.com/lmos-ai/arc/blob/main/LICENSES/Apache-2.0.txt"
+                        url = "https://github.com/eclipse-lmos/arc/blob/main/LICENSES/Apache-2.0.txt"
                     }
                 }
                 developers {
@@ -89,16 +89,21 @@ subprojects {
                         name = "Max Erren"
                         email = "opensource@telekom.de"
                     }
+                    developer {
+                        id = "jas34"
+                        name = "Jasbir Singh"
+                        email = "jasbirsinghkamboj@gmail.com"
+                    }
                 }
                 scm {
-                    url = "https://github.com/lmos-ai/arc.git"
+                    url = "https://github.com/eclipse-lmos/arc.git"
                 }
             }
 
             repositories {
                 maven {
                     name = "GitHubPackages"
-                    url = URI("https://maven.pkg.github.com/lmos-ai/arc")
+                    url = URI("https://maven.pkg.github.com/eclipse-lmos/arc")
                     credentials {
                         username = findProperty("GITHUB_USER")?.toString() ?: getenv("GITHUB_USER")
                         password = findProperty("GITHUB_TOKEN")?.toString() ?: getenv("GITHUB_TOKEN")

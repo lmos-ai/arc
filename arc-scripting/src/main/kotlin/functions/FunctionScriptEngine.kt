@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.scripting.functions
+package org.eclipse.lmos.arc.scripting.functions
 
-import ai.ancf.lmos.arc.agents.dsl.FunctionDefinitionContext
-import ai.ancf.lmos.arc.core.Result
-import ai.ancf.lmos.arc.core.failWith
-import ai.ancf.lmos.arc.core.result
-import ai.ancf.lmos.arc.scripting.ScriptFailedException
+import org.eclipse.lmos.arc.agents.dsl.FunctionDefinitionContext
+import org.eclipse.lmos.arc.core.Result
+import org.eclipse.lmos.arc.core.failWith
+import org.eclipse.lmos.arc.core.result
+import org.eclipse.lmos.arc.scripting.ScriptFailedException
 import org.slf4j.LoggerFactory
 import kotlin.script.experimental.api.EvaluationResult
 import kotlin.script.experimental.api.ResultValue

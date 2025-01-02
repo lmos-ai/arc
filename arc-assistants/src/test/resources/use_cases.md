@@ -25,7 +25,7 @@ Primary Solution
 
 #### Alternative Solution
 Alternative solution
-
+<web>The web solution for use case 2
 ----
 
 ### UseCase: usecase3

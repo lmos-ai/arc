@@ -2,11 +2,8 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.graphql.inbound
+package org.eclipse.lmos.arc.graphql.inbound
 
-import ai.ancf.lmos.arc.agents.events.Event
-import ai.ancf.lmos.arc.agents.events.EventHandler
-import ai.ancf.lmos.arc.agents.withLogContext
 import com.expediagroup.graphql.generator.annotations.GraphQLDescription
 import com.expediagroup.graphql.server.operations.Subscription
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -19,6 +16,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
+import org.eclipse.lmos.arc.agents.events.Event
+import org.eclipse.lmos.arc.agents.events.EventHandler
+import org.eclipse.lmos.arc.agents.withLogContext
 import org.slf4j.LoggerFactory
 import org.slf4j.MDC
 import java.util.*

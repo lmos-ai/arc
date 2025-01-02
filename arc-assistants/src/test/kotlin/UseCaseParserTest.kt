@@ -2,14 +2,14 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.assistants.support
+package org.eclipse.lmos.arc.assistants.support
 
-import ai.ancf.lmos.arc.agents.dsl.extensions.local
-import ai.ancf.lmos.arc.agents.dsl.withDSLContext
-import ai.ancf.lmos.arc.assistants.support.usecases.formatToString
-import ai.ancf.lmos.arc.assistants.support.usecases.toUseCases
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.eclipse.lmos.arc.agents.dsl.extensions.local
+import org.eclipse.lmos.arc.agents.dsl.withDSLContext
+import org.eclipse.lmos.arc.assistants.support.usecases.formatToString
+import org.eclipse.lmos.arc.assistants.support.usecases.toUseCases
 import org.junit.jupiter.api.Test
 
 class UseCaseParserTest : TestBase() {

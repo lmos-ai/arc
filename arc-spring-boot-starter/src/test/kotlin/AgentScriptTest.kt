@@ -2,15 +2,15 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.spring
+package org.eclipse.lmos.arc.spring
 
-import ai.ancf.lmos.arc.agents.AgentProvider
-import ai.ancf.lmos.arc.agents.functions.LLMFunctionProvider
-import ai.ancf.lmos.arc.agents.getAgentByName
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatNoException
+import org.eclipse.lmos.arc.agents.AgentProvider
+import org.eclipse.lmos.arc.agents.functions.LLMFunctionProvider
+import org.eclipse.lmos.arc.agents.getAgentByName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

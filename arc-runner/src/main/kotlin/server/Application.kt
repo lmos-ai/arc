@@ -2,11 +2,8 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.runner.server
+package org.eclipse.lmos.arc.runner.server
 
-import ai.ancf.lmos.arc.graphql.inbound.AgentQuery
-import ai.ancf.lmos.arc.graphql.inbound.AgentSubscription
-import ai.ancf.lmos.arc.graphql.inbound.EventSubscription
 import com.expediagroup.graphql.server.ktor.GraphQL
 import com.expediagroup.graphql.server.ktor.defaultGraphQLStatusPages
 import com.expediagroup.graphql.server.ktor.graphQLPostRoute
@@ -19,6 +16,9 @@ import io.ktor.server.netty.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
+import org.eclipse.lmos.arc.graphql.inbound.AgentQuery
+import org.eclipse.lmos.arc.graphql.inbound.AgentSubscription
+import org.eclipse.lmos.arc.graphql.inbound.EventSubscription
 import java.time.Duration
 
 /**
@@ -30,7 +30,7 @@ fun runApp(appConfig: AppConfig) {
     embeddedServer(Netty, port = 8080) {
         install(GraphQL) {
             schema {
-                packages = listOf("ai.ancf.lmos.arc.api", "ai.ancf.lmos.arc.graphql.inbound")
+                packages = listOf("org.eclipse.lmos.arc.api", "org.eclipse.lmos.arc.graphql.inbound")
                 queries = listOf(
                     AgentQuery(agentProvider),
                 )

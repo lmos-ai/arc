@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.functions
+package org.eclipse.lmos.arc.agents.functions
 
-import ai.ancf.lmos.arc.agents.dsl.DSLContext
+import org.eclipse.lmos.arc.agents.dsl.DSLContext
 
 /**
  * Tags a function that requires a DSLContext to be executed.

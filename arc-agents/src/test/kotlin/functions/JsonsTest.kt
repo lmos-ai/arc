@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.functions
+package org.eclipse.lmos.arc.agents.functions
 
-import ai.ancf.lmos.arc.agents.TestBase
-import ai.ancf.lmos.arc.core.Failure
-import ai.ancf.lmos.arc.core.getOrThrow
 import org.assertj.core.api.Assertions.assertThat
+import org.eclipse.lmos.arc.agents.TestBase
+import org.eclipse.lmos.arc.core.Failure
+import org.eclipse.lmos.arc.core.getOrThrow
 import org.junit.jupiter.api.Test
 
 class JsonsTest : TestBase() {

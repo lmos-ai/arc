@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.conversation
+package org.eclipse.lmos.arc.agents.conversation
 
-import ai.ancf.lmos.arc.agents.User
 import kotlinx.serialization.Serializable
+import org.eclipse.lmos.arc.agents.User
 import java.util.*
 
 @Serializable

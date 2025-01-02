@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.assistants.support
+package org.eclipse.lmos.arc.assistants.support
 
-import ai.ancf.lmos.arc.agents.conversation.ConversationClassification
+import org.eclipse.lmos.arc.agents.conversation.ConversationClassification
 
 /**
  * A classification to indicate that the agent was unavailable to resolve the user's request.

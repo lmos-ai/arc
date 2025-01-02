@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.assistants.support.usecases
+package org.eclipse.lmos.arc.assistants.support.usecases
 
 /**
  * Formats the given use cases to a string.
@@ -31,7 +31,9 @@ fun List<UseCase>.formatToString(
             )
             if (useCase.steps.isNotEmpty()) {
                 append("#### Steps\n")
-                append("${useCase.steps}\n")
+                useCase.steps.forEach {
+                    if (it.matches(conditions)) append("${it.text}\n")
+                }
             }
             if (!useAlternative && !useFallback) {
                 append("#### Solution\n")
@@ -41,11 +43,15 @@ fun List<UseCase>.formatToString(
             }
             if (useAlternative && !useFallback) {
                 append("#### Solution\n")
-                append("${useCase.alternativeSolution}\n")
+                useCase.alternativeSolution.forEach {
+                    if (it.matches(conditions)) append("${it.text}\n")
+                }
             }
             if (useFallback) {
                 append("#### Solution\n")
-                append("${useCase.fallbackSolution}\n")
+                useCase.fallbackSolution.forEach {
+                    if (it.matches(conditions)) append("${it.text}\n")
+                }
             }
             if (useCase.examples.isNotEmpty()) {
                 append("#### Examples\n")

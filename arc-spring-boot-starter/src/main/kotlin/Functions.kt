@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.spring
+package org.eclipse.lmos.arc.spring
 
-import ai.ancf.lmos.arc.agents.dsl.BasicFunctionDefinitionContext
-import ai.ancf.lmos.arc.agents.dsl.BeanProvider
-import ai.ancf.lmos.arc.agents.dsl.DSLContext
-import ai.ancf.lmos.arc.agents.functions.LLMFunction
-import ai.ancf.lmos.arc.agents.functions.ParameterSchema
+import org.eclipse.lmos.arc.agents.dsl.BasicFunctionDefinitionContext
+import org.eclipse.lmos.arc.agents.dsl.BeanProvider
+import org.eclipse.lmos.arc.agents.dsl.DSLContext
+import org.eclipse.lmos.arc.agents.functions.LLMFunction
+import org.eclipse.lmos.arc.agents.functions.ParameterSchema
 
 /**
  * A factory for creating llm functions using the Arc Agent DSL.

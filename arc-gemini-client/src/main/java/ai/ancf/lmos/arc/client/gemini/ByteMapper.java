@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.client.gemini;
+package org.eclipse.lmos.arc.client.gemini;
 
 import com.google.cloud.vertexai.api.Part;
 import com.google.cloud.vertexai.generativeai.PartMaker;

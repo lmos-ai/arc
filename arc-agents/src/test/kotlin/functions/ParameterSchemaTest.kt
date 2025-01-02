@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.functions
+package org.eclipse.lmos.arc.agents.functions
 
-import ai.ancf.lmos.arc.agents.TestBase
 import org.assertj.core.api.Assertions.assertThat
+import org.eclipse.lmos.arc.agents.TestBase
 import org.junit.jupiter.api.Test
 
 class ParameterSchemaTest : TestBase() {

@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.graphql
+package org.eclipse.lmos.arc.graphql
 
-import ai.ancf.lmos.arc.graphql.inbound.EventSubscription
-import ai.ancf.lmos.arc.graphql.inbound.EventSubscriptionHolder
+import org.eclipse.lmos.arc.graphql.inbound.EventSubscription
+import org.eclipse.lmos.arc.graphql.inbound.EventSubscriptionHolder
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

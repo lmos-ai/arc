@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.graphql
+package org.eclipse.lmos.arc.graphql
 
-import ai.ancf.lmos.arc.agents.AgentProvider
-import ai.ancf.lmos.arc.graphql.inbound.AgentQuery
-import ai.ancf.lmos.arc.graphql.inbound.AgentSubscription
 import com.expediagroup.graphql.server.spring.GraphQLAutoConfiguration
+import org.eclipse.lmos.arc.agents.AgentProvider
+import org.eclipse.lmos.arc.graphql.inbound.AgentQuery
+import org.eclipse.lmos.arc.graphql.inbound.AgentSubscription
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.AutoConfigureBefore
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty

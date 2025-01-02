@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.spring.ai
+package org.eclipse.lmos.arc.spring.ai
 
 class SpringChatClientTest : TestBase() {
 

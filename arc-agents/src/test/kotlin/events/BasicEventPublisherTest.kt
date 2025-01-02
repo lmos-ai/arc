@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.events
+package org.eclipse.lmos.arc.agents.events
 
-import ai.ancf.lmos.arc.agents.TestBase
 import org.assertj.core.api.Assertions.assertThat
+import org.eclipse.lmos.arc.agents.TestBase
 import org.junit.jupiter.api.Test
 import java.time.Instant
 import java.util.concurrent.atomic.AtomicInteger

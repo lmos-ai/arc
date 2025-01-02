@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.scripting.functions
+package org.eclipse.lmos.arc.scripting.functions
 
-import ai.ancf.lmos.arc.agents.dsl.FunctionDefinitionContext
+import org.eclipse.lmos.arc.agents.dsl.FunctionDefinitionContext
 import kotlin.script.experimental.annotations.KotlinScript
 import kotlin.script.experimental.api.*
 import kotlin.script.experimental.jvm.dependenciesFromCurrentContext
@@ -27,10 +27,10 @@ object ScriptConfiguration : ScriptCompilationConfiguration(
         compilerOptions("-Xcontext-receivers")
 
         defaultImports(
-            "ai.ancf.lmos.arc.agents.dsl.get",
-            "ai.ancf.lmos.arc.agents.dsl.*",
-            "ai.ancf.lmos.arc.core.*",
-            "ai.ancf.lmos.arc.agents.dsl.extensions.*",
+            "org.eclipse.lmos.arc.agents.dsl.get",
+            "org.eclipse.lmos.arc.agents.dsl.*",
+            "org.eclipse.lmos.arc.core.*",
+            "org.eclipse.lmos.arc.agents.dsl.extensions.*",
         )
 
         ide {

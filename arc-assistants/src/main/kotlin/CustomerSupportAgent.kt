@@ -1,14 +1,14 @@
 // SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
 //
 // SPDX-License-Identifier: Apache-2.0
-package ai.ancf.lmos.arc.assistants.support
+package org.eclipse.lmos.arc.assistants.support
 
-import ai.ancf.lmos.arc.agents.dsl.AgentDefinitionContext
-import ai.ancf.lmos.arc.agents.dsl.AllTools
-import ai.ancf.lmos.arc.agents.dsl.DSLContext
-import ai.ancf.lmos.arc.agents.llm.ChatCompletionSettings
-import ai.ancf.lmos.arc.assistants.support.filters.LLMHackingDetector
-import ai.ancf.lmos.arc.assistants.support.filters.UnresolvedDetector
+import org.eclipse.lmos.arc.agents.dsl.AgentDefinitionContext
+import org.eclipse.lmos.arc.agents.dsl.AllTools
+import org.eclipse.lmos.arc.agents.dsl.DSLContext
+import org.eclipse.lmos.arc.agents.llm.ChatCompletionSettings
+import org.eclipse.lmos.arc.assistants.support.filters.LLMHackingDetector
+import org.eclipse.lmos.arc.assistants.support.filters.UnresolvedDetector
 
 /**
  * WIP Sets up an agent that assists customers with service inquiries.

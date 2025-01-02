@@ -2,13 +2,8 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.client.azure
+package org.eclipse.lmos.arc.client.azure
 
-import ai.ancf.lmos.arc.agents.conversation.UserMessage
-import ai.ancf.lmos.arc.agents.functions.LLMFunction
-import ai.ancf.lmos.arc.agents.functions.ParametersSchema
-import ai.ancf.lmos.arc.core.Success
-import ai.ancf.lmos.arc.core.getOrThrow
 import com.azure.ai.openai.OpenAIAsyncClient
 import com.azure.ai.openai.models.ChatChoice
 import com.azure.ai.openai.models.ChatCompletions
@@ -24,6 +19,11 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.eclipse.lmos.arc.agents.conversation.UserMessage
+import org.eclipse.lmos.arc.agents.functions.LLMFunction
+import org.eclipse.lmos.arc.agents.functions.ParametersSchema
+import org.eclipse.lmos.arc.core.Success
+import org.eclipse.lmos.arc.core.getOrThrow
 import org.junit.jupiter.api.Test
 import reactor.core.publisher.Mono
 import reactor.core.publisher.Mono.just

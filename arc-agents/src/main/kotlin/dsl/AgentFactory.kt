@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.dsl
+package org.eclipse.lmos.arc.agents.dsl
 
-import ai.ancf.lmos.arc.agents.Agent
-import ai.ancf.lmos.arc.agents.ChatAgent
+import org.eclipse.lmos.arc.agents.Agent
+import org.eclipse.lmos.arc.agents.ChatAgent
 
 /**
  * Factory for creating agents from Agent Definitions.
@@ -30,6 +30,7 @@ class ChatAgentFactory(private val beanProvider: BeanProvider) : AgentFactory<Ch
             agentDefinition.toolsProvider,
             agentDefinition.outputFilter,
             agentDefinition.inputFilter,
+            agentDefinition.init,
         )
     }
 }

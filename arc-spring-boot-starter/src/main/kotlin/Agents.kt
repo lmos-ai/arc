@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.spring
+package org.eclipse.lmos.arc.spring
 
-import ai.ancf.lmos.arc.agents.Agent
-import ai.ancf.lmos.arc.agents.dsl.AgentDefinition
-import ai.ancf.lmos.arc.agents.dsl.AgentFactory
-import ai.ancf.lmos.arc.agents.dsl.BasicAgentDefinitionContext
+import org.eclipse.lmos.arc.agents.Agent
+import org.eclipse.lmos.arc.agents.dsl.AgentDefinition
+import org.eclipse.lmos.arc.agents.dsl.AgentFactory
+import org.eclipse.lmos.arc.agents.dsl.BasicAgentDefinitionContext
 
 /**
  * A factory for creating agents using the Arc Agent DSL.

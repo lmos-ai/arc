@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.functions
+package org.eclipse.lmos.arc.agents.functions
 
-import ai.ancf.lmos.arc.agents.dsl.DSLContext
-import ai.ancf.lmos.arc.core.Failure
-import ai.ancf.lmos.arc.core.Result
-import ai.ancf.lmos.arc.core.mapFailure
-import ai.ancf.lmos.arc.core.result
+import org.eclipse.lmos.arc.agents.dsl.DSLContext
+import org.eclipse.lmos.arc.core.Failure
+import org.eclipse.lmos.arc.core.Result
+import org.eclipse.lmos.arc.core.mapFailure
+import org.eclipse.lmos.arc.core.result
 import org.slf4j.LoggerFactory
 
 /**

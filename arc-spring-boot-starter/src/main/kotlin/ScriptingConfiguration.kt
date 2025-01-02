@@ -2,19 +2,19 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.spring
+package org.eclipse.lmos.arc.spring
 
-import ai.ancf.lmos.arc.agents.dsl.AgentFactory
-import ai.ancf.lmos.arc.agents.dsl.BeanProvider
-import ai.ancf.lmos.arc.agents.events.EventPublisher
-import ai.ancf.lmos.arc.scripting.ScriptHotReload
-import ai.ancf.lmos.arc.scripting.agents.AgentScriptEngine
-import ai.ancf.lmos.arc.scripting.agents.CompiledAgentLoader
-import ai.ancf.lmos.arc.scripting.agents.KtsAgentScriptEngine
-import ai.ancf.lmos.arc.scripting.agents.ScriptingAgentLoader
-import ai.ancf.lmos.arc.scripting.functions.FunctionScriptEngine
-import ai.ancf.lmos.arc.scripting.functions.KtsFunctionScriptEngine
-import ai.ancf.lmos.arc.scripting.functions.ScriptingLLMFunctionLoader
+import org.eclipse.lmos.arc.agents.dsl.AgentFactory
+import org.eclipse.lmos.arc.agents.dsl.BeanProvider
+import org.eclipse.lmos.arc.agents.events.EventPublisher
+import org.eclipse.lmos.arc.scripting.ScriptHotReload
+import org.eclipse.lmos.arc.scripting.agents.AgentScriptEngine
+import org.eclipse.lmos.arc.scripting.agents.CompiledAgentLoader
+import org.eclipse.lmos.arc.scripting.agents.KtsAgentScriptEngine
+import org.eclipse.lmos.arc.scripting.agents.ScriptingAgentLoader
+import org.eclipse.lmos.arc.scripting.functions.FunctionScriptEngine
+import org.eclipse.lmos.arc.scripting.functions.KtsFunctionScriptEngine
+import org.eclipse.lmos.arc.scripting.functions.ScriptingLLMFunctionLoader
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean

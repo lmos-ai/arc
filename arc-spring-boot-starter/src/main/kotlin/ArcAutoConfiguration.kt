@@ -2,26 +2,26 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.spring
+package org.eclipse.lmos.arc.spring
 
-import ai.ancf.lmos.arc.agents.Agent
-import ai.ancf.lmos.arc.agents.AgentLoader
-import ai.ancf.lmos.arc.agents.AgentProvider
-import ai.ancf.lmos.arc.agents.CompositeAgentProvider
-import ai.ancf.lmos.arc.agents.dsl.AgentFactory
-import ai.ancf.lmos.arc.agents.dsl.BeanProvider
-import ai.ancf.lmos.arc.agents.dsl.ChatAgentFactory
-import ai.ancf.lmos.arc.agents.dsl.CoroutineBeanProvider
-import ai.ancf.lmos.arc.agents.events.*
-import ai.ancf.lmos.arc.agents.functions.CompositeLLMFunctionProvider
-import ai.ancf.lmos.arc.agents.functions.LLMFunction
-import ai.ancf.lmos.arc.agents.functions.LLMFunctionLoader
-import ai.ancf.lmos.arc.agents.functions.LLMFunctionProvider
-import ai.ancf.lmos.arc.agents.llm.TextEmbedderProvider
-import ai.ancf.lmos.arc.agents.memory.InMemoryMemory
-import ai.ancf.lmos.arc.agents.memory.Memory
-import ai.ancf.lmos.arc.agents.router.SemanticRouter
-import ai.ancf.lmos.arc.agents.router.SemanticRoutes
+import org.eclipse.lmos.arc.agents.Agent
+import org.eclipse.lmos.arc.agents.AgentLoader
+import org.eclipse.lmos.arc.agents.AgentProvider
+import org.eclipse.lmos.arc.agents.CompositeAgentProvider
+import org.eclipse.lmos.arc.agents.dsl.AgentFactory
+import org.eclipse.lmos.arc.agents.dsl.BeanProvider
+import org.eclipse.lmos.arc.agents.dsl.ChatAgentFactory
+import org.eclipse.lmos.arc.agents.dsl.CoroutineBeanProvider
+import org.eclipse.lmos.arc.agents.events.*
+import org.eclipse.lmos.arc.agents.functions.CompositeLLMFunctionProvider
+import org.eclipse.lmos.arc.agents.functions.LLMFunction
+import org.eclipse.lmos.arc.agents.functions.LLMFunctionLoader
+import org.eclipse.lmos.arc.agents.functions.LLMFunctionProvider
+import org.eclipse.lmos.arc.agents.llm.TextEmbedderProvider
+import org.eclipse.lmos.arc.agents.memory.InMemoryMemory
+import org.eclipse.lmos.arc.agents.memory.Memory
+import org.eclipse.lmos.arc.agents.router.SemanticRouter
+import org.eclipse.lmos.arc.agents.router.SemanticRoutes
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.beans.factory.config.ConfigurableBeanFactory
 import org.springframework.boot.autoconfigure.AutoConfiguration

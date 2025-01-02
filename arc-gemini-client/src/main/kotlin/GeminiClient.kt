@@ -2,26 +2,26 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.client.gemini
+package org.eclipse.lmos.arc.client.gemini
 
-import ai.ancf.lmos.arc.agents.ArcException
-import ai.ancf.lmos.arc.agents.conversation.AssistantMessage
-import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
-import ai.ancf.lmos.arc.agents.conversation.SystemMessage
-import ai.ancf.lmos.arc.agents.conversation.UserMessage
-import ai.ancf.lmos.arc.agents.events.EventPublisher
-import ai.ancf.lmos.arc.agents.functions.LLMFunction
-import ai.ancf.lmos.arc.agents.llm.ChatCompleter
-import ai.ancf.lmos.arc.agents.llm.ChatCompletionSettings
-import ai.ancf.lmos.arc.agents.llm.LLMFinishedEvent
-import ai.ancf.lmos.arc.agents.llm.LLMStartedEvent
-import ai.ancf.lmos.arc.client.gemini.ByteMapper.map
-import ai.ancf.lmos.arc.core.Result
-import ai.ancf.lmos.arc.core.Success
-import ai.ancf.lmos.arc.core.failWith
-import ai.ancf.lmos.arc.core.finally
-import ai.ancf.lmos.arc.core.getOrThrow
-import ai.ancf.lmos.arc.core.result
+import org.eclipse.lmos.arc.agents.ArcException
+import org.eclipse.lmos.arc.agents.conversation.AssistantMessage
+import org.eclipse.lmos.arc.agents.conversation.ConversationMessage
+import org.eclipse.lmos.arc.agents.conversation.SystemMessage
+import org.eclipse.lmos.arc.agents.conversation.UserMessage
+import org.eclipse.lmos.arc.agents.events.EventPublisher
+import org.eclipse.lmos.arc.agents.functions.LLMFunction
+import org.eclipse.lmos.arc.agents.llm.ChatCompleter
+import org.eclipse.lmos.arc.agents.llm.ChatCompletionSettings
+import org.eclipse.lmos.arc.agents.llm.LLMFinishedEvent
+import org.eclipse.lmos.arc.agents.llm.LLMStartedEvent
+import org.eclipse.lmos.arc.client.gemini.ByteMapper.map
+import org.eclipse.lmos.arc.core.Result
+import org.eclipse.lmos.arc.core.Success
+import org.eclipse.lmos.arc.core.failWith
+import org.eclipse.lmos.arc.core.finally
+import org.eclipse.lmos.arc.core.getOrThrow
+import org.eclipse.lmos.arc.core.result
 import com.google.cloud.vertexai.VertexAI
 import com.google.cloud.vertexai.api.Content
 import com.google.cloud.vertexai.api.FunctionDeclaration

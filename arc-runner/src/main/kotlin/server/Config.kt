@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.runner.server
+package org.eclipse.lmos.arc.runner.server
 
 import java.io.File
 

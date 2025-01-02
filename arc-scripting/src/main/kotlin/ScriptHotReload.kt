@@ -1,18 +1,18 @@
 // SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
 //
 // SPDX-License-Identifier: Apache-2.0
-package ai.ancf.lmos.arc.scripting
+package org.eclipse.lmos.arc.scripting
 
-import ai.ancf.lmos.arc.core.closeWith
-import ai.ancf.lmos.arc.core.onFailure
-import ai.ancf.lmos.arc.core.result
-import ai.ancf.lmos.arc.scripting.agents.ScriptingAgentLoader
-import ai.ancf.lmos.arc.scripting.functions.ScriptingLLMFunctionLoader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.eclipse.lmos.arc.core.closeWith
+import org.eclipse.lmos.arc.core.onFailure
+import org.eclipse.lmos.arc.core.result
+import org.eclipse.lmos.arc.scripting.agents.ScriptingAgentLoader
+import org.eclipse.lmos.arc.scripting.functions.ScriptingLLMFunctionLoader
 import org.slf4j.LoggerFactory
 import java.io.Closeable
 import java.io.File

@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.conversation
+package org.eclipse.lmos.arc.agents.conversation
 
-import ai.ancf.lmos.arc.agents.User
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.eclipse.lmos.arc.agents.User
 import org.junit.jupiter.api.Test
 
 class ConversationTest {

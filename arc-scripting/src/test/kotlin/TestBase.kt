@@ -2,22 +2,22 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.scripting
+package org.eclipse.lmos.arc.scripting
 
-import ai.ancf.lmos.arc.agents.Agent
-import ai.ancf.lmos.arc.agents.dsl.AgentDefinitionContext
-import ai.ancf.lmos.arc.agents.dsl.BasicAgentDefinitionContext
-import ai.ancf.lmos.arc.agents.dsl.ChatAgentFactory
-import ai.ancf.lmos.arc.agents.dsl.CoroutineBeanProvider
-import ai.ancf.lmos.arc.agents.llm.ChatCompleter
-import ai.ancf.lmos.arc.agents.llm.ChatCompleterProvider
-import ai.ancf.lmos.arc.core.getOrThrow
-import ai.ancf.lmos.arc.scripting.agents.KtsAgentScriptEngine
-import ai.ancf.lmos.arc.scripting.agents.ScriptingAgentLoader
-import ai.ancf.lmos.arc.scripting.functions.KtsFunctionScriptEngine
-import ai.ancf.lmos.arc.scripting.functions.ScriptingLLMFunctionLoader
 import io.mockk.clearMocks
 import io.mockk.mockk
+import org.eclipse.lmos.arc.agents.Agent
+import org.eclipse.lmos.arc.agents.dsl.AgentDefinitionContext
+import org.eclipse.lmos.arc.agents.dsl.BasicAgentDefinitionContext
+import org.eclipse.lmos.arc.agents.dsl.ChatAgentFactory
+import org.eclipse.lmos.arc.agents.dsl.CoroutineBeanProvider
+import org.eclipse.lmos.arc.agents.llm.ChatCompleter
+import org.eclipse.lmos.arc.agents.llm.ChatCompleterProvider
+import org.eclipse.lmos.arc.core.getOrThrow
+import org.eclipse.lmos.arc.scripting.agents.KtsAgentScriptEngine
+import org.eclipse.lmos.arc.scripting.agents.ScriptingAgentLoader
+import org.eclipse.lmos.arc.scripting.functions.KtsFunctionScriptEngine
+import org.eclipse.lmos.arc.scripting.functions.ScriptingLLMFunctionLoader
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import java.io.File

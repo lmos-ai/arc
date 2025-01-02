@@ -2,14 +2,14 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.client.ollama
+package org.eclipse.lmos.arc.client.ollama
 
-import ai.ancf.lmos.arc.agents.conversation.UserMessage
-import ai.ancf.lmos.arc.agents.llm.embed
-import ai.ancf.lmos.arc.core.getOrThrow
 import io.ktor.server.engine.*
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.eclipse.lmos.arc.agents.conversation.UserMessage
+import org.eclipse.lmos.arc.agents.llm.embed
+import org.eclipse.lmos.arc.core.getOrThrow
 import org.junit.jupiter.api.Test
 
 class OllamaClientTest : TestBase() {

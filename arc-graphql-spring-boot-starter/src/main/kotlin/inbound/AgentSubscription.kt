@@ -2,28 +2,8 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.graphql.inbound
+package org.eclipse.lmos.arc.graphql.inbound
 
-import ai.ancf.lmos.arc.agents.AgentProvider
-import ai.ancf.lmos.arc.agents.ChatAgent
-import ai.ancf.lmos.arc.agents.User
-import ai.ancf.lmos.arc.agents.conversation.AssistantMessage
-import ai.ancf.lmos.arc.agents.conversation.Conversation
-import ai.ancf.lmos.arc.agents.conversation.latest
-import ai.ancf.lmos.arc.agents.events.MessagePublisherChannel
-import ai.ancf.lmos.arc.agents.getAgentByName
-import ai.ancf.lmos.arc.api.AgentRequest
-import ai.ancf.lmos.arc.api.AgentResult
-import ai.ancf.lmos.arc.core.Failure
-import ai.ancf.lmos.arc.core.Success
-import ai.ancf.lmos.arc.core.getOrThrow
-import ai.ancf.lmos.arc.graphql.AgentResolver
-import ai.ancf.lmos.arc.graphql.ContextHandler
-import ai.ancf.lmos.arc.graphql.EmptyContextHandler
-import ai.ancf.lmos.arc.graphql.ErrorHandler
-import ai.ancf.lmos.arc.graphql.context.AnonymizationEntities
-import ai.ancf.lmos.arc.graphql.context.ContextProvider
-import ai.ancf.lmos.arc.graphql.withLogContext
 import com.expediagroup.graphql.generator.annotations.GraphQLDescription
 import com.expediagroup.graphql.server.operations.Subscription
 import kotlinx.coroutines.async
@@ -31,6 +11,26 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.channelFlow
+import org.eclipse.lmos.arc.agents.AgentProvider
+import org.eclipse.lmos.arc.agents.ChatAgent
+import org.eclipse.lmos.arc.agents.User
+import org.eclipse.lmos.arc.agents.conversation.AssistantMessage
+import org.eclipse.lmos.arc.agents.conversation.Conversation
+import org.eclipse.lmos.arc.agents.conversation.latest
+import org.eclipse.lmos.arc.agents.events.MessagePublisherChannel
+import org.eclipse.lmos.arc.agents.getAgentByName
+import org.eclipse.lmos.arc.api.AgentRequest
+import org.eclipse.lmos.arc.api.AgentResult
+import org.eclipse.lmos.arc.core.Failure
+import org.eclipse.lmos.arc.core.Success
+import org.eclipse.lmos.arc.core.getOrThrow
+import org.eclipse.lmos.arc.graphql.AgentResolver
+import org.eclipse.lmos.arc.graphql.ContextHandler
+import org.eclipse.lmos.arc.graphql.EmptyContextHandler
+import org.eclipse.lmos.arc.graphql.ErrorHandler
+import org.eclipse.lmos.arc.graphql.context.AnonymizationEntities
+import org.eclipse.lmos.arc.graphql.context.ContextProvider
+import org.eclipse.lmos.arc.graphql.withLogContext
 import org.slf4j.LoggerFactory
 import java.time.Duration
 
