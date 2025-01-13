@@ -15,34 +15,14 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.util.*
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.double
-import kotlinx.serialization.json.jsonArray
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.*
 import org.eclipse.lmos.arc.agents.ArcException
-import org.eclipse.lmos.arc.agents.FeatureNotSupportedException
-import org.eclipse.lmos.arc.agents.conversation.AssistantMessage
-import org.eclipse.lmos.arc.agents.conversation.ConversationMessage
-import org.eclipse.lmos.arc.agents.conversation.SystemMessage
-import org.eclipse.lmos.arc.agents.conversation.UserMessage
+import org.eclipse.lmos.arc.agents.conversation.*
 import org.eclipse.lmos.arc.agents.events.EventPublisher
 import org.eclipse.lmos.arc.agents.functions.LLMFunction
-import org.eclipse.lmos.arc.agents.llm.ChatCompleter
-import org.eclipse.lmos.arc.agents.llm.ChatCompletionSettings
-import org.eclipse.lmos.arc.agents.llm.LLMFinishedEvent
-import org.eclipse.lmos.arc.agents.llm.LLMStartedEvent
+import org.eclipse.lmos.arc.agents.llm.*
 import org.eclipse.lmos.arc.agents.llm.OutputFormat.JSON
-import org.eclipse.lmos.arc.agents.llm.TextEmbedder
-import org.eclipse.lmos.arc.agents.llm.TextEmbedding
-import org.eclipse.lmos.arc.agents.llm.TextEmbeddings
-import org.eclipse.lmos.arc.core.Result
-import org.eclipse.lmos.arc.core.ensure
-import org.eclipse.lmos.arc.core.failWith
-import org.eclipse.lmos.arc.core.finally
-import org.eclipse.lmos.arc.core.result
+import org.eclipse.lmos.arc.core.*
 import org.slf4j.LoggerFactory
 import kotlin.time.Duration
 import kotlin.time.measureTime
@@ -90,19 +70,50 @@ class OllamaClient(
     ) = result<AssistantMessage, ArcException> {
         val ollamaMessages = toOllamaMessages(messages)
 
-        ensure(functions.isNullOrEmpty()) {
-            FeatureNotSupportedException("OllamaClient currently does not support functions!")
-        }
+        val ollamaTools = languageModel.toolSupported.takeIf { it }?.let { toOllamaTools(functions) } ?: emptyList()
+
+        val functionCallHandler = FunctionCallHandler(functions ?: emptyList(), eventHandler)
 
         eventHandler?.publish(LLMStartedEvent(languageModel.modelName))
         val result: Result<ChatResponse, ArcException>
         val duration = measureTime {
-            result = chat(ollamaMessages, settings)
+            result = chat(ollamaMessages, ollamaTools, functionCallHandler, settings)
         }
-        var chatCompletions: ChatResponse? = null
-        finally { publishEvent(it, messages, functions, chatCompletions, duration, settings) }
-        chatCompletions = result failWith { it }
-        AssistantMessage(chatCompletions.message.content)
+        var chatResponse: ChatResponse? = null
+        finally { publishEvent(it, messages, functions, chatResponse, duration, functionCallHandler, settings) }
+        chatResponse = result failWith { it }
+        chatResponse.getFirstAssistantMessage(
+            sensitive = functionCallHandler.calledSensitiveFunction(),
+            settings = settings,
+        )
+    }
+
+    private fun toOllamaTools(
+        functions: List<LLMFunction>?,
+        parametersSchema: org.eclipse.lmos.arc.agents.functions.ParametersSchema? = null,
+    ): List<Tool>? {
+        return functions?.map { llmFunction ->
+            Tool(
+                type = "function",
+                function = Function(
+                    name = llmFunction.name,
+                    description = llmFunction.description,
+                    parameters = parametersSchema?.let { schema ->
+                        Parameters(
+                            type = "object",
+                            properties = schema.parameters.associate {
+                                it.name to Property(
+                                    type = it.type.schemaType,
+                                    description = it.description,
+                                    enum = it.enum,
+                                )
+                            },
+                            required = schema.required,
+                        )
+                    },
+                ),
+            )
+        }
     }
 
     private fun publishEvent(
@@ -111,6 +122,7 @@ class OllamaClient(
         functions: List<LLMFunction>?,
         chatCompletions: ChatResponse?,
         duration: Duration,
+        functionCallHandler: FunctionCallHandler,
         settings: ChatCompletionSettings?,
     ) {
         eventHandler?.publish(
@@ -119,50 +131,62 @@ class OllamaClient(
                 messages,
                 functions,
                 languageModel.modelName,
-                chatCompletions?.let { it.promptTokenCount + it.responseTokenCount } ?: -1,
-                chatCompletions?.promptTokenCount ?: -1,
-                chatCompletions?.responseTokenCount ?: -1,
-                0,
+                chatCompletions?.let { it.promptEvalCount + it.evalCount } ?: -1,
+                chatCompletions?.promptEvalCount ?: -1,
+                chatCompletions?.evalCount ?: -1,
+                functionCallHandler.calledFunctions.size,
                 duration,
                 settings = settings,
             ),
         )
     }
 
-    private suspend fun chat(messages: List<ChatMessage>, settings: ChatCompletionSettings?) =
-        result<ChatResponse, ArcException> {
-            val response: HttpResponse = client.post("${languageModel.url}/api/chat") {
-                contentType(ContentType.Application.Json)
-                setBody(
-                    ChatRequest(
-                        languageModel.modelName,
-                        messages,
-                        stream = false,
-                        format = if (settings?.format == JSON) "json" else null,
-                    ),
-                )
-            }.body()
-            ensure(response.status.isSuccess()) { ArcException("Failed to complete chat: ${response.status}!") }
-            json.decodeFromString(response.bodyAsText()) // server is sending wrong content type
-            // so that ktor does not decode it correctly.
+    private suspend fun chat(messages: List<ChatMessage>, tools: List<Tool>? = null, functionCallHandler: FunctionCallHandler, settings: ChatCompletionSettings?): Result<ChatResponse, ArcException> {
+        val response: HttpResponse = client.post("${languageModel.url}/api/chat") {
+            contentType(ContentType.Application.Json)
+            setBody(
+                ChatRequest(
+                    languageModel.modelName,
+                    messages,
+                    stream = false,
+                    format = if (settings?.format == JSON) "json" else null,
+                    tools = tools,
+                ),
+            )
+        }.body()
+
+        val chatResponse = response.takeIf { it.status.isSuccess() }
+            ?.let { json.decodeFromString<ChatResponse>(it.bodyAsText()) }
+            ?: throw ArcException(response.bodyAsText())
+
+        val newMessages: List<ChatMessage> = functionCallHandler.handle(chatResponse).getOrThrow()
+        if (newMessages.isNotEmpty()) {
+            return chat(messages + newMessages, tools, functionCallHandler, settings)
         }
+        return Success(chatResponse)
+    }
 
     private fun toOllamaMessages(messages: List<ConversationMessage>) =
-        messages.map {
-            when (it) {
-                is UserMessage -> if (it.binaryData.isNotEmpty()) {
+        messages.map { msg ->
+            when (msg) {
+                is SystemMessage -> ChatMessage(
+                    content = msg.content,
+                    role = "system",
+                )
+                is AssistantMessage -> ChatMessage(
+                    content = msg.content,
+                    role = "assistant",
+                )
+                is UserMessage -> if (msg.binaryData.isNotEmpty()) {
                     ChatMessage(
-                        content = it.content,
+                        content = msg.content,
                         role = "user",
-                        images = it.binaryData.map { it.data.encodeBase64() },
+                        images = msg.binaryData.map { it.data.encodeBase64() },
                     )
                 } else {
-                    ChatMessage(content = it.content, role = "user")
+                    ChatMessage(content = msg.content, role = "user")
                 }
-
-                is AssistantMessage -> ChatMessage(content = it.content, role = "assistant")
-                is SystemMessage -> ChatMessage(content = it.content, role = "system")
-                else -> throw ArcException("Unsupported message type: $it")
+                else -> throw ArcException("Unsupported message type: $msg")
             }
         }
 
@@ -184,34 +208,16 @@ class OllamaClient(
     }
 
     private val String.embedding get() = json.parseToJsonElement(this).jsonObject["embedding"]!!.jsonArray
+
+    private fun ChatResponse.getFirstAssistantMessage(
+        sensitive: Boolean = false,
+        settings: ChatCompletionSettings?,
+    ) = AssistantMessage(
+        message.content,
+        sensitive = sensitive,
+        format = when (settings?.format) {
+            JSON -> MessageFormat.JSON
+            else -> MessageFormat.TEXT
+        },
+    )
 }
-
-@Serializable
-data class ChatRequest(
-    val model: String,
-    val messages: List<ChatMessage>,
-    val format: String?,
-    val stream: Boolean = false,
-)
-
-@Serializable
-data class ChatMessage(
-    val role: String,
-    val content: String,
-    val images: List<String>? = null,
-)
-
-@Serializable
-data class ChatResponse(
-    @SerialName("prompt_eval_count")
-    val promptTokenCount: Int = -1,
-    @SerialName("eval_count")
-    val responseTokenCount: Int,
-    val message: ChatMessage,
-)
-
-@Serializable
-data class TextEmbeddingRequest(
-    val model: String,
-    val prompt: String,
-)

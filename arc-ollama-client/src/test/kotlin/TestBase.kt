@@ -45,9 +45,10 @@ open class TestBase {
                         call.respondText(
                             Json.encodeToString(
                                 ChatResponse(
-                                    50,
-                                    100,
-                                    ChatMessage(role = "assistant", content = "answer to test"),
+                                    promptEvalCount = 50,
+                                    evalCount = 100,
+                                    promptEvalDuration = 10,
+                                    message = ChatMessage(role = "assistant", content = "answer to test"),
                                 ),
                             ),
                         )

@@ -82,7 +82,7 @@ class ClientsConfiguration {
     @ConditionalOnClass(OllamaClient::class)
     private fun ollamaClient() = ClientBuilder { config, eventPublisher ->
         if (config.client != "ollama") return@ClientBuilder null
-        OllamaClient(OllamaClientConfig(config.modelName, config.url), eventPublisher)
+        OllamaClient(OllamaClientConfig(config.modelName, config.url, config.toolSupported), eventPublisher)
     }
 
     @Bean

@@ -14,8 +14,9 @@ class OllamaClientConfigTest {
         val config = OllamaClientConfig(
             modelName = "test-model",
             url = "http://test-url",
+            toolSupported = false,
         )
-        val expected = "OllamaClientConfig(modelName=test-model, url=http://test-url)"
+        val expected = "OllamaClientConfig(modelName=test-model, url=http://test-url, toolSupported=false)"
         assertEquals(expected, config.toString())
     }
 }
