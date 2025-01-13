@@ -7,27 +7,14 @@ package org.eclipse.lmos.arc.agents
 import kotlinx.coroutines.coroutineScope
 import org.eclipse.lmos.arc.agents.conversation.Conversation
 import org.eclipse.lmos.arc.agents.conversation.SystemMessage
-import org.eclipse.lmos.arc.agents.dsl.AllTools
-import org.eclipse.lmos.arc.agents.dsl.BasicDSLContext
-import org.eclipse.lmos.arc.agents.dsl.BeanProvider
-import org.eclipse.lmos.arc.agents.dsl.CompositeBeanProvider
-import org.eclipse.lmos.arc.agents.dsl.DSLContext
-import org.eclipse.lmos.arc.agents.dsl.InputFilterContext
-import org.eclipse.lmos.arc.agents.dsl.OutputFilterContext
-import org.eclipse.lmos.arc.agents.dsl.ToolsDSLContext
-import org.eclipse.lmos.arc.agents.dsl.provideOptional
+import org.eclipse.lmos.arc.agents.dsl.*
 import org.eclipse.lmos.arc.agents.events.EventPublisher
 import org.eclipse.lmos.arc.agents.functions.FunctionWithContext
 import org.eclipse.lmos.arc.agents.functions.LLMFunction
 import org.eclipse.lmos.arc.agents.functions.LLMFunctionProvider
 import org.eclipse.lmos.arc.agents.llm.ChatCompleterProvider
 import org.eclipse.lmos.arc.agents.llm.ChatCompletionSettings
-import org.eclipse.lmos.arc.core.Result
-import org.eclipse.lmos.arc.core.failWith
-import org.eclipse.lmos.arc.core.getOrThrow
-import org.eclipse.lmos.arc.core.mapFailure
-import org.eclipse.lmos.arc.core.recover
-import org.eclipse.lmos.arc.core.result
+import org.eclipse.lmos.arc.core.*
 import org.slf4j.LoggerFactory
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.time.measureTime
@@ -40,8 +27,8 @@ const val AGENT_LOG_CONTEXT_KEY = "agent"
 class ChatAgent(
     override val name: String,
     override val description: String,
-    private val model: () -> String?,
-    private val settings: () -> ChatCompletionSettings?,
+    private val model: suspend DSLContext.() -> String?,
+    private val settings: suspend DSLContext.() -> ChatCompletionSettings?,
     private val beanProvider: BeanProvider,
     private val systemPrompt: suspend DSLContext.() -> String,
     private val toolsProvider: suspend DSLContext.() -> Unit,
@@ -59,7 +46,10 @@ class ChatAgent(
     override suspend fun execute(input: Conversation, context: Set<Any>): Result<Conversation, AgentFailedException> {
         return withLogContext(mapOf(AGENT_LOG_CONTEXT_KEY to name)) {
             val agentEventHandler = beanProvider.provideOptional<EventPublisher>()
-            val model = model()
+            val compositeBeanProvider =
+                CompositeBeanProvider(context + setOf(input, input.user).filterNotNull(), beanProvider)
+            val dslContext = BasicDSLContext(compositeBeanProvider)
+            val model = model.invoke(dslContext)
 
             agentEventHandler?.publish(AgentStartedEvent(this@ChatAgent))
 
@@ -67,7 +57,7 @@ class ChatAgent(
             val usedFunctions = AtomicReference<List<LLMFunction>?>(null)
             val result: Result<Conversation, AgentFailedException>
             val duration = measureTime {
-                result = doExecute(input, model, context, usedFunctions)
+                result = doExecute(input, model, dslContext, compositeBeanProvider, usedFunctions)
                     .recover {
                         if (it is WithConversationResult) {
                             log.info("Agent $name interrupted!", it)
@@ -99,20 +89,18 @@ class ChatAgent(
     private suspend fun doExecute(
         conversation: Conversation,
         model: String?,
-        context: Set<Any>,
+        dslContext: DSLContext,
+        compositeBeanProvider: BeanProvider,
         usedFunctions: AtomicReference<List<LLMFunction>?>,
     ) =
         result<Conversation, Exception> {
-            val fullContext = context + setOf(conversation, conversation.user).filterNotNull()
-            val compositeBeanProvider = CompositeBeanProvider(fullContext, beanProvider)
-            val scriptingContext = BasicDSLContext(compositeBeanProvider)
             val chatCompleter = compositeBeanProvider.chatCompleter(model = model)
 
-            val functions = functions(scriptingContext)
+            val functions = functions(dslContext)
             usedFunctions.set(functions)
 
             val filteredInput = coroutineScope {
-                val filterContext = InputFilterContext(scriptingContext, conversation)
+                val filterContext = InputFilterContext(dslContext, conversation)
                 filterInput.invoke(filterContext).let {
                     filterContext.finish()
                     filterContext.input
@@ -121,15 +109,16 @@ class ChatAgent(
 
             if (filteredInput.isEmpty()) failWith { AgentNotExecutedException("Input has been filtered") }
 
-            val generatedSystemPrompt = systemPrompt.invoke(scriptingContext)
+            val generatedSystemPrompt = systemPrompt.invoke(dslContext)
             val fullConversation =
                 listOf(SystemMessage(generatedSystemPrompt)) + filteredInput.transcript
             val completedConversation =
-                conversation + chatCompleter.complete(fullConversation, functions, settings()).getOrThrow()
+                conversation + chatCompleter.complete(fullConversation, functions, settings.invoke(dslContext))
+                    .getOrThrow()
 
             coroutineScope {
                 val filterOutputContext =
-                    OutputFilterContext(scriptingContext, conversation, completedConversation, generatedSystemPrompt)
+                    OutputFilterContext(dslContext, conversation, completedConversation, generatedSystemPrompt)
                 filterOutput.invoke(filterOutputContext).let {
                     filterOutputContext.finish()
                     filterOutputContext.output

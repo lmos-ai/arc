@@ -36,13 +36,13 @@ class AgentDefinition {
     lateinit var name: String
     var description: String = ""
 
-    var model: () -> String? = { null }
-    fun model(fn: () -> String) {
+    var model: suspend DSLContext.() -> String? = { null }
+    fun model(fn: suspend DSLContext.() -> String) {
         model = fn
     }
 
-    var settings: () -> ChatCompletionSettings? = { null }
-    fun settings(fn: () -> ChatCompletionSettings) {
+    var settings: suspend DSLContext.() -> ChatCompletionSettings? = { null }
+    fun settings(fn: suspend DSLContext.() -> ChatCompletionSettings) {
         settings = fn
     }
 
