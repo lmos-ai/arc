@@ -27,6 +27,7 @@ class ChatAgentFactory(private val beanProvider: BeanProvider) : AgentFactory<Ch
             agentDefinition.settings,
             beanProvider,
             agentDefinition.systemPrompt,
+            agentDefinition.developerPrompt,
             agentDefinition.toolsProvider,
             agentDefinition.outputFilter,
             agentDefinition.inputFilter,

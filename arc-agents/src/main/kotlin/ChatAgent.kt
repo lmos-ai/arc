@@ -5,8 +5,7 @@
 package org.eclipse.lmos.arc.agents
 
 import kotlinx.coroutines.coroutineScope
-import org.eclipse.lmos.arc.agents.conversation.Conversation
-import org.eclipse.lmos.arc.agents.conversation.SystemMessage
+import org.eclipse.lmos.arc.agents.conversation.*
 import org.eclipse.lmos.arc.agents.dsl.AllTools
 import org.eclipse.lmos.arc.agents.dsl.BasicDSLContext
 import org.eclipse.lmos.arc.agents.dsl.BeanProvider
@@ -44,6 +43,7 @@ class ChatAgent(
     private val settings: () -> ChatCompletionSettings?,
     private val beanProvider: BeanProvider,
     private val systemPrompt: suspend DSLContext.() -> String,
+    private val developerPrompt: suspend DSLContext.() -> String,
     private val toolsProvider: suspend DSLContext.() -> Unit,
     private val filterOutput: suspend OutputFilterContext.() -> Unit,
     private val filterInput: suspend InputFilterContext.() -> Unit,
@@ -122,8 +122,8 @@ class ChatAgent(
             if (filteredInput.isEmpty()) failWith { AgentNotExecutedException("Input has been filtered") }
 
             val generatedSystemPrompt = systemPrompt.invoke(scriptingContext)
-            val fullConversation =
-                listOf(SystemMessage(generatedSystemPrompt)) + filteredInput.transcript
+            val fullConversation = getFullConversation(generatedSystemPrompt, developerPrompt.invoke(scriptingContext), filteredInput)
+
             val completedConversation =
                 conversation + chatCompleter.complete(fullConversation, functions, settings()).getOrThrow()
 
@@ -163,6 +163,18 @@ class ChatAgent(
 
     override fun toString(): String {
         return "ChatAgent(name='$name', description='$description')"
+    }
+
+    private fun getFullConversation(systemPrompt: String, developerPrompt: String, filteredInput: Conversation): List<ConversationMessage> {
+        return mutableListOf<ConversationMessage>().apply {
+            if (systemPrompt.isNotEmpty()) {
+                add(SystemMessage(systemPrompt))
+            }
+            if (developerPrompt.isNotEmpty()) {
+                add(DeveloperMessage(developerPrompt))
+            }
+            addAll(filteredInput.transcript)
+        }
     }
 }
 

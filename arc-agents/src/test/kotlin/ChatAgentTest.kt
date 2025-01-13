@@ -116,15 +116,38 @@ class ChatAgentTest : TestBase() {
         assertThat(initExecuted.toString()).isEqualTo(result.transcript.findLast { it is AssistantMessage }?.content)
     }
 
-    class TestChatCompleter : ChatCompleter {
+    @Test
+    fun `test developer message is available in context`(): Unit = runBlocking {
+        val agent = agent {
+            name = "agent"
+            description = "agent description"
+            systemPrompt = { "does stuff" }
+            developerPrompt = { "this is developer prompt" }
+            filterInput {
+                assertThat(input).isNotNull
+            }
+        } as ChatAgent
+        val result = testBeanProvider.setContext(setOf(ChatCompleterProvider { TestChatCompleter(true) })) {
+            agent.execute("test".toConversation(User("user"))).getOrThrow()
+        }
+        assertThat("this is developer prompt").isEqualTo(result.transcript.findLast { it is AssistantMessage }?.content)
+    }
+
+    class TestChatCompleter(private val returnPrompt: Boolean = false) : ChatCompleter {
         override suspend fun complete(
             messages: List<ConversationMessage>,
             functions: List<LLMFunction>?,
             settings: ChatCompletionSettings?,
         ): Result<AssistantMessage, ArcException> {
-            return messages.findLast { it is SystemMessage }?.let {
-                Success(AssistantMessage(it.content))
-            } ?: throw ArcException("No system message found")
+            return if (returnPrompt) {
+                messages.findLast { it is DeveloperMessage }?.let {
+                    Success(AssistantMessage(it.content))
+                } ?: throw ArcException("No developer message found")
+            } else {
+                messages.findLast { it is SystemMessage }?.let {
+                    Success(AssistantMessage(it.content))
+                } ?: throw ArcException("No system message found")
+            }
         }
     }
 }

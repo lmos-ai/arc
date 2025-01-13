@@ -85,4 +85,14 @@ class AgentDefinition {
     fun init(fn: DSLContext.() -> Unit) {
         init = fn
     }
+
+    var developerPrompt: suspend DSLContext.() -> String = { "" }
+        get() = {
+            val result = field()
+            if (this is BasicDSLContext) {
+                (output.get() + result).trimIndent()
+            } else {
+                result.trimIndent()
+            }
+        }
 }
