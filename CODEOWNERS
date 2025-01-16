@@ -1,0 +1,5 @@
+# This file helps GitHub doing automatic review requests for new PRs.
+
+# Assign all PRs to the most suitable committer:
+/.github/ @pschwager
+*       @patwlan

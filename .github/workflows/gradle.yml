@@ -1,31 +1,26 @@
-# SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
+# SPDX-FileCopyrightText: 2025 Deutsche Telekom AG and others
 #
 # SPDX-License-Identifier: Apache-2.0
 
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
-
 name: Java CI with Gradle
 
-on: [push]
+on: [ push ]
 
 jobs:
-  validation:
-    name: "Gradle wrapper validation"
+  verify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.1.7
-      - uses: gradle/actions/wrapper-validation@v4.2.1
-  build:
+      - uses: actions/checkout@v4
+      - name: REUSE Compliance Check
+        uses: fsfe/reuse-action@v5
+      - name: Validate Gradle Wrapper
+        uses: gradle/actions/wrapper-validation@v4.2.1
 
+  build:
+    needs: verify
     runs-on: ubuntu-latest
     permissions:
       contents: read
-
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 21
@@ -33,15 +28,16 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@cc4fc85e6b35bafd578d5ffbc76a5518407e1af0
-      - name: Build with Gradle Wrapper
+          cache: 'gradle'
+      - name: Build with Gradle
         run: ./gradlew build
 
   dependency-submission:
+    needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 21
@@ -49,8 +45,6 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-
-      # Generates and submits a dependency graph, enabling Dependabot Alerts for all project dependencies.
-      # See: https://github.com/gradle/actions/blob/main/dependency-submission/README.md
+          cache: 'gradle'
       - name: Generate and submit dependency graph
-        uses: gradle/actions/dependency-submission@cc4fc85e6b35bafd578d5ffbc76a5518407e1af0
+        uses: gradle/actions/dependency-submission@v4

@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
+// SPDX-FileCopyrightText: 2025 Deutsche Telekom AG and others
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -20,6 +20,6 @@ include("arc-graphql-spring-boot-starter")
 include("arc-runner")
 include("arc-assistants")
 include("arc-langchain4j-client")
-include("arc-gradle-plugin")
+// include("arc-gradle-plugin")
 include("arc-gen")
 include("arc-openai-client")

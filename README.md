@@ -1,9 +1,3 @@
-<!--
-SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
-
-SPDX-License-Identifier: CC0-1.0    
--->
-
 [![GitHub Actions Build Status](https://github.com/eclipse-lmos/arc/actions/workflows/gradle.yml/badge.svg?branch=main)](https://github.com/eclipse-lmos/arc/actions/workflows/gradle.yml)
 [![GitHub Actions Publish Status](https://github.com/eclipse-lmos/arc/actions/workflows/gradle-publish.yml/badge.svg?branch=main)](https://github.com/eclipse-lmos/arc/actions/workflows/gradle-publish.yml)
 [![Apache 2.0 License](https://img.shields.io/badge/license-Apache%202.0-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
@@ -26,7 +20,7 @@ This project has adopted the [Contributor Covenant](https://www.contributor-cove
 By participating in this project, you agree to abide by its [Code of Conduct](./CODE_OF_CONDUCT.md) at all times.
 
 ## Licensing
-Copyright (c) 2024 Deutsche Telekom AG.
+Copyright (c) 2025 Deutsche Telekom AG and others.
 
 Sourcecode licensed under the [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0) (the "License"); you may not use this project except in compliance with the License.
 

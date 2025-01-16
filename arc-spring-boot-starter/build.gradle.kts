@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
+// SPDX-FileCopyrightText: 2025 Deutsche Telekom AG and others
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -23,7 +23,7 @@ dependencies {
     compileOnly("dev.langchain4j:langchain4j-open-ai:$langchain4jVersion")
 
     implementation("org.springframework.boot:spring-boot-autoconfigure:3.4.0")
-    implementation("org.springframework.boot:spring-boot-configuration-processor:3.4.0")
+    implementation("org.springframework.boot:spring-boot-configuration-processor:3.4.1")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test:3.4.0")
     testImplementation("org.springframework.boot:spring-boot-starter:3.4.0")

@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
+// SPDX-FileCopyrightText: 2025 Deutsche Telekom AG and others
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -69,7 +69,7 @@ fun String.toUseCases(): List<UseCase> {
 fun String.parseConditions(): Pair<String, Set<String>> {
     val regex = Regex("<(.*?)>")
     val conditions = regex.find(this)?.groupValues?.get(1)
-    return replace(regex, "").trim() to (conditions?.split(",")?.map { it.trim().lowercase() }?.toSet() ?: emptySet())
+    return replace(regex, "").trim() to (conditions?.split(",")?.map { it.trim() }?.toSet() ?: emptySet())
 }
 
 fun String.asConditional(): Conditional {
