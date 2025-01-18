@@ -18,6 +18,8 @@ fun agentRequest(content: String, conversationId: String, vararg binaryData: Bin
             ),
         ),
         conversationContext = ConversationContext(conversationId, turnId),
+        systemContext = emptyList(),
+        userContext = UserContext(profile = emptyList()),
     )
 
 /**

@@ -1,9 +1,22 @@
-// SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
+// SPDX-FileCopyrightText: 2025 Deutsche Telekom AG and others
 //
 // SPDX-License-Identifier: Apache-2.0
 
 package org.eclipse.lmos.arc.agent.client.ws
 
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.plugins.websocket.*
+import io.ktor.client.request.*
+import io.ktor.websocket.*
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.channels.consumeEach
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromJsonElement
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import org.eclipse.lmos.arc.agent.client.ws.sound.pcm16ToWav
 import org.eclipse.lmos.arc.agents.ArcException
 import org.eclipse.lmos.arc.agents.conversation.AssistantMessage
@@ -18,19 +31,6 @@ import org.eclipse.lmos.arc.agents.functions.LLMFunction
 import org.eclipse.lmos.arc.agents.llm.ChatCompleter
 import org.eclipse.lmos.arc.agents.llm.ChatCompletionSettings
 import org.eclipse.lmos.arc.core.result
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.plugins.websocket.*
-import io.ktor.client.request.*
-import io.ktor.websocket.*
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
-import kotlinx.coroutines.channels.consumeEach
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.decodeFromJsonElement
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
 import org.slf4j.LoggerFactory
 import java.io.Closeable
 import java.util.concurrent.atomic.AtomicReference

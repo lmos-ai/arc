@@ -13,15 +13,15 @@ import kotlinx.serialization.Serializable
 data class AgentRequest(
     val messages: List<Message>,
     val conversationContext: ConversationContext,
-    val systemContext: List<SystemContextEntry>? = null,
-    val userContext: UserContext? = null,
+    val systemContext: List<SystemContextEntry>,
+    val userContext: UserContext,
 )
 
 @Serializable
 data class UserContext(
     val userId: String? = null,
     val userToken: String? = null,
-    val profile: List<ProfileEntry>? = null,
+    val profile: List<ProfileEntry>,
 )
 
 @Serializable

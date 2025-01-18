@@ -1,11 +1,4 @@
 # SPDX-FileCopyrightText: 2025 Deutsche Telekom AG
 #
 # SPDX-License-Identifier: Apache-2.0
-
-server:
-  port: 8080
-
-logging:
-  level:
-    root: DEBUG
-    org.eclipse.lmos.arc: DEBUG
+org.eclipse.lmos.arc.ws.AgentStreamingAutoConfiguration

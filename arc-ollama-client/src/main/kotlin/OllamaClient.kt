@@ -166,7 +166,7 @@ class OllamaClient(
         return Success(chatResponse)
     }
 
-    private fun toOllamaMessages(messages: List<ConversationMessage>) =
+    private suspend fun toOllamaMessages(messages: List<ConversationMessage>) =
         messages.map { msg ->
             when (msg) {
                 is SystemMessage -> ChatMessage(
@@ -181,7 +181,7 @@ class OllamaClient(
                     ChatMessage(
                         content = msg.content,
                         role = "user",
-                        images = msg.binaryData.map { it.data.encodeBase64() },
+                        images = msg.binaryData.map { it.readAllBytes().encodeBase64() },
                     )
                 } else {
                     ChatMessage(content = msg.content, role = "user")
