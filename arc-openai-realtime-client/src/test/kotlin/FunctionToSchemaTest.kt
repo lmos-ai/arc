@@ -1,5 +1,12 @@
+// SPDX-FileCopyrightText: 2025 Deutsche Telekom AG and others
+//
+// SPDX-License-Identifier: Apache-2.0
+
 package org.eclipse.lmos.arc.agent.client
 
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import org.assertj.core.api.Assertions.assertThat
 import org.eclipse.lmos.arc.agent.client.ws.Session
 import org.eclipse.lmos.arc.agent.client.ws.toJsonSchema
 import org.eclipse.lmos.arc.agents.functions.LLMFunction
@@ -8,9 +15,6 @@ import org.eclipse.lmos.arc.agents.functions.ParameterSchema
 import org.eclipse.lmos.arc.agents.functions.ParameterType
 import org.eclipse.lmos.arc.agents.functions.ParametersSchema
 import org.eclipse.lmos.arc.core.Result
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class FunctionToSchemaTest {
