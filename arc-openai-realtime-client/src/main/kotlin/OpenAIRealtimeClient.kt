@@ -2,22 +2,22 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agent.client.ws
+package org.eclipse.lmos.arc.agent.client.ws
 
-import ai.ancf.lmos.arc.agent.client.ws.sound.pcm16ToWav
-import ai.ancf.lmos.arc.agents.ArcException
-import ai.ancf.lmos.arc.agents.conversation.AssistantMessage
-import ai.ancf.lmos.arc.agents.conversation.ConversationMessage
-import ai.ancf.lmos.arc.agents.conversation.DataStream
-import ai.ancf.lmos.arc.agents.conversation.SystemMessage
-import ai.ancf.lmos.arc.agents.conversation.UserMessage
-import ai.ancf.lmos.arc.agents.conversation.WritableDataStream
-import ai.ancf.lmos.arc.agents.conversation.asDataStream
-import ai.ancf.lmos.arc.agents.conversation.readAllBytes
-import ai.ancf.lmos.arc.agents.functions.LLMFunction
-import ai.ancf.lmos.arc.agents.llm.ChatCompleter
-import ai.ancf.lmos.arc.agents.llm.ChatCompletionSettings
-import ai.ancf.lmos.arc.core.result
+import org.eclipse.lmos.arc.agent.client.ws.sound.pcm16ToWav
+import org.eclipse.lmos.arc.agents.ArcException
+import org.eclipse.lmos.arc.agents.conversation.AssistantMessage
+import org.eclipse.lmos.arc.agents.conversation.ConversationMessage
+import org.eclipse.lmos.arc.agents.conversation.DataStream
+import org.eclipse.lmos.arc.agents.conversation.SystemMessage
+import org.eclipse.lmos.arc.agents.conversation.UserMessage
+import org.eclipse.lmos.arc.agents.conversation.WritableDataStream
+import org.eclipse.lmos.arc.agents.conversation.asDataStream
+import org.eclipse.lmos.arc.agents.conversation.readAllBytes
+import org.eclipse.lmos.arc.agents.functions.LLMFunction
+import org.eclipse.lmos.arc.agents.llm.ChatCompleter
+import org.eclipse.lmos.arc.agents.llm.ChatCompletionSettings
+import org.eclipse.lmos.arc.core.result
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.websocket.*
@@ -72,7 +72,7 @@ class OpenAIRealtimeClient(private val url: String, private val key: String) : C
                 AssistantMessage(
                     text,
                     userTranscript = userTranscript,
-                    binaryData = listOf(wavData(pcm16ToWav(audio.readAllBytes()).asDataStream()))
+                    binaryData = listOf(wavData(pcm16ToWav(audio.readAllBytes()).asDataStream())),
                 ),
             )
             close()

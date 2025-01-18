@@ -1,4 +1,4 @@
-package ai.ancf.lmos.arc.agent.client
+package org.eclipse.lmos.arc.agent.client
 
 enum class AudioMimeType(val value: String) {
     MP3("audio/mpeg"),

@@ -2,12 +2,12 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agent.client.stream
+package org.eclipse.lmos.arc.agent.client.stream
 
-import ai.ancf.lmos.arc.api.AgentRequest
-import ai.ancf.lmos.arc.api.AgentResult
-import ai.ancf.lmos.arc.api.REQUEST_END
-import ai.ancf.lmos.arc.api.RequestEnvelope
+import org.eclipse.lmos.arc.api.AgentRequest
+import org.eclipse.lmos.arc.api.AgentResult
+import org.eclipse.lmos.arc.api.REQUEST_END
+import org.eclipse.lmos.arc.api.RequestEnvelope
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.websocket.*

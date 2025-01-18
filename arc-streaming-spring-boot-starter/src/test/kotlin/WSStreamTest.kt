@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.ws
+package org.eclipse.lmos.arc.ws
 
-import ai.ancf.lmos.arc.agent.client.stream.DataStream
-import ai.ancf.lmos.arc.agent.client.stream.StreamClient
-import ai.ancf.lmos.arc.api.BinaryData
-import ai.ancf.lmos.arc.api.STREAM_SOURCE
-import ai.ancf.lmos.arc.api.agentRequest
+import org.eclipse.lmos.arc.agent.client.stream.DataStream
+import org.eclipse.lmos.arc.agent.client.stream.StreamClient
+import org.eclipse.lmos.arc.api.BinaryData
+import org.eclipse.lmos.arc.api.STREAM_SOURCE
+import org.eclipse.lmos.arc.api.agentRequest
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat

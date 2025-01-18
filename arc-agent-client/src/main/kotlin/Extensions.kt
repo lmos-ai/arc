@@ -1,9 +1,9 @@
-package ai.ancf.lmos.arc.agent.client
+package org.eclipse.lmos.arc.agent.client
 
-import ai.ancf.lmos.arc.api.AgentRequest
-import ai.ancf.lmos.arc.api.BinaryData
-import ai.ancf.lmos.arc.api.ConversationContext
-import ai.ancf.lmos.arc.api.Message
+import org.eclipse.lmos.arc.api.AgentRequest
+import org.eclipse.lmos.arc.api.BinaryData
+import org.eclipse.lmos.arc.api.ConversationContext
+import org.eclipse.lmos.arc.api.Message
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 

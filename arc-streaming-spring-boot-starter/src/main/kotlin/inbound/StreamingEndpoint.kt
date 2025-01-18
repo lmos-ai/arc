@@ -2,13 +2,13 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.ws.inbound
+package org.eclipse.lmos.arc.ws.inbound
 
-import ai.ancf.lmos.arc.agents.conversation.WritableDataStream
-import ai.ancf.lmos.arc.agents.conversation.readAllBytes
-import ai.ancf.lmos.arc.api.AgentResult
-import ai.ancf.lmos.arc.api.RequestEnvelope
-import ai.ancf.lmos.arc.ws.AgentCaller
+import org.eclipse.lmos.arc.agents.conversation.WritableDataStream
+import org.eclipse.lmos.arc.agents.conversation.readAllBytes
+import org.eclipse.lmos.arc.api.AgentResult
+import org.eclipse.lmos.arc.api.RequestEnvelope
+import org.eclipse.lmos.arc.ws.AgentCaller
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
@@ -71,7 +71,7 @@ class StreamingEndpoint(private val agentCaller: AgentCaller) : WebSocketHandler
         websocketSession: WebSocketSession,
         message: WebSocketMessage,
         output: Channel<WebSocketMessage>,
-        sessionHolder: AtomicReference<Session>
+        sessionHolder: AtomicReference<Session>,
     ) {
         val msg = message.payloadAsText
         log.info("Session: ${websocketSession.id} received message: $msg")
@@ -102,7 +102,7 @@ class StreamingEndpoint(private val agentCaller: AgentCaller) : WebSocketHandler
     private fun handleBinaryMessage(
         session: WebSocketSession,
         message: WebSocketMessage,
-        sessionHolder: AtomicReference<Session>
+        sessionHolder: AtomicReference<Session>,
     ) {
         log.info("Received binary message for: ${session.id}")
         sessionHolder.get()?.let {

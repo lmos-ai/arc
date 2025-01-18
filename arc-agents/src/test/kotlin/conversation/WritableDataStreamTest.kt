@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agents.conversation
+package org.eclipse.lmos.arc.agents.conversation
 
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking

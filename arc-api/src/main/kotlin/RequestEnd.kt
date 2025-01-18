@@ -1,4 +1,4 @@
-package ai.ancf.lmos.arc.api
+package org.eclipse.lmos.arc.api
 
 /**
  * Indicates the end of a request.

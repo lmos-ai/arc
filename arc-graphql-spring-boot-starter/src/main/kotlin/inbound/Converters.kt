@@ -45,6 +45,6 @@ fun List<BinaryData>.convertBinary(stream: DataStream?) =
             stream = when (it.source) {
                 STREAM_SOURCE -> stream ?: error("Stream source provided but streaming not enabled!")
                 else -> it.dataAsBase64?.asDataStream() ?: error("No data or source provided!")
-            }
+            },
         )
     }

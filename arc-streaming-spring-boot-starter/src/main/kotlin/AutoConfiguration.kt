@@ -2,14 +2,14 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.ws
+package org.eclipse.lmos.arc.ws
 
-import ai.ancf.lmos.arc.agents.AgentProvider
-import ai.ancf.lmos.arc.graphql.AgentResolver
-import ai.ancf.lmos.arc.graphql.ContextHandler
-import ai.ancf.lmos.arc.graphql.EmptyContextHandler
-import ai.ancf.lmos.arc.graphql.ErrorHandler
-import ai.ancf.lmos.arc.ws.inbound.StreamingEndpoint
+import org.eclipse.lmos.arc.agents.AgentProvider
+import org.eclipse.lmos.arc.graphql.AgentResolver
+import org.eclipse.lmos.arc.graphql.ContextHandler
+import org.eclipse.lmos.arc.graphql.EmptyContextHandler
+import org.eclipse.lmos.arc.graphql.ErrorHandler
+import org.eclipse.lmos.arc.ws.inbound.StreamingEndpoint
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.web.reactive.HandlerMapping

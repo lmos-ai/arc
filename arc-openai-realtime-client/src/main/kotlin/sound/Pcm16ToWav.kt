@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agent.client.ws.sound
+package org.eclipse.lmos.arc.agent.client.ws.sound
 
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer

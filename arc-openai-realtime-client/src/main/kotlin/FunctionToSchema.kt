@@ -2,17 +2,16 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agent.client.ws
+package org.eclipse.lmos.arc.agent.client.ws
 
-import ai.ancf.lmos.arc.agents.functions.LLMFunction
-import ai.ancf.lmos.arc.agents.functions.ParameterSchema
-import ai.ancf.lmos.arc.agents.functions.ParametersSchema
+import org.eclipse.lmos.arc.agents.functions.LLMFunction
+import org.eclipse.lmos.arc.agents.functions.ParameterSchema
+import org.eclipse.lmos.arc.agents.functions.ParametersSchema
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
-
 
 /**
  * Converts an LLMFunction to a JSON Schema.

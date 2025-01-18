@@ -14,7 +14,7 @@
 
 package arc.runner;
 
-import ai.ancf.lmos.arc.runner.Arc;
+import org.eclipse.lmos.arc.runner.Arc;
 import picocli.CommandLine;
 
 /* ktlint-disable */

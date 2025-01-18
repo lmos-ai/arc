@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.agent.client.ws
+package org.eclipse.lmos.arc.agent.client.ws
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

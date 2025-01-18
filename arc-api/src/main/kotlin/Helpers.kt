@@ -1,4 +1,4 @@
-package ai.ancf.lmos.arc.api
+package org.eclipse.lmos.arc.api
 
 /**
  * Short-hand function to create an agent request with a single user message.

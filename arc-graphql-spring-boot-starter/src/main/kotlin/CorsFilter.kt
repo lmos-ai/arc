@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 
-package ai.ancf.lmos.arc.graphql
+package org.eclipse.lmos.arc.graphql
 
 import org.springframework.web.server.ServerWebExchange
 import org.springframework.web.server.WebFilter

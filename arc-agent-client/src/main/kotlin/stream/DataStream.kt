@@ -1,4 +1,4 @@
-package ai.ancf.lmos.arc.agent.client.stream
+package org.eclipse.lmos.arc.agent.client.stream
 
 import io.ktor.utils.io.core.*
 import kotlinx.coroutines.channels.Channel

@@ -8,4 +8,4 @@ server:
 logging:
   level:
     root: DEBUG
-    ai.ancf.lmos.arc: DEBUG
+    org.eclipse.lmos.arc: DEBUG

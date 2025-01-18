@@ -4,7 +4,7 @@
 
 package org.eclipse.lmos.arc.scripting
 
-import ai.ancf.lmos.arc.core.getOrThrow
+import org.eclipse.lmos.arc.core.getOrThrow
 import org.assertj.core.api.Assertions.assertThat
 import org.eclipse.lmos.arc.core.getOrThrow
 import org.junit.jupiter.api.Test

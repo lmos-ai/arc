@@ -1,7 +1,11 @@
-package ai.ancf.lmos.arc.agent.client.ws
+// SPDX-FileCopyrightText: 2024 Deutsche Telekom AG
+//
+// SPDX-License-Identifier: Apache-2.0
 
-import ai.ancf.lmos.arc.agents.conversation.BinaryData
-import ai.ancf.lmos.arc.agents.conversation.DataStream
+package org.eclipse.lmos.arc.agent.client.ws
+
+import org.eclipse.lmos.arc.agents.conversation.BinaryData
+import org.eclipse.lmos.arc.agents.conversation.DataStream
 
 /**
  * Creates a [BinaryData] object with the given wav audio data.
