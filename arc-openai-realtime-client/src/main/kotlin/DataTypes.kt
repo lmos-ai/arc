@@ -41,7 +41,7 @@ data class Content(
     val audio: String? = null,
 )
 
-fun textContent(text: String) = Content("input_text", text = text)
+fun textContent(text: String) = Content("text", text = text)
 
 @Serializable
 data class ResponseDone(
