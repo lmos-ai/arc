@@ -78,10 +78,10 @@ fun String.asConditional(): Conditional {
 }
 
 /**
- * Splits a given string into a list of lines.
+ * Splits a given string into a list of lines and filters out comments.
  */
 private inline fun String.forEachLine(crossinline fn: (String) -> Unit) {
-    return split("\n").forEach { fn(it + "\n") }
+    return split("\n").filter { it.trim().startsWith("//") }.forEach { fn(it + "\n") }
 }
 
 enum class Section {
