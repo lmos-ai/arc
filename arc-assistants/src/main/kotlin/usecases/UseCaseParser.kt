@@ -15,7 +15,7 @@ fun String.toUseCases(): List<UseCase> {
     var currentSection = NONE
 
     forEachLine { line ->
-        if (line.startsWith("#")) {
+        if (line.trimStart().startsWith("#")) {
             if (line.contains("# UseCase")) {
                 currentUseCase?.let { useCases.add(it) }
                 currentUseCase = UseCase(id = line.substringAfter(":").trim())
@@ -81,7 +81,7 @@ fun String.asConditional(): Conditional {
  * Splits a given string into a list of lines and filters out comments.
  */
 private inline fun String.forEachLine(crossinline fn: (String) -> Unit) {
-    return split("\n").filter { it.trim().startsWith("//") }.forEach { fn(it + "\n") }
+    return split("\n").filter { !it.trimStart().startsWith("//") }.forEach { fn(it + "\n") }
 }
 
 enum class Section {
