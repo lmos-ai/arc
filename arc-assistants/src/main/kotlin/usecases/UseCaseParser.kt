@@ -18,7 +18,8 @@ fun String.toUseCases(): List<UseCase> {
         if (line.trimStart().startsWith("#")) {
             if (line.contains("# UseCase")) {
                 currentUseCase?.let { useCases.add(it) }
-                currentUseCase = UseCase(id = line.substringAfter(":").trim())
+                val (lineWithoutConditions, conditions) = line.parseConditions()
+                currentUseCase = UseCase(id = lineWithoutConditions.substringAfter(":").trim(), conditions = conditions)
                 currentSection = NONE
             } else {
                 currentSection = when {
@@ -102,7 +103,12 @@ data class UseCase(
     val alternativeSolution: List<Conditional> = emptyList(),
     val fallbackSolution: List<Conditional> = emptyList(),
     val examples: String = "",
-)
+    val conditions: Set<String> = emptySet(),
+) {
+    fun matches(allConditions: Set<String>): Boolean {
+        return conditions.isEmpty() || conditions.all { allConditions.contains(it) }
+    }
+}
 
 data class Conditional(
     val text: String = "",

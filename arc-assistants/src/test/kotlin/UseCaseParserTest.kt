@@ -49,4 +49,48 @@ class UseCaseParserTest : TestBase() {
         assertThat(useCases).hasSize(1)
         assertThat(useCases.toString()).doesNotContain("this is a comment")
     }
+
+    @Test
+    fun `test conditional use case`(): Unit = runBlocking {
+        val useCases = """
+                ### UseCase: usecase <myCondition>
+                #### Description
+                The description of the use case 2.
+
+                #### Solution
+                Primary Solution
+                ----
+            """.toUseCases()
+        assertThat(useCases).hasSize(1)
+        assertThat(useCases.first().id).isEqualTo("usecase")
+        val parsedUseCases = useCases.formatToString(conditions = setOf("myCondition"))
+        assertThat(parsedUseCases.replace("\\W".toRegex(), "")).isEqualTo(
+            """
+             ### UseCase: usecase
+                #### Description
+                The description of the use case 2.
+
+                #### Solution
+                Primary Solution
+                ----
+        """.replace("\\W".toRegex(), ""),
+        )
+    }
+
+    @Test
+    fun `test conditional use case filtered`(): Unit = runBlocking {
+        val useCases = """
+                ### UseCase: usecase <myCondition>
+                #### Description
+                The description of the use case 2.
+
+                #### Solution
+                Primary Solution
+                ----
+            """.toUseCases()
+        assertThat(useCases).hasSize(1)
+        assertThat(useCases.first().id).isEqualTo("usecase")
+        val parsedUseCases = useCases.formatToString(conditions = setOf(""))
+        assertThat(parsedUseCases.trim()).isEqualTo("""""".trim())
+    }
 }
