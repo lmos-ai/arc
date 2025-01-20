@@ -18,7 +18,7 @@ fun List<UseCase>.formatToString(
     conditions: Set<String> = emptySet(),
 ) =
     buildString {
-        this@formatToString.forEach { useCase ->
+        this@formatToString.filter { it.matches(conditions) }.forEach { useCase ->
             val useAlternative = useAlternatives.contains(useCase.id) && useCase.alternativeSolution.isNotEmpty()
             val useFallback = useFallbacks.contains(useCase.id) && useCase.fallbackSolution.isNotEmpty()
             append(
