@@ -20,7 +20,7 @@ class UseCaseParserTest : TestBase() {
             val useCases = local("use_cases.md")!!.toUseCases()
             val expectedResult = local("use_cases_out.md")!!
             val parsedUseCases = useCases.formatToString()
-            assertThat(parsedUseCases.trim()).isEqualTo(("#" + expectedResult.substringAfter("#")).trim()) // remove copyright
+            assertThat(parsedUseCases.trim()).isEqualTo(("#" + expectedResult.substringAfter("#")).trim())
         }
     }
 
@@ -30,7 +30,23 @@ class UseCaseParserTest : TestBase() {
             val useCases = local("use_cases.md")!!.toUseCases()
             val expectedResult = local("use_cases_mobile.md")!!
             val parsedUseCases = useCases.formatToString(conditions = setOf("mobile"))
-            assertThat(parsedUseCases.trim()).isEqualTo(("#" + expectedResult.substringAfter("#")).trim()) // remove copyright
+            assertThat(parsedUseCases.trim()).isEqualTo(("#" + expectedResult.substringAfter("#")).trim())
         }
+    }
+
+    @Test
+    fun `test use case comments`(): Unit = runBlocking {
+        val useCases = """
+                ### UseCase: usecase
+                #### Description
+                // this is a comment
+                The description of the use case 2.
+
+                #### Solution
+                Primary Solution
+                ----
+            """.toUseCases()
+        assertThat(useCases).hasSize(1)
+        assertThat(useCases.toString()).doesNotContain("this is a comment")
     }
 }
