@@ -25,6 +25,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-autoconfigure:3.4.0")
     implementation("org.springframework.boot:spring-boot-configuration-processor:3.4.1")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test:3.4.0")
-    testImplementation("org.springframework.boot:spring-boot-starter:3.4.0")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:3.4.1")
+    testImplementation("org.springframework.boot:spring-boot-starter:3.4.1")
 }
