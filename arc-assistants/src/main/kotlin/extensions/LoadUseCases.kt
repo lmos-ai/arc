@@ -8,6 +8,7 @@ import org.eclipse.lmos.arc.agents.dsl.DSLContext
 import org.eclipse.lmos.arc.assistants.support.usecases.formatToString
 import org.eclipse.lmos.arc.assistants.support.usecases.toUseCases
 import org.slf4j.LoggerFactory
+import kotlin.random.Random.Default.nextInt
 
 private val log = LoggerFactory.getLogger("UseCasesLoader")
 
@@ -21,7 +22,16 @@ suspend fun DSLContext.useCases(name: String, fallbackLimit: Int = 2, conditions
 
     val usedUseCases = memory("usedUseCases") as List<String>? ?: emptyList()
     val fallbackCases = usedUseCases.groupingBy { it }.eachCount().filter { it.value >= fallbackLimit }.keys
-    val filteredUseCases = useCases.formatToString(usedUseCases.toSet(), fallbackCases, conditions)
+    val filteredUseCases = useCases.formatToString(usedUseCases.toSet(), fallbackCases, loadConditions() + conditions)
     log.info("Loaded use cases: ${useCases.map { it.id }} Fallback cases: $fallbackCases")
     return filteredUseCases
+}
+
+/**
+ * Loads default conditions.
+ */
+private fun loadConditions(): Set<String> = buildSet {
+    // Add a condition with a 1 in 4 chance.
+    // Helps to add some variety to the behaviour of the Agent.
+    nextInt(1, 4).let { if (it == 2) add("sometimes") }
 }

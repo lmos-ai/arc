@@ -13,7 +13,7 @@ typealias UseCaseId = String
 private val useCaseIdRegex = "<ID:(.*)>".toRegex()
 
 fun extractUseCaseId(message: String): Pair<String, UseCaseId?> {
-    val id = useCaseIdRegex.find(message)?.value
+    val id = useCaseIdRegex.find(message)?.groupValues?.elementAtOrNull(1)
     val cleanedMessage = message.replace(useCaseIdRegex, "").trim()
     return cleanedMessage to id
 }
@@ -25,7 +25,7 @@ fun extractUseCaseId(message: String): Pair<String, UseCaseId?> {
 private val useCaseStepIdRegex = "<Step (\\w*)>".toRegex()
 
 fun extractUseCaseStepId(message: String): Pair<String, UseCaseId?> {
-    val id = useCaseStepIdRegex.find(message)?.value
+    val id = useCaseStepIdRegex.find(message)?.groupValues?.elementAtOrNull(1)
     val cleanedMessage = message.replace(useCaseStepIdRegex, "").replace("<No Step>", "").trim()
     return cleanedMessage to id
 }

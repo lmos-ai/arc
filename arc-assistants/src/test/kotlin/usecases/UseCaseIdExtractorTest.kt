@@ -16,7 +16,7 @@ class UseCaseIdExtractorTest {
                  This is a reply from the LLM."""
         val (filteredMessage, useCaseId) = extractUseCaseId(message)
         assertThat(filteredMessage).contains("This is a reply from the LLM.")
-        assertThat(useCaseId).contains("use_case01")
+        assertThat(useCaseId).isEqualTo("use_case01")
     }
 
     @Test
@@ -36,7 +36,7 @@ class UseCaseIdExtractorTest {
             """<ID:use_case01>  
                  This is a reply from the LLM.""",
         )
-        assertThat(stepId).contains("1")
+        assertThat(stepId).isEqualTo("1")
     }
 
     @Test
