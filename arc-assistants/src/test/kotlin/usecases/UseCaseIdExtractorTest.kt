@@ -50,4 +50,11 @@ class UseCaseIdExtractorTest {
         )
         assertThat(stepId).isNull()
     }
+
+    @Test
+    fun `test missing Step id extraction`(): Unit = runBlocking {
+        val message = """This is a reply from the LLM."""
+        val (_, stepId) = extractUseCaseStepId(message)
+        assertThat(stepId).isNull()
+    }
 }
