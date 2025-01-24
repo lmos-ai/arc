@@ -6,7 +6,7 @@ dependencies {
     api(project(":arc-result"))
     api(project(":arc-agents"))
 
-    implementation("org.springframework.boot:spring-boot-autoconfigure:3.4.0")
+    implementation("org.springframework.boot:spring-boot-autoconfigure:3.4.2")
     implementation("org.springframework.boot:spring-boot-configuration-processor:3.4.1")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive:3.4.1")
 
