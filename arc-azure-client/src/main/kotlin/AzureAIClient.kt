@@ -157,7 +157,7 @@ class AzureAIClient(
 
     override suspend fun embed(texts: List<String>) = result<TextEmbeddings, Exception> {
         val embedding = client.getEmbeddings(config.modelName, EmbeddingsOptions(texts)).awaitFirst().let { result ->
-            result.data.map { e -> TextEmbedding(texts[e.promptIndex], e.embedding) }
+            result.data.map { e -> TextEmbedding(texts[e.promptIndex], e.embedding.map { it.toDouble() }) }
         }
         TextEmbeddings(embedding)
     }.mapFailure { ArcException("Failed to create text embeddings!", it) }
