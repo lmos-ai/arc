@@ -148,7 +148,7 @@ class AzureAIClient(
      */
     private fun toOpenAIFunctions(functions: List<LLMFunction>) = functions.map { fn ->
         ChatCompletionsFunctionToolDefinition(
-            FunctionDefinition(fn.name).apply {
+            ChatCompletionsFunctionToolDefinitionFunction(fn.name).apply {
                 description = fn.description
                 parameters = BinaryData.fromObject(fn.parameters.toAzureOpenAISchemaAsMap())
             },
