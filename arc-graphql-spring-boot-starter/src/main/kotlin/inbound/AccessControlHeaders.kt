@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono
 class AccessControlHeaders(
     private val allowOrigin: String,
     private val allowMethods: String,
-    private val allowHeaders: String
+    private val allowHeaders: String,
 ) : WebFilter {
 
     private val log = LoggerFactory.getLogger(this.javaClass)

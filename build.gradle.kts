@@ -10,9 +10,9 @@ import java.lang.System.getenv
 import java.net.URI
 
 plugins {
-    kotlin("jvm") version "2.1.0" apply false
-    kotlin("plugin.serialization") version "2.0.21" apply false
-    id("org.jetbrains.dokka") version "1.9.20"
+    kotlin("jvm") version "2.1.10" apply false
+    kotlin("plugin.serialization") version "2.1.10" apply false
+    id("org.jetbrains.dokka") version "2.0.0"
     id("org.cyclonedx.bom") version "2.0.0" apply false
     id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
     id("org.jetbrains.kotlinx.kover") version "0.9.1"
