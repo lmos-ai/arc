@@ -7,14 +7,27 @@ package org.eclipse.lmos.arc.agents
 import kotlinx.coroutines.coroutineScope
 import org.eclipse.lmos.arc.agents.conversation.Conversation
 import org.eclipse.lmos.arc.agents.conversation.SystemMessage
-import org.eclipse.lmos.arc.agents.dsl.*
+import org.eclipse.lmos.arc.agents.dsl.AllTools
+import org.eclipse.lmos.arc.agents.dsl.BasicDSLContext
+import org.eclipse.lmos.arc.agents.dsl.BeanProvider
+import org.eclipse.lmos.arc.agents.dsl.CompositeBeanProvider
+import org.eclipse.lmos.arc.agents.dsl.DSLContext
+import org.eclipse.lmos.arc.agents.dsl.InputFilterContext
+import org.eclipse.lmos.arc.agents.dsl.OutputFilterContext
+import org.eclipse.lmos.arc.agents.dsl.ToolsDSLContext
+import org.eclipse.lmos.arc.agents.dsl.provideOptional
 import org.eclipse.lmos.arc.agents.events.EventPublisher
 import org.eclipse.lmos.arc.agents.functions.FunctionWithContext
 import org.eclipse.lmos.arc.agents.functions.LLMFunction
 import org.eclipse.lmos.arc.agents.functions.LLMFunctionProvider
 import org.eclipse.lmos.arc.agents.llm.ChatCompleterProvider
 import org.eclipse.lmos.arc.agents.llm.ChatCompletionSettings
-import org.eclipse.lmos.arc.core.*
+import org.eclipse.lmos.arc.core.Result
+import org.eclipse.lmos.arc.core.failWith
+import org.eclipse.lmos.arc.core.getOrThrow
+import org.eclipse.lmos.arc.core.mapFailure
+import org.eclipse.lmos.arc.core.recover
+import org.eclipse.lmos.arc.core.result
 import org.slf4j.LoggerFactory
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.time.measureTime
@@ -59,12 +72,21 @@ class ChatAgent(
             val duration = measureTime {
                 result = doExecute(input, model, dslContext, compositeBeanProvider, usedFunctions)
                     .recover {
-                        if (it is WithConversationResult) {
-                            log.info("Agent $name interrupted!", it)
-                            flowBreak = true
-                            it.conversation
-                        } else {
-                            null
+                        val cause = it.cause
+                        when {
+                            it is WithConversationResult -> {
+                                log.info("Agent $name interrupted!", it)
+                                flowBreak = true
+                                it.conversation
+                            }
+
+                            cause is WithConversationResult -> {
+                                log.info("Agent $name interrupted!", it)
+                                flowBreak = true
+                                cause.conversation
+                            }
+
+                            else -> null
                         }
                     }.mapFailure {
                         log.error("Agent $name failed!", it)
