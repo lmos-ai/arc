@@ -14,7 +14,7 @@ dependencies {
     compileOnly(project(":arc-openai-client"))
 
     compileOnly("io.micrometer:micrometer-registry-atlas:1.14.1")
-    compileOnly("com.azure:azure-identity:1.13.1")
+    compileOnly("com.azure:azure-identity:1.15.0")
 
     val langchain4jVersion = "0.36.2"
     compileOnly("dev.langchain4j:langchain4j-bedrock:$langchain4jVersion")
