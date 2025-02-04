@@ -6,9 +6,12 @@ package org.eclipse.lmos.arc.memory.redis
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import io.lettuce.core.AbstractRedisClient
 import io.lettuce.core.RedisClient
 import io.lettuce.core.SetArgs
-import io.lettuce.core.api.reactive.RedisReactiveCommands
+import io.lettuce.core.api.reactive.RedisKeyReactiveCommands
+import io.lettuce.core.api.reactive.RedisStringReactiveCommands
+import io.lettuce.core.cluster.RedisClusterClient
 import kotlinx.coroutines.reactor.awaitSingle
 import kotlinx.coroutines.reactor.awaitSingleOrNull
 import org.eclipse.lmos.arc.agents.memory.Memory
@@ -21,14 +24,14 @@ import java.time.Duration
  */
 class RedisMemory(
     private val shortTermTTL: Duration,
-    private val redisClientFactory: () -> RedisClient,
+    private val redisClient: AbstractRedisClient,
 ) : Memory {
     private val log = getLogger(RedisMemory::class.java)
     private val json = jacksonObjectMapper().apply {
         enableDefaultTyping()
     }
 
-    override suspend fun storeLongTerm(owner: String, key: String, value: Any?): Unit = withClient { commands ->
+    override suspend fun storeLongTerm(owner: String, key: String, value: Any?): Unit = withClient { commands, keys ->
         val compositeKey = json.writeValueAsString(MemoryKey(owner, key))
         if (value != null) {
             log.debug("Storing $key for $owner in LONG_TERM memory.")
@@ -41,12 +44,12 @@ class RedisMemory(
             }
         } else {
             log.debug("Deleting $key for $owner in LONG_TERM memory.")
-            commands.del(compositeKey).awaitSingle()
+            keys.del(compositeKey).awaitSingle()
         }
     }
 
     override suspend fun storeShortTerm(owner: String, key: String, value: Any?, sessionId: String): Unit =
-        withClient { commands ->
+        withClient { commands, keys ->
             val compositeKey = json.writeValueAsString(MemoryKey(owner, key, sessionId))
             if (value != null) {
                 log.debug("Storing $key for $owner in SHORT_TERM memory.")
@@ -54,11 +57,11 @@ class RedisMemory(
                 commands.set(compositeKey, json.writeValueAsString(MemoryEntry(value)), setArgs).awaitSingle()
             } else {
                 log.debug("Deleting $key for $owner in SHORT_TERM memory.")
-                commands.del(compositeKey).awaitSingle()
+                keys.del(compositeKey).awaitSingle()
             }
         }
 
-    override suspend fun <T> fetch(owner: String, key: String, sessionId: String?): T? = withClient { commands ->
+    override suspend fun <T> fetch(owner: String, key: String, sessionId: String?): T? = withClient { commands, _ ->
         val compositeKey = json.writeValueAsString(MemoryKey(owner, key, sessionId))
         val value = commands.get(compositeKey).awaitSingleOrNull()
         if (value != null) {
@@ -68,26 +71,27 @@ class RedisMemory(
         }
     }
 
-    private suspend fun <T> withClient(fn: suspend (RedisReactiveCommands<String, String>) -> T): T {
-        val client = redisClientFactory()
-        val connection = client.connect()
-        val commands = connection.reactive()
+    private suspend fun <T> withClient(fn: suspend (RedisStringReactiveCommands<String, String>, RedisKeyReactiveCommands<String, String>) -> T): T {
+        val closeable: AutoCloseable
+        val commands = when (redisClient) {
+            is RedisClusterClient -> {
+                closeable = redisClient.connect()
+                closeable.reactive()
+            }
+
+            else -> {
+                closeable = (redisClient as RedisClient).connect()
+                closeable.reactive()
+            }
+        }
         val result = try {
-            fn(commands)
+            fn(commands, commands)
         } catch (ex: Exception) {
             log.error("Error while executing Redis command!", ex)
             if (ex is MemoryException) throw ex
             throw MemoryException("Error while executing Redis command!", ex)
         }
-        connection.close()
-        client.shutdown()
+        closeable.close()
         return result
     }
 }
-
-/**
- * Entry in memory.
- */
-data class MemoryEntry<T>(val value: T)
-
-data class MemoryKey(val owner: String, val key: String, val sessionId: String? = null)
