@@ -9,6 +9,10 @@ import org.eclipse.lmos.arc.agents.dsl.DSLContext
 import org.eclipse.lmos.arc.agents.dsl.extensions.MemoryScope.LONG_TERM
 import org.eclipse.lmos.arc.agents.dsl.extensions.MemoryScope.SHORT_TERM
 import org.eclipse.lmos.arc.agents.dsl.get
+import org.eclipse.lmos.arc.agents.dsl.getOptional
+import org.eclipse.lmos.arc.agents.events.BaseEvent
+import org.eclipse.lmos.arc.agents.events.Event
+import org.eclipse.lmos.arc.agents.events.EventPublisher
 import org.eclipse.lmos.arc.agents.memory.Memory
 
 enum class MemoryScope {
@@ -19,9 +23,11 @@ enum class MemoryScope {
 /**
  * Extensions that add memory functions to the DSL context.
  */
-suspend fun DSLContext.memory(key: String, value: Any?, scope: MemoryScope = SHORT_TERM) {
+suspend fun DSLContext.memory(key: String, value: Any?, scope: MemoryScope = SHORT_TERM, loggable: Boolean = true) {
     val conversation = get<Conversation>()
     val memory = get<Memory>()
+
+    getOptional<EventPublisher>()?.publish(MemoryStoreEvent(key, if (loggable) value else "****", scope))
 
     if (LONG_TERM == scope && conversation.user?.id == null) {
         kotlin.error("LONG_TERM is only available when a user id is present!")
@@ -38,5 +44,20 @@ suspend fun DSLContext.memory(key: String): Any? {
     val conversation = get<Conversation>()
     val memory = get<Memory>()
     val owner = conversation.user?.id ?: conversation.conversationId
+    getOptional<EventPublisher>()?.publish(MemoryRetrieveEvent(key))
     return memory.fetch(owner, key, conversation.conversationId)
 }
+
+
+/**
+ * Published when a memory operation is performed.
+ */
+sealed class MemoryEvent : Event by BaseEvent()
+
+class MemoryStoreEvent(
+    val key: String,
+    val value: Any?,
+    val scope: MemoryScope,
+) : MemoryEvent()
+
+class MemoryRetrieveEvent(val key: String) : MemoryEvent()

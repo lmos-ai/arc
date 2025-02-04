@@ -6,6 +6,8 @@ package org.eclipse.lmos.arc.agents.dsl
 
 import kotlinx.coroutines.future.await
 import org.eclipse.lmos.arc.agents.functions.LLMFunction
+import org.eclipse.lmos.arc.core.getOrNull
+import org.eclipse.lmos.arc.core.result
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -52,6 +54,12 @@ class BasicDSLContext(private val beanProvider: BeanProvider) : DSLContext {
         return response.body()
     }
 }
+
+/**
+ * Returns the requested bean or null if it is not available.
+ */
+suspend inline fun <reified T : Any> DSLContext.getOptional() =
+    result<T, MissingBeanException> { context(T::class) }.getOrNull()
 
 /**
  * Used to run functions in a DSL context with a set of beans.
