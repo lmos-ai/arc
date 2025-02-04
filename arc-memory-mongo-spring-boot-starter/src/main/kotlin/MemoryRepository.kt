@@ -25,7 +25,7 @@ data class MemoryEntry(
     val key: String,
     val value: Any,
     val sessionId: String? = null,
-    @Indexed(expireAfterSeconds = 0) val deletionDate: Instant? = null,
+    @Indexed(expireAfter = "0s") val deletionDate: Instant? = null,
     @Id val id: MemoryKey = MemoryKey(owner, key, sessionId),
     val creationDate: Instant = Instant.now(),
 )
