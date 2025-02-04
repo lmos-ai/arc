@@ -31,7 +31,7 @@ class UseCaseResponseHandler : AgentFilter {
             log.info("Use case: $useCaseId used. Step: $stepId")
 
             if (stepId == null) {
-                val usedUseCases = memory("usedUseCases") as List<String>? ?: emptyList()
+                val usedUseCases = memory<List<String>>("usedUseCases") ?: emptyList()
                 log.info("All Use cases used: $usedUseCases")
                 memory("usedUseCases", usedUseCases + useCaseId)
             }

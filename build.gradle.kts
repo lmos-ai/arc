@@ -152,6 +152,7 @@ dependencies {
     kover(project("arc-agent-client"))
     kover(project("arc-assistants"))
     kover(project("arc-langchain4j-client"))
+    kover(project("arc-memory-redis"))
 }
 
 repositories {

@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Interface for storing data in memory.
+ * Methods amy throw a [MemoryException] if an unexpected error occurs.
  */
 interface Memory {
 
@@ -38,8 +39,13 @@ interface Memory {
      * @param sessionId The session id to fetch the value for. Only used if the value was stored under SHORT_TERM memory.
      * @return The value stored under the key, or null if no value is stored.
      */
-    suspend fun fetch(owner: String, key: String, sessionId: String? = null): Any?
+    suspend fun <T> fetch(owner: String, key: String, sessionId: String? = null): T?
 }
+
+/**
+ * Exception thrown when an error occurs in memory.
+ */
+class MemoryException(message: String, cause: Throwable? = null) : Exception(message, cause)
 
 /**
  * In-memory implementation of [Memory].
@@ -91,13 +97,15 @@ class InMemoryMemory : Memory {
         }
     }
 
-    override suspend fun fetch(owner: String, key: String, sessionId: String?) =
-        if (sessionId != null) {
+    override suspend fun <T> fetch(owner: String, key: String, sessionId: String?): T? {
+        val result = if (sessionId != null) {
             shortTermMemory["$sessionId $owner $key"]?.value
                 ?: longTermMemory["$owner $key"]
         } else {
             longTermMemory["$owner $key"]
         }
+        return result as T?
+    }
 }
 
 private data class MemoryShortTermEntry(val value: Any?, val creationDate: Instant = Instant.now())

@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2025 Deutsche Telekom AG and others
 //
 // SPDX-License-Identifier: Apache-2.0
-package org.eclipse.lmos.arc.memory.mongo
+package org.eclipse.lmos.arc.memory.redis
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
@@ -47,7 +47,7 @@ class ShortTermMemoryTest : TestBase() {
         val key = UUID.randomUUID().toString()
 
         memory.storeShortTerm("owner", key, value, "sessionId")
-        delay(60_000)
+        delay(4000)
         val storedValue = memory.fetch<TestValue>("owner", key, "sessionId")
         assertThat(storedValue).isNull()
     }

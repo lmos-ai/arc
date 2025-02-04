@@ -40,7 +40,7 @@ suspend fun DSLContext.memory(key: String, value: Any?, scope: MemoryScope = SHO
     }
 }
 
-suspend fun DSLContext.memory(key: String): Any? {
+suspend fun <T> DSLContext.memory(key: String): T? {
     val conversation = get<Conversation>()
     val memory = get<Memory>()
     val owner = conversation.user?.id ?: conversation.conversationId

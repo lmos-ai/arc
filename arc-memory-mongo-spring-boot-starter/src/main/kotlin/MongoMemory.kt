@@ -43,7 +43,7 @@ class MongoMemory(
         }
     }
 
-    override suspend fun fetch(owner: String, key: String, sessionId: String?): Any? {
-        return memoryRepository.findById(MemoryKey(owner, key, sessionId))?.value
+    override suspend fun <T> fetch(owner: String, key: String, sessionId: String?): T? {
+        return memoryRepository.findById(MemoryKey(owner, key, sessionId))?.value as T?
     }
 }
