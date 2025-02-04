@@ -48,7 +48,6 @@ suspend fun DSLContext.memory(key: String): Any? {
     return memory.fetch(owner, key, conversation.conversationId)
 }
 
-
 /**
  * Published when a memory operation is performed.
  */
