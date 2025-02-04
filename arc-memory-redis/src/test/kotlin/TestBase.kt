@@ -20,10 +20,12 @@ open class TestBase {
         private val redisContainer = RedisContainer(redisImage).withExposedPorts(6379).also { it.start() }
     }
 
-    val memory = RedisMemory(shortTermTTL = Duration.ofSeconds(2)) {
+    val memory = RedisMemory(shortTermTTL = Duration.ofSeconds(2), redisClient = createRedisClient())
+
+    private fun createRedisClient(): RedisClient {
         val port = redisContainer.getMappedPort(6379)
         val redisURI = "redis://localhost:$port"
-        RedisClient.create(redisURI)
+        return RedisClient.create(redisURI)
     }
 }
 
