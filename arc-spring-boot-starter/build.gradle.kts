@@ -13,7 +13,7 @@ dependencies {
     compileOnly(project(":arc-gen"))
     compileOnly(project(":arc-openai-client"))
 
-    compileOnly("io.micrometer:micrometer-registry-atlas:1.14.1")
+    compileOnly("io.micrometer:micrometer-registry-atlas:1.14.3")
     compileOnly("com.azure:azure-identity:1.15.0")
 
     val langchain4jVersion = "0.36.2"
