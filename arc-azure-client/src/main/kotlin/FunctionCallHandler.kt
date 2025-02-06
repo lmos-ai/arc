@@ -10,6 +10,7 @@ import com.azure.ai.openai.models.ChatRequestAssistantMessage
 import com.azure.ai.openai.models.ChatRequestMessage
 import com.azure.ai.openai.models.ChatRequestToolMessage
 import com.azure.ai.openai.models.CompletionsFinishReason
+import com.azure.ai.openai.models.CompletionsFinishReason.TOOL_CALLS
 import org.eclipse.lmos.arc.agents.ArcException
 import org.eclipse.lmos.arc.agents.HallucinationDetectedException
 import org.eclipse.lmos.arc.agents.events.EventPublisher
@@ -52,7 +53,7 @@ class FunctionCallHandler(
         }
 
         // The LLM is requesting the calling of the function we defined in the original request
-        if (CompletionsFinishReason.TOOL_CALLS == choice.finishReason) {
+        if (TOOL_CALLS == choice.finishReason || choice.message.toolCalls.isNotEmpty()) {
             val assistantMessage = ChatRequestAssistantMessage("")
             assistantMessage.setToolCalls(choice.message.toolCalls)
 
