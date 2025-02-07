@@ -151,7 +151,7 @@ class ChatAgent(
     private suspend fun BeanProvider.chatCompleter(model: String?) =
         provide(ChatCompleterProvider::class).provideByModel(model = model)
 
-    private suspend fun functions(context: DSLContext, beanProvider : BeanProvider): List<LLMFunction>? {
+    private suspend fun functions(context: DSLContext, beanProvider: BeanProvider): List<LLMFunction>? {
         val toolsContext = ToolsDSLContext(context)
         val tools = toolsProvider.invoke(toolsContext).let { toolsContext.tools }
         return if (tools.isNotEmpty()) {
@@ -163,7 +163,7 @@ class ChatAgent(
         }
     }
 
-    private suspend fun getFunctions(tools: List<String>, beanProvider : BeanProvider): List<LLMFunction> {
+    private suspend fun getFunctions(tools: List<String>, beanProvider: BeanProvider): List<LLMFunction> {
         val functionProvider = beanProvider.provide(LLMFunctionProvider::class)
         return if (tools.contains(AllTools.symbol)) {
             functionProvider.provideAll()
