@@ -1,0 +1,43 @@
+# SPDX-FileCopyrightText: 2025 Deutsche Telekom AG and others
+#
+# SPDX-License-Identifier: Apache-2.0
+
+name: CI
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: REUSE Compliance Check
+        uses: fsfe/reuse-action@v5
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'gradle'
+      - name: Validate Gradle Wrapper
+        uses: gradle/actions/wrapper-validation@v4.2.1
+      - name: Build with Gradle
+        run: ./gradlew build
+      - name: Publish to Maven Central
+        if: github.ref == 'refs/heads/main'
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.OSSRH_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.OSSRH_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.GPG_SUBKEY_ID }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_PRIVATE_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_PASSPHRASE }}
+        run: ./gradlew publishAllPublicationsToMavenCentralRepository
+      - name: Generate and submit dependency graph
+        if: github.ref == 'refs/heads/main'
+        uses: gradle/actions/dependency-submission@v4
