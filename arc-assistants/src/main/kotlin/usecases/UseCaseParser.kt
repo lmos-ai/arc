@@ -4,7 +4,13 @@
 
 package org.eclipse.lmos.arc.assistants.support.usecases
 
-import org.eclipse.lmos.arc.assistants.support.usecases.Section.*
+import org.eclipse.lmos.arc.assistants.support.usecases.Section.ALTERNATIVE_SOLUTION
+import org.eclipse.lmos.arc.assistants.support.usecases.Section.DESCRIPTION
+import org.eclipse.lmos.arc.assistants.support.usecases.Section.EXAMPLES
+import org.eclipse.lmos.arc.assistants.support.usecases.Section.FALLBACK_SOLUTION
+import org.eclipse.lmos.arc.assistants.support.usecases.Section.NONE
+import org.eclipse.lmos.arc.assistants.support.usecases.Section.SOLUTION
+import org.eclipse.lmos.arc.assistants.support.usecases.Section.STEPS
 
 /**
  * Parses the given string into a list of use cases.
@@ -13,13 +19,18 @@ fun String.toUseCases(): List<UseCase> {
     val useCases = mutableListOf<UseCase>()
     var currentUseCase: UseCase? = null
     var currentSection = NONE
+    val version = extractVersion(this)
 
     forEachLine { line ->
         if (line.trimStart().startsWith("#")) {
             if (line.contains("# UseCase")) {
                 currentUseCase?.let { useCases.add(it) }
                 val (lineWithoutConditions, conditions) = line.parseConditions()
-                currentUseCase = UseCase(id = lineWithoutConditions.substringAfter(":").trim(), conditions = conditions)
+                currentUseCase = UseCase(
+                    id = lineWithoutConditions.substringAfter(":").trim(),
+                    version = version,
+                    conditions = conditions,
+                )
                 currentSection = NONE
             } else {
                 currentSection = when {
@@ -97,6 +108,7 @@ enum class Section {
 
 data class UseCase(
     val id: String,
+    val version: String? = null,
     val description: String = "",
     val steps: List<Conditional> = emptyList(),
     val solution: List<Conditional> = emptyList(),

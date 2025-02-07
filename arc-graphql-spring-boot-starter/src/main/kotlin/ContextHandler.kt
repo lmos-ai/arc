@@ -8,11 +8,11 @@ import org.eclipse.lmos.arc.api.AgentRequest
 
 interface ContextHandler {
 
-    suspend fun <T> inject(request: AgentRequest, block: suspend () -> T): T
+    suspend fun <T> inject(request: AgentRequest, block: suspend (Set<Any>) -> T): T
 }
 
 class EmptyContextHandler : ContextHandler {
-    override suspend fun <T> inject(request: AgentRequest, block: suspend () -> T): T {
-        return block()
+    override suspend fun <T> inject(request: AgentRequest, block: suspend (Set<Any>) -> T): T {
+        return block(emptySet())
     }
 }

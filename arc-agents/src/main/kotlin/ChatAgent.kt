@@ -118,7 +118,7 @@ class ChatAgent(
         result<Conversation, Exception> {
             val chatCompleter = compositeBeanProvider.chatCompleter(model = model)
 
-            val functions = functions(dslContext)
+            val functions = functions(dslContext, compositeBeanProvider)
             usedFunctions.set(functions)
 
             val filteredInput = coroutineScope {
@@ -151,11 +151,11 @@ class ChatAgent(
     private suspend fun BeanProvider.chatCompleter(model: String?) =
         provide(ChatCompleterProvider::class).provideByModel(model = model)
 
-    private suspend fun functions(context: DSLContext): List<LLMFunction>? {
+    private suspend fun functions(context: DSLContext, beanProvider : BeanProvider): List<LLMFunction>? {
         val toolsContext = ToolsDSLContext(context)
         val tools = toolsProvider.invoke(toolsContext).let { toolsContext.tools }
         return if (tools.isNotEmpty()) {
-            getFunctions(tools).map { fn ->
+            getFunctions(tools, beanProvider).map { fn ->
                 if (fn is FunctionWithContext) fn.withContext(context) else fn
             }
         } else {
@@ -163,7 +163,7 @@ class ChatAgent(
         }
     }
 
-    private suspend fun getFunctions(tools: List<String>): List<LLMFunction> {
+    private suspend fun getFunctions(tools: List<String>, beanProvider : BeanProvider): List<LLMFunction> {
         val functionProvider = beanProvider.provide(LLMFunctionProvider::class)
         return if (tools.contains(AllTools.symbol)) {
             functionProvider.provideAll()

@@ -58,7 +58,7 @@ class AgentSubscription(
                 sendIntermediateMessage(messageChannel, start, anonymizationEntities)
             }
 
-            val result = contextHandler.inject(request) {
+            val result = contextHandler.inject(request) { extraContext ->
                 withLogContext(agent.name, request) {
                     agent.execute(
                         Conversation(
@@ -75,7 +75,7 @@ class AgentSubscription(
                             anonymizationEntities,
                             MessagePublisherChannel(messageChannel),
                             ContextProvider(request),
-                        ),
+                        ) + extraContext,
                     )
                 }
             }

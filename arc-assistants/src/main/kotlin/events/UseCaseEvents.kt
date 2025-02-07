@@ -10,4 +10,9 @@ import org.eclipse.lmos.arc.agents.events.Event
 /**
  * Emitted when a use case was triggered.
  */
-data class UseCaseEvent(val name: String, val step: String? = null) : Event by BaseEvent()
+data class UseCaseEvent(
+    val name: String,
+    val step: String? = null,
+    val version: String? = null,
+    val description: String? = null,
+) : Event by BaseEvent()

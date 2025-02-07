@@ -4,6 +4,8 @@ SPDX-FileCopyrightText: 2025 Deutsche Telekom AG and others
 SPDX-License-Identifier: CC0-1.0    
 -->
 
+<Version:1.0.0>
+
 ### UseCase: usecase1
 #### Description
 The description of the use case 1.

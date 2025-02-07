@@ -8,6 +8,7 @@ import org.eclipse.lmos.arc.agents.conversation.ConversationMessage
 import org.eclipse.lmos.arc.agents.dsl.AgentFilter
 import org.eclipse.lmos.arc.agents.dsl.DSLContext
 import org.eclipse.lmos.arc.agents.dsl.extensions.emit
+import org.eclipse.lmos.arc.agents.dsl.extensions.getCurrentUseCases
 import org.eclipse.lmos.arc.agents.dsl.extensions.memory
 import org.eclipse.lmos.arc.assistants.support.events.UseCaseEvent
 import org.eclipse.lmos.arc.assistants.support.usecases.extractUseCaseId
@@ -36,7 +37,8 @@ class UseCaseResponseHandler : AgentFilter {
                 memory("usedUseCases", usedUseCases + useCaseId)
             }
 
-            emit(UseCaseEvent(useCaseId, stepId))
+            val useCase = getCurrentUseCases()?.find { it.id == useCaseId }
+            emit(UseCaseEvent(useCaseId, stepId, version = useCase?.version, description = useCase?.description))
         }
         return message.update(cleanMessage)
     }

@@ -4,14 +4,10 @@
 
 package org.eclipse.lmos.arc.agents.dsl
 
-import kotlinx.coroutines.future.await
 import org.eclipse.lmos.arc.agents.functions.LLMFunction
 import org.eclipse.lmos.arc.core.getOrNull
 import org.eclipse.lmos.arc.core.result
-import java.net.URI
-import java.net.http.HttpClient
-import java.net.http.HttpRequest
-import java.net.http.HttpResponse
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.reflect.KClass
 
@@ -24,11 +20,24 @@ annotation class SBaseContextMarker
 @SBaseContextMarker
 interface DSLContext {
 
+    /**
+     * Provides access to Beans in the context.
+     * May throw a [MissingBeanException] if the bean is not available.
+     * The getOptional() extension function can be used to get a null instead of an exception.
+     */
     suspend fun <T : Any> context(type: KClass<T>): T
 
-    suspend fun httpGet(url: String): String
-
     operator fun String.unaryPlus()
+
+    /**
+     * Sets a local value that is only available during the current request.
+     */
+    fun setLocal(key: String, value: Any)
+
+    /**
+     * Gets a local value that is only available during the current request.
+     */
+    fun getLocal(key: String): Any?
 }
 
 /**
@@ -42,17 +51,19 @@ class BasicDSLContext(private val beanProvider: BeanProvider) : DSLContext {
 
     val output = AtomicReference("")
 
+    private val localMap = ConcurrentHashMap<String, Any>()
+
+    override fun setLocal(key: String, value: Any) {
+        localMap[key] = value
+    }
+
+    override fun getLocal(key: String): Any? = localMap[key]
+
     override fun String.unaryPlus() {
         output.updateAndGet { it + this }
     }
 
     override suspend fun <T : Any> context(type: KClass<T>) = beanProvider.provide(type)
-
-    override suspend fun httpGet(url: String): String {
-        val request = HttpRequest.newBuilder().uri(URI(url)).GET().build()
-        val response = HttpClient.newHttpClient().sendAsync(request, HttpResponse.BodyHandlers.ofString()).await()
-        return response.body()
-    }
 }
 
 /**
