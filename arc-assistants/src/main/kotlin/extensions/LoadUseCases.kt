@@ -5,7 +5,7 @@
 package org.eclipse.lmos.arc.agents.dsl.extensions
 
 import org.eclipse.lmos.arc.agents.dsl.DSLContext
-import org.eclipse.lmos.arc.assistants.support.usecases.UseCase
+import org.eclipse.lmos.arc.assistants.support.extensions.LoadedUseCases
 import org.eclipse.lmos.arc.assistants.support.usecases.formatToString
 import org.eclipse.lmos.arc.assistants.support.usecases.toUseCases
 import org.slf4j.LoggerFactory
@@ -16,7 +16,7 @@ private val log = LoggerFactory.getLogger("UseCasesLoader")
 /**
  * Local variables stored by the Use Case extensions.
  */
-private const val LOCAL_USE_CASES = "useCases"
+private const val LOCAL_USE_CASES = "LOCAL_USE_CASES"
 
 /**
  * Loads the use case file with the given name.
@@ -30,14 +30,19 @@ suspend fun DSLContext.useCases(name: String, fallbackLimit: Int = 2, conditions
     val fallbackCases = usedUseCases.groupingBy { it }.eachCount().filter { it.value >= fallbackLimit }.keys
     val filteredUseCases = useCases.formatToString(usedUseCases.toSet(), fallbackCases, loadConditions() + conditions)
     log.info("Loaded use cases: ${useCases.map { it.id }} Fallback cases: $fallbackCases")
-    setLocal(LOCAL_USE_CASES, useCases)
+
+    setLocal(LOCAL_USE_CASES, LoadedUseCases(useCases, filteredUseCases))
+
     return filteredUseCases
 }
 
 /**
- * Gets the current use cases.
+ * Gets and sets the current use cases.
  */
-fun DSLContext.getCurrentUseCases(): List<UseCase>? = getLocal(LOCAL_USE_CASES) as List<UseCase>?
+fun DSLContext.getCurrentUseCases(): LoadedUseCases? = getLocal(LOCAL_USE_CASES) as LoadedUseCases?
+fun DSLContext.setCurrentUseCases(cases: LoadedUseCases) {
+    setLocal(LOCAL_USE_CASES, cases)
+}
 
 /**
  * Loads default conditions.
