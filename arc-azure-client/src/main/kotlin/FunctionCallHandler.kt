@@ -53,7 +53,7 @@ class FunctionCallHandler(
 
         // The LLM is requesting the calling of the function we defined in the original request
         // There seems to be a bug where the toolCalls are defined, but the finishReason is not set to TOOL_CALLS.
-        if (CompletionsFinishReason.TOOL_CALLS == choice.finishReason || choice.message.toolCalls.isNotEmpty()) {
+        if (CompletionsFinishReason.TOOL_CALLS == choice.finishReason || choice.message?.toolCalls?.isNotEmpty() == true) {
             val assistantMessage = ChatRequestAssistantMessage("")
             assistantMessage.setToolCalls(choice.message.toolCalls)
 
