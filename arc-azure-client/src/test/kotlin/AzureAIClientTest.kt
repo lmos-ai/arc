@@ -54,6 +54,10 @@ class AzureAIClientTest {
             toolsChatCompletions(listOf("testFunction", "testFunction")),
             finalChatCompletions(),
         )
+        every { azureClient.getChatCompletions(any(), any()) } returnsMany listOf(
+            toolsChatCompletions(listOf("testFunction", "testFunction")),
+            finalChatCompletions(),
+        )
 
         val subject = AzureAIClient(testLanguageModel, azureClient)
         val result = subject.complete(listOf(UserMessage("Hello")), listOf(testFunction)).getOrThrow()
@@ -95,6 +99,7 @@ class AzureAIClientTest {
     private fun finalChatCompletions(): Mono<ChatCompletions> {
         val chatResponseMessage = mockk<ChatResponseMessage>()
         every { chatResponseMessage.content } returns "answer"
+        every { chatResponseMessage.toolCalls } returns null
 
         val chatChoice = mockk<ChatChoice>()
         every { chatChoice.finishReason } returns STOPPED
